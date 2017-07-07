@@ -1,0 +1,14 @@
+## Only requests to our Host are allowed
+#      if ($host !~ ^($server_name)$ ) {
+#         return 444;
+#      }
+
+## Only allow these request methods ##
+## Do not accept DELETE, SEARCH and other methods ##
+if ($request_method !~ ^(GET|HEAD|POST)$ ) {
+   return 444;
+}
+
+location ~ /\.ht {
+  deny  all;
+}

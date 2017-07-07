@@ -3,6 +3,7 @@
 # Tested on Debian 8.8 32bit / 64bit - DigitalOcean
 # NOT COMPLETED, MAY HAVE SERIOUS ERRORS
 
+BASEDIR="$PWD"
 MACHINE_TYPE=`uname -m`
 
 if [ "$MACHINE_TYPE" == "i386" ]; then
@@ -16,7 +17,7 @@ fi
 export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib"
 export LDCONFIG=-L/usr/local/lib
 export LIBS="-ldl" # for curl / openssl
-    
+
 source /etc/profile
 
 #####################################################################################################################
@@ -30,13 +31,13 @@ function wgetAndDecompress(){
   dirTmp=$1
   folderTmp=$2
   downloadAddress=$3
-  
+
   if [ -z $dirTmp ] || [ -z $folderTmp ] || [ -z $downloadAddress ]
   then
      read -n 1 -s -p "Critical error in wgetAndDecompress()" && echo -e "\n"
     exit 0
   fi
-  
+
   # tar.gz or tar.xz
   mkdir -p $dirTmp/$folderTmp
   wget -O $dirTmp/$folderTmp.tar $downloadAddress
@@ -55,6 +56,14 @@ function pauseToContinue() {
 # INIT SCRIPT
 #
 #####################################################################################################################
+
+global_domain="domian.com"
+read -e -i "$global_domain" -p "Enter the domian: " input_global_domain
+global_domain="${input_global_domain:-$global_domain}"
+
+global_emailSupport="email@email.com"
+read -e -i "$global_emailSupport" -p "Enter email support: " input_global_emailSupport
+global_emailSupport="${input_global_emailSupport:-$global_emailSupport}"
 
 read -e -i "Y" -p "Delete building directories ? [Y/n]: " input_delete_build
 
@@ -88,7 +97,7 @@ then
   gcj-jdk valgrind kytea libkytea-dev valgrind-mpi valkyrie \
   libdbi-perl libboost-all-dev libreadline-dev rsync net-tools libdbd-mysql-perl \
   re2c
-  
+
   apt-get -y remove --purge --auto-remove curl
   apt-get -y remove --purge --auto-remove cmake*
 
@@ -98,9 +107,9 @@ then
 
   apt-get -y upgrade
   apt-get -y autoremove
-  
+
   pauseToContinue
-  
+
   read -e -i "Y" -p "Reboot ? [Y/n]: " input_install_reboot
 
   if [ $input_install_reboot == "Y" ] || [ $input_install_reboot == "y" ]
@@ -108,7 +117,7 @@ then
     reboot
     exit 0
   fi
-  
+
 fi
 
 #####################################################################################################################
@@ -135,18 +144,18 @@ then
   wgetAndDecompress $openssl_install_tmp_dir openssl_src $openssl_address
 
   ./config -Wl,--enable-new-dtags,-rpath,'$(LIBRPATH)' no-comp no-zlib no-zlib-dynamic shared
-  
+
   make
   make test
   sed -i 's# libcrypto.a##;s# libssl.a##;/INSTALL_LIBS/s#libcrypto.a##' Makefile
   make MANSUFFIX=ssl install
-  
+
   ldconfig
   ldconfig -p | grep libcrypto
 
   whereis openssl
   openssl version -v
-  
+
   pauseToContinue
 
   needrestart -r l
@@ -174,7 +183,7 @@ then
 
   # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
   wgetAndDecompress $zlib_install_tmp_dir zlib_src $zlib_address
-  
+
   ./configure --shared
 
   make
@@ -204,14 +213,14 @@ then
   lz4_install_tmp_dir="/var/tmp/lz4_build"
   read -e -i "$lz4_install_tmp_dir" -p "Enter temporary directory for libssh2 installation: " input_lz4_install_tmp_dir
   lz4_install_tmp_dir="${input_lz4_install_tmp_dir:-$lz4_install_tmp_dir}"
-  
+
   wgetAndDecompress $lz4_install_tmp_dir lz4_src $lz4_address
-  
+
   make
   make install
 
   ldconfig
-  
+
   lz4 -V
 
 pauseToContinue
@@ -236,11 +245,11 @@ then
   libssh2_install_tmp_dir="/var/tmp/libssh2_build"
   read -e -i "$libssh2_install_tmp_dir" -p "Enter temporary directory for libssh2 installation: " input_libssh2_install_tmp_dir
   libssh2_install_tmp_dir="${input_libssh2_install_tmp_dir:-$libssh2_install_tmp_dir}"
-  
+
   wgetAndDecompress $libssh2_install_tmp_dir libssh2_src $libssh2_address
-  
+
   ./configure --with-openssl --with-libssl-prefix=/usr/local --with-libz --with-libz-prefix=/usr/local
-  
+
   make
   make install
 
@@ -252,7 +261,7 @@ fi
 
 #####################################################################################################################
 #
-# INSTALL Nghttp2: HTTP/2 C Library 
+# INSTALL Nghttp2: HTTP/2 C Library
 # (Tested with v1.23.1 - https://github.com/nghttp2/nghttp2/releases/download/v1.23.1/nghttp2-1.23.1.tar.gz)
 #
 #####################################################################################################################
@@ -261,7 +270,7 @@ read -e -i "Y" -p "Install Nghttp2 ? [Y/n]: " input_install_nghttp2
 
 if [ $input_install_nghttp2 == "Y" ] || [ $input_install_nghttp2 == "y" ]
 then
-  
+
   nghttp2_address="https://github.com/nghttp2/nghttp2/releases/download/v1.23.1/nghttp2-1.23.1.tar.gz"
   read -e -i "$nghttp2_address" -p "Enter the download address for Nghttp2 (tar.gz): " input_nghttp2_address
   nghttp2_address="${input_nghttp2_address:-$nghttp2_address}"
@@ -269,16 +278,16 @@ then
   nghttp2_install_tmp_dir="/var/tmp/nghttp2_build"
   read -e -i "$nghttp2_install_tmp_dir" -p "Enter temporary directory for Nghttp2 installation: " input_nghttp2_install_tmp_dir
   nghttp2_install_tmp_dir="${input_nghttp2_install_tmp_dir:-$nghttp2_install_tmp_dir}"
-  
+
   wgetAndDecompress $nghttp2_install_tmp_dir nghttp2_src $nghttp2_address
-  
+
   ./configure
-  
+
   make
   make install
-  
+
   ldconfig
-  
+
 pauseToContinue
 
 fi
@@ -308,15 +317,15 @@ then
   ./buildconf
 
   ./configure --enable-versioned-symbols --enable-threaded-resolver --with-ssl=/usr/local/ssl --with-libssl-prefix=/usr/local --with-zlib=/usr/local/zlib --with-nghttp2 --with-libssh2
-  
+
   make
   make install
-    
+
   ldconfig
 
   curl -V
-  
-  
+
+
 
 pauseToContinue
 
@@ -333,10 +342,10 @@ read -e -i "n" -p "Install GnuTLS [Opcional] ? [Y/n]: " input_install_gnutls
 
 if [ $input_install_gnutls == "Y" ] || [ $input_install_gnutls == "y" ]
 then
-  
+
   apt-get -y build-dep nettle
   apt-get -y build-dep p11-kit
-  
+
   gnutls_address="https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.13.tar.xz"
   read -e -i "$gnutls_address" -p "Enter the download address for GnuTLS (tar.gz): " input_gnutls_address
   gnutls_address="${input_gnutls_address:-$gnutls_address}"
@@ -346,49 +355,49 @@ then
   gnutls_install_tmp_dir="${input_gnutls_install_tmp_dir:-$gnutls_install_tmp_dir}"
 
   # GnuTLS Dependencies: Nettle 3.3
-  
+
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress '/var/tmp/nettle_build' nettle_src 'https://ftp.gnu.org/gnu/nettle/nettle-3.3.tar.gz'
 
     ./configure
-    
+
     make
     make install
-    
+
     chmod -v 755 /usr/lib/lib{hogweed,nettle}.so
-    
+
     ldconfig
-  
+
     pauseToContinue
-  
+
   # GnuTLS Dependencies: Libtasn1 >= 4.9
-    
+
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress '/var/tmp/libtasn1_build' libtasn1_src 'http://ftp.gnu.org/gnu/libtasn1/libtasn1-4.12.tar.gz'
-    
+
     ./configure
-    
+
     make
     make install
-    
+
     ldconfig
-    
+
     pauseToContinue
-  
+
   # GnuTLS Dependencies: p11-kit >= 0.23.1
-  
+
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress '/var/tmp/p11kit_build' p11kit_src 'http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz'
-    
+
     ./configure --with-trust-paths=/etc/ssl/certs
-    
+
     make
     make install
-    
+
     ldconfig
-    
+
     pauseToContinue
-  
+
   # Compile GnuTLS
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
@@ -400,7 +409,7 @@ then
     make install
 
     ldconfig
-  
+
 pauseToContinue
 
 fi
@@ -423,22 +432,22 @@ then
   cmake_install_tmp_dir="/var/tmp/cmake_build"
   read -e -i "$cmake_install_tmp_dir" -p "Enter temporary directory for cmake installation: " input_cmake_install_tmp_dir
   cmake_install_tmp_dir="${input_cmake_install_tmp_dir:-$cmake_install_tmp_dir}"
-  
+
   # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
   wgetAndDecompress $cmake_install_tmp_dir cmake_src $cmake_address
-  
+
   ./bootstrap
-  
+
   make
   make install
-  
+
   ldconfig
-  
+
   cmake --version
-  
+
 pauseToContinue
 
-fi  
+fi
 #####################################################################################################################
 #
 # INSTALL libcrack2  (Tested with 2.9.6 - https://github.com/cracklib/cracklib/archive/cracklib-2.9.6.tar.gz)
@@ -457,38 +466,38 @@ then
   libcrack2_install_tmp_dir="/var/tmp/libcrack2_build"
   read -e -i "$libcrack2_install_tmp_dir" -p "Enter temporary directory for libcrack2 installation: " input_libcrack2_install_tmp_dir
   libcrack2_install_tmp_dir="${input_libcrack2_install_tmp_dir:-$libcrack2_install_tmp_dir}"
-  
+
   wgetAndDecompress $libcrack2_install_tmp_dir libcrack2_src $libcrack2_address
-  
+
   cd ./src
-  
+
   sed -i '/skipping/d' util/packer.c
-  
+
   mkdir -p /usr/local/lib/cracklib/pw_dict
-  
+
   ./autogen.sh
-  
+
   ./configure --prefix=/usr/local
 
   make
   make install
   make installcheck
-  
+
   ldconfig
-  
+
   pauseToContinue
-  
+
   cd ../words
-  
+
   make all
-  
+
   install -v -m644 -D  ./cracklib-words.gz /usr/share/dict/cracklib-words.gz
   gunzip -v /usr/share/dict/cracklib-words.gz
   ln -v -sf cracklib-words /usr/share/dict/words
   install -v -m755 -d /usr/local/lib/cracklib
   #create-cracklib-dict /usr/share/dict/cracklib-words /usr/share/dict/cracklib-extra-words
   create-cracklib-dict /usr/share/dict/cracklib-words
-  
+
 pauseToContinue
 
 fi
@@ -503,7 +512,7 @@ read -e -i "Y" -p "Install LibXML2 ? [Y/n]: " input_install_libXML2
 
 if [ $input_install_libXML2 == "Y" ] || [ $input_install_libXML2 == "y" ]
 then
-  
+
   libXML2_address="http://xmlsoft.org/sources/libxml2-2.9.4.tar.gz"
   read -e -i "$libXML2_address" -p "Enter the download address for LibXML2 (tar.gz): " input_libXML2_address
   libXML2_address="${input_libXML2_address:-$libXML2_address}"
@@ -511,16 +520,16 @@ then
   libXML2_install_tmp_dir="/var/tmp/libXML2_build"
   read -e -i "$libXML2_install_tmp_dir" -p "Enter temporary directory for LibXML2 installation: " input_libXML2_install_tmp_dir
   libXML2_install_tmp_dir="${input_libXML2_install_tmp_dir:-$libXML2_install_tmp_dir}"
-  
+
   wgetAndDecompress $libXML2_install_tmp_dir libXML2_src $libXML2_address
-  
+
   ./configure --prefix=/usr/local --with-history
-  
+
   make
   make install
-  
+
   ldconfig
-  
+
   pauseToContinue
 
 fi
@@ -535,7 +544,7 @@ read -e -i "Y" -p "Install libxslt ? [Y/n]: " input_install_libxslt
 
 if [ $input_install_libxslt == "Y" ] || [ $input_install_libxslt == "y" ]
 then
-  
+
   libxslt_address="http://xmlsoft.org/sources/libxslt-1.1.29.tar.gz"
   read -e -i "$libxslt_address" -p "Enter the download address for libxslt (tar.gz): " input_libxslt_address
   libxslt_address="${input_libxslt_address:-$libxslt_address}"
@@ -543,16 +552,16 @@ then
   libxslt_install_tmp_dir="/var/tmp/libxslt_build"
   read -e -i "$libxslt_install_tmp_dir" -p "Enter temporary directory for libxslt installation: " input_libxslt_install_tmp_dir
   libxslt_install_tmp_dir="${input_libxslt_install_tmp_dir:-$libxslt_install_tmp_dir}"
-  
+
   wgetAndDecompress $libxslt_install_tmp_dir libxslt_src $libxslt_address
-  
+
   ./configure --prefix=/usr/local
-  
+
   make
   make install
-  
+
   ldconfig
-  
+
   pauseToContinue
 
 fi
@@ -578,17 +587,17 @@ then
 
   # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
   wgetAndDecompress $jemalloc_install_tmp_dir jemalloc_src $jemalloc_address
-  
+
   ./autogen.sh
-  
+
   ./configure --prefix=/usr/local --with-xslroot=/usr/share/xml/docbook/stylesheet/docbook-xsl/
-  
+
   make
   make dist
   make install
-  
+
   ldconfig
-  
+
   pauseToContinue
 
 fi
@@ -614,9 +623,10 @@ then
 
   # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
   wgetAndDecompress $mariadb_install_tmp_dir mariadb_src $mariadb_address
-  
+
   groupadd mysql
-  useradd -c "MySQL Server" -g mysql -s /bin/false mysql
+  # useradd -c "MySQL Server" -g mysql -s /bin/false mysql
+	adduser --system --no-create-home --disabled-login --disabled-password --group mysql
 
   cmake . -DBUILD_CONFIG=mysql_release \
   -DCMAKE_C_FLAGS="-I/usr/local/include -I/usr/include/i386-linux-gnu" \
@@ -627,16 +637,16 @@ then
 
   make
   make install
-  
+
   export PATH=$PATH:/usr/local/mysql/bin
   echo "export PATH=$PATH:/usr/local/mysql/bin" >> /etc/profile
   source /etc/profile
-  
+
   cd /usr/local/mysql
-  
+
   chown -R root .
   chown -R mysql mysql
-  
+
   cp ./support-files/my-medium.cnf /etc/my.cnf
   cp /etc/mysql/my.cnf /etc/mysql/my.cnf.back
 
@@ -647,77 +657,77 @@ then
   # Evaluate: Modify query_cache_size (=0)
   # Evaluate: Modify query_cache_type (=0)
   # Evaluate: Modify query_cache_limit (> 1M, or use smaller result sets)
-  
+
   # setting /etc/my.cnf
   sed -i 's#socket.*=.*/tmp/mysql.sock#socket  = /var/run/mysqld/mysqld.sock#g' /etc/my.cnf
   ## setting [mysqld] section
   perl -i -pe "BEGIN{undef $/;} s/^\[mysqld\]$/[mysqld]\n\nperformance_schema = ON\n/sgm" /etc/my.cnf
 
   my_print_defaults --mysqld
-  
+
   pauseToContinue
 
   # log dir
   mkdir -p /var/log/mysql/
   touch /var/log/mysql/error.log
   chown -R mysql:mysql /var/log/mysql/
-  
+
   # socket
   mkdir -p /var/run/mysqld/
   chown -R mysql:mysql /var/run/mysqld/
-  
+
   # datadir
   mkdir -p /usr/local/mysql/data
-    
+
   ./scripts/mysql_install_db --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --socket=/var/run/mysqld/mysqld.sock --verbose
-  
+
   # datadir own
   chown -R mysql:mysql /usr/local/mysql/data
-  
+
   cp ./support-files/mysql.server /etc/init.d/mysql
   chmod +x /etc/init.d/mysql
   update-rc.d mysql defaults
-  
+
   ldconfig
-    
+
   service mysql start
-  
+
   ./bin/mysql_secure_installation --socket=/var/run/mysqld/mysqld.sock
-  
+
   ./bin/mysqladmin -u root -p password
-  
+
   service mysql restart
-  
+
   service mysql status
-  
+
   pauseToContinue
-  
+
   # http://www.askapache.com/linux/mariadb-lz4-compression-howto-centos/
   mysql -p -Ntbe 'set global innodb_compression_algorithm=lz4;set global innodb_compression_level=3'
   mysql -p -Ntbe 'SHOW VARIABLES WHERE Variable_name LIKE "have_%" OR Variable_name LIKE "%_compression_%"'
 
   pauseToContinue
-  
+
   wget http://mysqltuner.pl/ -O /usr/local/mysql/mysql-test/mysqltuner.pl
   wget https://raw.githubusercontent.com/major/MySQLTuner-perl/master/basic_passwords.txt -O /usr/local/mysql/mysql-test/basic_passwords.txt
   wget https://raw.githubusercontent.com/major/MySQLTuner-perl/master/vulnerabilities.csv -O /usr/local/mysql/mysql-test/vulnerabilities.csv
-  
+
   read -e -i "Y" -p "Run Test Tuner MariaDB ? [Y/n]: " input_install_mariadb_test_tuner
-  
+
   if [ $input_install_mariadb_test_tuner == "Y" ] || [ $input_install_mariadb_test_tuner == "y" ]
   then
      perl /usr/local/mysql/mysql-test/mysqltuner.pl --cvefile=/usr/local/mysql/mysql-test/vulnerabilities.csv
   fi
-  
+
   cd ./mysql-test
-  
+
   read -e -i "n" -p "Run Test MariaDB ? [Y/n]: " input_install_mariadb_test
-  
+
   if [ $input_install_mariadb_test == "Y" ] || [ $input_install_mariadb_test == "y" ]
   then
     perl ./mysql-test-run.pl
   fi
-  
+
 pauseToContinue
 
 fi
@@ -734,6 +744,8 @@ read -e -i "Y" -p "Install PHP ? [Y/n]: " input_install_php
 if [ $input_install_php == "Y" ] || [ $input_install_php == "y" ]
 then
 
+	adduser --system --no-create-home --disabled-login --disabled-password --group www-data
+
   php_address="https://github.com/php/php-src/archive/php-7.1.6.tar.gz"
   read -e -i "$php_address" -p "Enter the download address for PHP 7 (tar.gz): " input_php_address
   php_address="${input_php_address:-$php_address}"
@@ -741,14 +753,14 @@ then
   php_install_tmp_dir="/var/tmp/php_build"
   read -e -i "$php_install_tmp_dir" -p "Enter temporary directory for nginx installation: " input_php_install_tmp_dir
   php_install_tmp_dir="${input_php_install_tmp_dir:-$php_install_tmp_dir}"
-  
+
   # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
   wgetAndDecompress $php_install_tmp_dir php_src $php_address
-  
+
   mkdir -p /usr/local/php7
 
   ./buildconf --force
-  
+
   CONFIGURE_STRING="--prefix=/usr/local/php7 \
   --enable-huge-code-pages \
   --with-config-file-scan-dir=/usr/local/php7/etc/conf.d \
@@ -790,12 +802,12 @@ then
   --enable-fpm \
   --with-fpm-user=www-data \
   --with-fpm-group=www-data"
-  
+
   ./configure $CONFIGURE_STRING
-  
+
   make
   make install
-  
+
   # Create a dir for storing PHP module conf
   mkdir /usr/local/php7/etc/conf.d
 
@@ -805,9 +817,9 @@ then
   # Add config files
   cp php.ini-production /usr/local/php7/lib/php.ini-production
   cp php.ini-development /usr/local/php7/lib/php.ini-development
-  
+
   cp php.ini-production /usr/local/php7/lib/php.ini
-  
+
   touch /usr/local/php7/etc/php-fpm.d/www.conf
   echo '[www]' > /usr/local/php7/etc/php-fpm.d/www.conf
   echo 'user = www-data' >> /usr/local/php7/etc/php-fpm.d/www.conf
@@ -824,22 +836,22 @@ then
   echo 'pid = /var/run/php7-fpm.pid' >> /usr/local/php7/etc/php-fpm.conf
   echo 'error_log = /var/log/php7-fpm.log' >> /usr/local/php7/etc/php-fpm.conf
   echo 'include=/usr/local/php7/etc/php-fpm.d/*.conf' >> /usr/local/php7/etc/php-fpm.conf
-  
+
   touch /usr/local/php7/etc/conf.d/modules.ini
   echo '# Zend OPcache' > /usr/local/php7/etc/conf.d/modules.ini
   echo 'zend_extension=opcache.so' >> /usr/local/php7/etc/conf.d/modules.ini
-  
+
   # Add the init script
   wget https://raw.githubusercontent.com/kasparsd/php-7-debian/master/conf/php7-fpm.init -O /etc/init.d/php7-fpm
   chmod +x /etc/init.d/php7-fpm
   update-rc.d php7-fpm defaults
-  
+
   ldconfig
-  
+
   service php7-fpm start
-  
+
   needrestart -r l
-  
+
 pauseToContinue
 
 fi
@@ -855,6 +867,8 @@ read -e -i "Y" -p "Install nginx ? [Y/n]: " input_install_nginx
 if [ $input_install_nginx == "Y" ] || [ $input_install_nginx == "y" ]
 then
 
+	adduser --system --no-create-home --disabled-login --disabled-password --group www-data
+
   nginx_address="https://nginx.org/download/nginx-1.13.1.tar.gz"
   read -e -i "$nginx_address" -p "Enter the download address for CURL (tar.gz): " input_nginx_address
   nginx_address="${input_nginx_address:-$nginx_address}"
@@ -865,7 +879,7 @@ then
 
   # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
   wgetAndDecompress $nginx_install_tmp_dir nginx_src $nginx_address
-  
+
   ./configure \
     --prefix=/usr/share/nginx \
     --sbin-path=/usr/sbin/nginx \
@@ -887,22 +901,49 @@ then
     --with-http_gzip_static_module \
     --with-http_v2_module \
     --with-ipv6
-    
+
     make
     make install
-    
+
     mkdir -p /etc/nginx/ssl/
     openssl dhparam -out /etc/nginx/ssl/dhparam.pem 4096
-    
-    # TODO: nano /etc/nginx/nginx.conf
-    
+
+    # FILE: /etc/nginx/nginx.conf
+		rm /etc/nginx/nginx.conf
+		cp ${BASEDIR}/files/nginx/nginx.conf /etc/nginx/nginx.conf
+
+		# FILE: /etc/nginx/conf.d/*
+		mkdir -p /etc/nginx/conf.d/
+		cp ${BASEDIR}/files/nginx/conf.d/mail.conf /etc/nginx/conf.d/mail.conf
+
+		# FILE: /etc/nginx/snippets/*
+		mkdir -p /etc/nginx/snippets/
+		cp ${BASEDIR}/files/nginx/snippets/diffie-hellman /etc/nginx/snippets/diffie-hellman
+		cp ${BASEDIR}/files/nginx/snippets/security /etc/nginx/snippets/security
+
+		# FILE: /etc/nginx/sites-available/*
+		mkdir -p /etc/nginx/sites-available/
+		cp ${BASEDIR}/files/nginx/sites-available/xxdomainxx.conf /etc/nginx/sites-available/${global_domain}.conf
+		# Modify file
+		sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/nginx/sites-available/${global_domain}.conf
+
+		# DIR: /etc/nginx/sites-enabled/
+		mkdir -p /etc/nginx/sites-enabled/
+		ln -s /etc/nginx/sites-available/${global_domain}.conf /etc/nginx/sites-enabled/${global_domain}.conf
+
+		# FILE: /lib/systemd/system/nginx.service
+		cp ${BASEDIR}/files/nginx/systemd/nginx.service /lib/systemd/system/nginx.service
+		chmod +x /lib/systemd/system/nginx.service
+
+		needrestart -r l
+
+		nginx
     nginx -t
     nginx -V
-    needrestart -r l
     nginx -s reload
-    
+
     pauseToContinue
-    
+
 pauseToContinue
 
 fi
@@ -918,35 +959,31 @@ read -e -i "Y" -p "Install Let’s Encrypt ? [Y/n]: " input_install_letEncrypt
 if [ $input_install_letEncrypt == "Y" ] || [ $input_install_letEncrypt == "y" ]
 then
 
-  letEncrypt_domain="grupolfmedia.tk"
-  read -e -i "$letEncrypt_domain" -p "Enter the domian: " input_letEncrypt_domain
-  letEncrypt_domain="${input_letEncrypt_domain:-$letEncrypt_domain}"
-  
-  letEncrypt_emailSupport="email@email.com"
-  read -e -i "$letEncrypt_domain" -p "Enter email support: " input_letEncrypt_emailSupport
-  letEncrypt_emailSupport="${input_letEncrypt_emailSupport:-$letEncrypt_emailSupport}"
-  
   git clone https://github.com/certbot/certbot /opt/letsencrypt
-  
-  cd /var/www && mkdir letsencrypt && chgrp www-data letsencrypt
-  
-  # /etc/letsencrypt/configs/my-domain.conf
+	chmod a+x /opt/letsencrypt/certbot-auto
+
+	mkdir -p /var/www/${global_domain}/letsencrypt
+	chgrp www-data /var/www/${global_domain}/letsencrypt
+
+  # FILE: /etc/letsencrypt/configs/my-domain.conf
   mkdir -p /etc/letsencrypt/configs/
-  touch /etc/letsencrypt/configs/${letEncrypt_domain}.conf
-  echo "domains = ${letEncrypt_domain}" > /etc/letsencrypt/configs/${letEncrypt_domain}.conf
-  echo "rsa-key-size = 4096" >> /etc/letsencrypt/configs/${letEncrypt_domain}.conf
-  echo "# the current closed beta (as of 2015-Nov-07) is using this server"  >> /etc/letsencrypt/configs/${letEncrypt_domain}.conf
-  echo "server = https://acme-v01.api.letsencrypt.org/directory" >> /etc/letsencrypt/configs/${letEncrypt_domain}.conf
-  echo "# this address will receive renewal reminders, IIRC" >> /etc/letsencrypt/configs/${letEncrypt_domain}.conf
-  echo "email = ${letEncrypt_emailSupport}" >> /etc/letsencrypt/configs/${letEncrypt_domain}.conf
-  echo "# turn off the ncurses UI, we want this to be run as a cronjob" >> /etc/letsencrypt/configs/${letEncrypt_domain}.conf
-  echo "text = True" >> /etc/letsencrypt/configs/${letEncrypt_domain}.conf
-  echo "# authenticate by placing a file in the webroot (under .well-known/acme-challenge/) and then letting" >> /etc/letsencrypt/configs/${letEncrypt_domain}.conf
-  echo "# LE fetch it" >> /etc/letsencrypt/configs/${letEncrypt_domain}.conf
-  echo "authenticator = webroot" >> /etc/letsencrypt/configs/${letEncrypt_domain}.conf
-  echo "webroot-path = /var/www/letsencrypt/" >> /etc/letsencrypt/configs/${letEncrypt_domain}.conf
-  
-  # TODO: Continue...
+	cp ${BASEDIR}/files/letsencrypt/configs/xxdomainxx.conf /etc/letsencrypt/configs/${global_domain}.conf
+	# Modify file
+	sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/letsencrypt/configs/${global_domain}.conf
+	sed -i "s#XXEMAILSUPPORTXX#${global_emailSupport}#g" /etc/letsencrypt/configs/${global_domain}.conf
+
+	cd /opt/letsencrypt/
+	./certbot-auto --nginx --config /etc/letsencrypt/configs/${global_domain}.conf certonly
+
+	mkdir -p /var/log/letsencrypt/
+
+	# FILE: /etc/letsencrypt/crontab/
+	mkdir -p /etc/letsencrypt/crontab/
+	cp ${BASEDIR}/files/letsencrypt/crontab/renew‑letsencrypt.sh /etc/letsencrypt/crontab/${global_domain}-renew‑letsencrypt.sh
+	# Modify file
+	sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/letsencrypt/crontab/${global_domain}-renew‑letsencrypt.sh
+	# Add crontab renew‑letsencrypt
+	crontab -l | { cat; echo "0 0 1 JAN,MAR,MAY,JUL,SEP,NOV * /etc/letsencrypt/crontab/${global_domain}-renew‑letsencrypt.sh"; } | crontab -
 
 fi
 
@@ -964,4 +1001,3 @@ fi
 # https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
 # https://www.linode.com/docs/security/securing-your-server
 # https://easyengine.io/tutorials/nginx/fail2ban/
-
