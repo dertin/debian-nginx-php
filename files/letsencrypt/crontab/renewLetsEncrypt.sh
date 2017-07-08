@@ -1,7 +1,7 @@
 #!/bin/sh
 
 cd /opt/letsencrypt/
-./certbot-auto renew --noninteractive --no-self-upgrade --config /etc/letsencrypt/configs/XXDOMAINXX.conf certonly
+./certbot-auto renew --noninteractive --no-self-upgrade --config /etc/letsencrypt/configs/XXDOMAINXX.conf
 
 if [ $? -ne 0 ]
  then

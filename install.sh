@@ -973,17 +973,17 @@ then
 	sed -i "s#XXEMAILSUPPORTXX#${global_emailSupport}#g" /etc/letsencrypt/configs/${global_domain}.conf
 
 	cd /opt/letsencrypt/
-	./certbot-auto --nginx --config /etc/letsencrypt/configs/${global_domain}.conf certonly
+	./certbot-auto --config /etc/letsencrypt/configs/${global_domain}.conf certonly
 
 	mkdir -p /var/log/letsencrypt/
 
 	# FILE: /etc/letsencrypt/crontab/
 	mkdir -p /etc/letsencrypt/crontab/
-	cp ${BASEDIR}/files/letsencrypt/crontab/renew‑letsencrypt.sh /etc/letsencrypt/crontab/${global_domain}-renew‑letsencrypt.sh
+	cp ${BASEDIR}/files/letsencrypt/crontab/renewLetsEncrypt.sh /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh
 	# Modify file
-	sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/letsencrypt/crontab/${global_domain}-renew‑letsencrypt.sh
+	sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh
 	# Add crontab renew‑letsencrypt
-	crontab -l | { cat; echo "0 0 1 JAN,MAR,MAY,JUL,SEP,NOV * /etc/letsencrypt/crontab/${global_domain}-renew‑letsencrypt.sh"; } | crontab -
+	crontab -l | { cat; echo "0 0 1 JAN,MAR,MAY,JUL,SEP,NOV * /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh"; } | crontab -
 
 fi
 
