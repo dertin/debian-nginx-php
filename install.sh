@@ -77,7 +77,7 @@ read -e -i "Y" -p "Install Essential ? [Y/n]: " input_install_essential
 if [ $input_install_essential == "Y" ] || [ $input_install_essential == "y" ]
 then
 
-# Build Essential
+	# Build Essential
 
   apt-get -y update
   apt-get -y upgrade
@@ -191,7 +191,7 @@ then
 
   ldconfig
 
-pauseToContinue
+	pauseToContinue
 
 fi
 
@@ -223,7 +223,7 @@ then
 
   lz4 -V
 
-pauseToContinue
+	pauseToContinue
 
 fi
 
@@ -255,7 +255,7 @@ then
 
   ldconfig
 
-pauseToContinue
+	pauseToContinue
 
 fi
 
@@ -288,7 +288,7 @@ then
 
   ldconfig
 
-pauseToContinue
+	pauseToContinue
 
 fi
 
@@ -325,9 +325,7 @@ then
 
   curl -V
 
-
-
-pauseToContinue
+	pauseToContinue
 
 fi
 
@@ -410,7 +408,7 @@ then
 
     ldconfig
 
-pauseToContinue
+		pauseToContinue
 
 fi
 
@@ -445,9 +443,10 @@ then
 
   cmake --version
 
-pauseToContinue
+	pauseToContinue
 
 fi
+
 #####################################################################################################################
 #
 # INSTALL libcrack2  (Tested with 2.9.6 - https://github.com/cracklib/cracklib/archive/cracklib-2.9.6.tar.gz)
@@ -498,7 +497,7 @@ then
   #create-cracklib-dict /usr/share/dict/cracklib-words /usr/share/dict/cracklib-extra-words
   create-cracklib-dict /usr/share/dict/cracklib-words
 
-pauseToContinue
+	pauseToContinue
 
 fi
 
@@ -728,7 +727,7 @@ then
     perl ./mysql-test-run.pl
   fi
 
-pauseToContinue
+	pauseToContinue
 
 fi
 
@@ -814,11 +813,15 @@ then
   # Symlink php-fpm to php7-fpm
   ln -s /usr/local/php7/sbin/php-fpm /usr/local/php7/sbin/php7-fpm
 
-  # Add config files
+  # Generate backup configuration file php.ini
   cp php.ini-production /usr/local/php7/lib/php.ini-production
   cp php.ini-development /usr/local/php7/lib/php.ini-development
-
+	# PHP configuration file
   cp php.ini-production /usr/local/php7/lib/php.ini
+	# Enable PDO extension for mysql and extension mysqli, mysqlnd
+	echo 'extension=mysqlnd.so' >> /usr/local/php7/lib/php.ini
+	echo 'extension=mysqli.so' >> /usr/local/php7/lib/php.ini
+	echo 'extension=pdo_mysql.so' >> /usr/local/php7/lib/php.ini
 
   touch /usr/local/php7/etc/php-fpm.d/www.conf
   echo '[www]' > /usr/local/php7/etc/php-fpm.d/www.conf
@@ -852,7 +855,7 @@ then
 
   needrestart -r l
 
-pauseToContinue
+	pauseToContinue
 
 fi
 
@@ -902,49 +905,46 @@ then
     --with-http_v2_module \
     --with-ipv6
 
-    make
-    make install
+  make
+  make install
 
-    mkdir -p /etc/nginx/ssl/
-    openssl dhparam -out /etc/nginx/ssl/dhparam.pem 4096
+  mkdir -p /etc/nginx/ssl/
+  openssl dhparam -out /etc/nginx/ssl/dhparam.pem 4096
 
-    # FILE: /etc/nginx/nginx.conf
-		rm /etc/nginx/nginx.conf
-		cp ${BASEDIR}/files/nginx/nginx.conf /etc/nginx/nginx.conf
+  # FILE: /etc/nginx/nginx.conf
+	rm /etc/nginx/nginx.conf
+	cp ${BASEDIR}/files/nginx/nginx.conf /etc/nginx/nginx.conf
 
-		# FILE: /etc/nginx/conf.d/*
-		mkdir -p /etc/nginx/conf.d/
-		cp ${BASEDIR}/files/nginx/conf.d/mail.conf /etc/nginx/conf.d/mail.conf
+	# FILE: /etc/nginx/conf.d/*
+	mkdir -p /etc/nginx/conf.d/
+	cp ${BASEDIR}/files/nginx/conf.d/mail.conf /etc/nginx/conf.d/mail.conf
 
-		# FILE: /etc/nginx/snippets/*
-		mkdir -p /etc/nginx/snippets/
-		cp ${BASEDIR}/files/nginx/snippets/diffie-hellman /etc/nginx/snippets/diffie-hellman
-		cp ${BASEDIR}/files/nginx/snippets/security /etc/nginx/snippets/security
+	# FILE: /etc/nginx/snippets/*
+	mkdir -p /etc/nginx/snippets/
+	cp ${BASEDIR}/files/nginx/snippets/diffie-hellman /etc/nginx/snippets/diffie-hellman
+	cp ${BASEDIR}/files/nginx/snippets/security /etc/nginx/snippets/security
 
-		# FILE: /etc/nginx/sites-available/*
-		mkdir -p /etc/nginx/sites-available/
-		cp ${BASEDIR}/files/nginx/sites-available/xxdomainxx.conf /etc/nginx/sites-available/${global_domain}.conf
-		# Modify file
-		sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/nginx/sites-available/${global_domain}.conf
+	# FILE: /etc/nginx/sites-available/*
+	mkdir -p /etc/nginx/sites-available/
+	cp ${BASEDIR}/files/nginx/sites-available/xxdomainxx.conf /etc/nginx/sites-available/${global_domain}.conf
+	# Modify file
+	sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/nginx/sites-available/${global_domain}.conf
 
-		# DIR: /etc/nginx/sites-enabled/
-		mkdir -p /etc/nginx/sites-enabled/
-		ln -s /etc/nginx/sites-available/${global_domain}.conf /etc/nginx/sites-enabled/${global_domain}.conf
+	# DIR: /etc/nginx/sites-enabled/
+	mkdir -p /etc/nginx/sites-enabled/
+	ln -s /etc/nginx/sites-available/${global_domain}.conf /etc/nginx/sites-enabled/${global_domain}.conf
 
-		# FILE: /lib/systemd/system/nginx.service
-		cp ${BASEDIR}/files/nginx/systemd/nginx.service /lib/systemd/system/nginx.service
-		chmod +x /lib/systemd/system/nginx.service
+	# FILE: /lib/systemd/system/nginx.service
+	cp ${BASEDIR}/files/nginx/systemd/nginx.service /lib/systemd/system/nginx.service
+	chmod +x /lib/systemd/system/nginx.service
+	update-rc.d nginx defaults
 
-		needrestart -r l
+	needrestart -r l
 
-		nginx
-    nginx -t
-    nginx -V
-    nginx -s reload
+	service nginx start
+  service nginx status
 
-    pauseToContinue
-
-pauseToContinue
+  pauseToContinue
 
 fi
 
@@ -984,6 +984,11 @@ then
 	sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh
 	# Add crontab renew‑letsencrypt
 	crontab -l | { cat; echo "0 0 1 JAN,MAR,MAY,JUL,SEP,NOV * /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh"; } | crontab -
+
+	# Enabled certificates in configuration file
+	sed -i "s/#REMOVE_AFTER_CONFIGURING_LE#//g" /etc/nginx/sites-enabled/${global_domain}.conf
+	# Reload nginx
+	service nginx reload
 
 fi
 
