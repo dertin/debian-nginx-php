@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Tested on Debian 8.8 32bit / 64bit - DigitalOcean
+# Tested on Debian 9 32bit / 64bit
 # NOT COMPLETED, MAY HAVE SERIOUS ERRORS
 
 BASEDIR="$PWD"
@@ -84,7 +84,7 @@ then
   apt-get -y dist-upgrade
 
   apt-get -y install coreutils build-essential expect perl file sudo cron xsltproc docbook-xsl docbook-xml \
-  libpcre3 libpcre3-dev golang libssl-dev libtiffxx5 libexpat1-dev libpng12-dev libfreetype6-dev \
+  libpcre3 libpcre3-dev golang libssl-dev libtiffxx5 libexpat1-dev libfreetype6-dev \
   pkg-config libfontconfig1-dev libjpeg62-turbo-dev xorg-sgml-doctools \
   x11proto-core-dev libxau-dev libxdmcp-dev needrestart g++ make binutils autoconf automake autotools-dev libtool \
   libbz2-dev zlib1g-dev libcunit1-dev libxml2-dev libev-dev libevent-dev libjansson-dev libc-ares-dev \
