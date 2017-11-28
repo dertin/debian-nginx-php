@@ -84,18 +84,18 @@ then
   apt-get -y dist-upgrade
 
   apt-get -y install coreutils build-essential expect perl file sudo cron xsltproc docbook-xsl docbook-xml \
-  libpcre3 libpcre3-dev zlib1g-dev golang libssl-dev libtiffxx5 libexpat1-dev libpng12-dev libfreetype6-dev \
-  pkg-config libfontconfig1-dev libjpeg62-turbo-dev libjpeg-dev xorg-sgml-doctools \
+  libpcre3 libpcre3-dev golang libssl-dev libtiffxx5 libexpat1-dev libpng12-dev libfreetype6-dev \
+  pkg-config libfontconfig1-dev libjpeg62-turbo-dev xorg-sgml-doctools \
   x11proto-core-dev libxau-dev libxdmcp-dev needrestart g++ make binutils autoconf automake autotools-dev libtool \
-  libbz2-dev zlib1g-dev libcunit1-dev libxml2-dev libev-dev libevent-dev libjansson-dev \
-  libjemalloc-dev cython python3-dev python-setuptools libaio-dev libncurses5-dev \
+  libbz2-dev zlib1g-dev libcunit1-dev libxml2-dev libev-dev libevent-dev libjansson-dev libc-ares-dev \
+  libjemalloc-dev libsystemd-dev libspdylay-dev cython python3-dev python-setuptools libaio-dev libncurses5-dev \
   m4 libunistring-dev libgmp-dev trousers libidn2-0 libunbound-dev \
   bison libmcrypt-dev libicu-dev libltdl-dev libjpeg-dev libpng-dev libpspell-dev libreadline-dev \
   uuid-dev gnulib libc6-dev libc-dbg libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
   libstdc++-4.9-dev autoconf-archive gnu-standards gettext gcc-4.9-locales debian-keyring \
   g++-multilib g++-4.9-multilib gcc-multilib flex liblinear-tools liblinear-dev mcrypt \
   gcj-jdk valgrind kytea libkytea-dev valgrind-mpi valkyrie \
-  libdbi-perl libboost-all-dev libreadline-dev rsync net-tools libdbd-mysql-perl \
+  libdbi-perl libboost-all-dev rsync net-tools libdbd-mysql-perl \
   re2c
 
   apt-get -y remove --purge --auto-remove curl
@@ -122,7 +122,7 @@ fi
 
 #####################################################################################################################
 #
-# INSTALL OpenSSL (Tested with 1.1.0f - https://www.openssl.org/source/openssl-1.1.0f.tar.gz)
+# INSTALL OpenSSL (Tested with 1.1.0g - https://www.openssl.org/source/openssl-1.1.0g.tar.gz)
 # config file: /usr/local/ssl/openssl.cnf
 #
 #####################################################################################################################
@@ -132,7 +132,7 @@ read -e -i "Y" -p "Install OpenSSL ? [Y/n]: " input_install_openssl
 if [ $input_install_openssl == "Y" ] || [ $input_install_openssl == "y" ]
 then
 
-  openssl_address="https://www.openssl.org/source/openssl-1.1.0f.tar.gz"
+  openssl_address="https://www.openssl.org/source/openssl-1.1.0g.tar.gz"
   read -e -i "$openssl_address" -p "Enter the download address for OpenSSL (tar.gz): " input_openssl_address
   openssl_address="${input_openssl_address:-$openssl_address}"
 
@@ -197,7 +197,7 @@ fi
 
 #####################################################################################################################
 #
-# INSTALL LZ4 (Tested with v1.7.5 - https://github.com/lz4/lz4/archive/v1.7.5.tar.gz)
+# INSTALL LZ4 (Tested with v1.8.0 - https://github.com/lz4/lz4/archive/v1.8.0.tar.gz)
 #
 #####################################################################################################################
 
@@ -206,12 +206,12 @@ read -e -i "Y" -p "Install lz4 ? [Y/n]: " input_install_lz4
 if [ $input_install_lz4 == "Y" ] || [ $input_install_lz4 == "y" ]
 then
 
-  lz4_address="https://github.com/lz4/lz4/archive/v1.7.5.tar.gz"
+  lz4_address="https://github.com/lz4/lz4/archive/v1.8.0.tar.gz"
   read -e -i "$lz4_address" -p "Enter the download address for lz4 (tar.gz): " input_lz4_address
   lz4_address="${input_lz4_address:-$lz4_address}"
 
   lz4_install_tmp_dir="/var/tmp/lz4_build"
-  read -e -i "$lz4_install_tmp_dir" -p "Enter temporary directory for libssh2 installation: " input_lz4_install_tmp_dir
+  read -e -i "$lz4_install_tmp_dir" -p "Enter temporary directory for lz4 installation: " input_lz4_install_tmp_dir
   lz4_install_tmp_dir="${input_lz4_install_tmp_dir:-$lz4_install_tmp_dir}"
 
   wgetAndDecompress $lz4_install_tmp_dir lz4_src $lz4_address
@@ -262,7 +262,7 @@ fi
 #####################################################################################################################
 #
 # INSTALL Nghttp2: HTTP/2 C Library
-# (Tested with v1.23.1 - https://github.com/nghttp2/nghttp2/releases/download/v1.23.1/nghttp2-1.23.1.tar.gz)
+# (Tested with v1.28.0 - https://github.com/nghttp2/nghttp2/archive/v1.28.0.tar.gz)
 #
 #####################################################################################################################
 
@@ -271,7 +271,7 @@ read -e -i "Y" -p "Install Nghttp2 ? [Y/n]: " input_install_nghttp2
 if [ $input_install_nghttp2 == "Y" ] || [ $input_install_nghttp2 == "y" ]
 then
 
-  nghttp2_address="https://github.com/nghttp2/nghttp2/releases/download/v1.23.1/nghttp2-1.23.1.tar.gz"
+  nghttp2_address="https://github.com/nghttp2/nghttp2/archive/v1.28.0.tar.gz"
   read -e -i "$nghttp2_address" -p "Enter the download address for Nghttp2 (tar.gz): " input_nghttp2_address
   nghttp2_address="${input_nghttp2_address:-$nghttp2_address}"
 
@@ -294,7 +294,7 @@ fi
 
 #####################################################################################################################
 #
-# INSTALL curl (Tested with 7.54.1 - https://curl.haxx.se/download/curl-7.54.1.tar.gz)
+# INSTALL curl (Tested with 7.56.1 - https://curl.haxx.se/download/curl-7.56.1.tar.gz)
 #
 #####################################################################################################################
 
@@ -303,7 +303,7 @@ read -e -i "Y" -p "Install curl ? [Y/n]: " input_install_curl
 if [ $input_install_curl == "Y" ] || [ $input_install_curl == "y" ]
 then
 
-  curl_address="https://curl.haxx.se/download/curl-7.54.1.tar.gz"
+  curl_address="https://curl.haxx.se/download/curl-7.56.1.tar.gz"
   read -e -i "$curl_address" -p "Enter the download address for CURL (tar.gz): " input_curl_address
   curl_address="${input_curl_address:-$curl_address}"
 
@@ -331,7 +331,7 @@ fi
 
 #####################################################################################################################
 #
-# INSTALL GnuTLS 3.5.13 (https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.13.tar.xz)
+# INSTALL GnuTLS 3.5.16 (https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.16.tar.xz)
 # - Optional
 #
 #####################################################################################################################
@@ -344,7 +344,7 @@ then
   apt-get -y build-dep nettle
   apt-get -y build-dep p11-kit
 
-  gnutls_address="https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.13.tar.xz"
+  gnutls_address="https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.16.tar.xz"
   read -e -i "$gnutls_address" -p "Enter the download address for GnuTLS (tar.gz): " input_gnutls_address
   gnutls_address="${input_gnutls_address:-$gnutls_address}"
 
@@ -352,10 +352,10 @@ then
   read -e -i "$gnutls_install_tmp_dir" -p "Enter temporary directory for GnuTLS installation: " input_gnutls_install_tmp_dir
   gnutls_install_tmp_dir="${input_gnutls_install_tmp_dir:-$gnutls_install_tmp_dir}"
 
-  # GnuTLS Dependencies: Nettle 3.3
+  # GnuTLS Dependencies: Nettle >= 3.3
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
-    wgetAndDecompress '/var/tmp/nettle_build' nettle_src 'https://ftp.gnu.org/gnu/nettle/nettle-3.3.tar.gz'
+    wgetAndDecompress '/var/tmp/nettle_build' nettle_src 'https://ftp.gnu.org/gnu/nettle/nettle-3.4.tar.gz'
 
     ./configure
 
@@ -371,7 +371,7 @@ then
   # GnuTLS Dependencies: Libtasn1 >= 4.9
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
-    wgetAndDecompress '/var/tmp/libtasn1_build' libtasn1_src 'http://ftp.gnu.org/gnu/libtasn1/libtasn1-4.12.tar.gz'
+    wgetAndDecompress '/var/tmp/libtasn1_build' libtasn1_src 'https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.12.tar.gz'
 
     ./configure
 
@@ -503,7 +503,7 @@ fi
 
 #####################################################################################################################
 #
-# INSTALL LibXML2  (Tested with 2.9.4 - http://xmlsoft.org/sources/libxml2-2.9.4.tar.gz)
+# INSTALL LibXML2  (Tested with 2.9.7 - http://xmlsoft.org/sources/libxml2-2.9.7.tar.gz)
 #
 #####################################################################################################################
 
@@ -512,7 +512,7 @@ read -e -i "Y" -p "Install LibXML2 ? [Y/n]: " input_install_libXML2
 if [ $input_install_libXML2 == "Y" ] || [ $input_install_libXML2 == "y" ]
 then
 
-  libXML2_address="http://xmlsoft.org/sources/libxml2-2.9.4.tar.gz"
+  libXML2_address="http://xmlsoft.org/sources/libxml2-2.9.7.tar.gz"
   read -e -i "$libXML2_address" -p "Enter the download address for LibXML2 (tar.gz): " input_libXML2_address
   libXML2_address="${input_libXML2_address:-$libXML2_address}"
 
@@ -535,7 +535,7 @@ fi
 
 #####################################################################################################################
 #
-# INSTALL libxslt  (Tested with 1.1.29 - http://xmlsoft.org/sources/libxslt-1.1.29.tar.gz)
+# INSTALL libxslt  (Tested with 1.1.32 - http://xmlsoft.org/sources/libxslt-1.1.32.tar.gz)
 #
 #####################################################################################################################
 
@@ -544,7 +544,7 @@ read -e -i "Y" -p "Install libxslt ? [Y/n]: " input_install_libxslt
 if [ $input_install_libxslt == "Y" ] || [ $input_install_libxslt == "y" ]
 then
 
-  libxslt_address="http://xmlsoft.org/sources/libxslt-1.1.29.tar.gz"
+  libxslt_address="http://xmlsoft.org/sources/libxslt-1.1.32.tar.gz"
   read -e -i "$libxslt_address" -p "Enter the download address for libxslt (tar.gz): " input_libxslt_address
   libxslt_address="${input_libxslt_address:-$libxslt_address}"
 
@@ -603,7 +603,7 @@ fi
 
 #####################################################################################################################
 #
-# INSTALL MariaDB 10.2.6 - https://mariadb.com/kb/en/mariadb/generic-build-instructions/
+# INSTALL MariaDB 10.2.10 - https://mariadb.com/kb/en/mariadb/generic-build-instructions/
 #
 #####################################################################################################################
 
@@ -612,7 +612,7 @@ read -e -i "Y" -p "Install MariaDB ? [Y/n]: " input_install_mariadb
 if [ $input_install_mariadb == "Y" ] || [ $input_install_mariadb == "y" ]
 then
 
-  mariadb_address="https://downloads.mariadb.org/f/mariadb-10.2.6/source/mariadb-10.2.6.tar.gz?serve"
+  mariadb_address="https://downloads.mariadb.org/f/mariadb-10.2.10/source/mariadb-10.2.10.tar.gz?serve"
   read -e -i "$mariadb_address" -p "Enter the download address for MariaDB (tar.gz): " input_mariadb_address
   mariadb_address="${input_mariadb_address:-$mariadb_address}"
 
@@ -733,7 +733,7 @@ fi
 
 #####################################################################################################################
 #
-# INSTALL PHP (Tested with 7.1.6 - https://github.com/php/php-src/archive/php-7.1.6.tar.gz)
+# INSTALL PHP (Tested with 7.1.12 - https://github.com/php/php-src/archive/php-7.1.12.tar.gz)
 # use config file from: https://github.com/kasparsd/php-7-debian/
 #
 #####################################################################################################################
@@ -745,7 +745,7 @@ then
 
 	adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
-  php_address="https://github.com/php/php-src/archive/php-7.1.6.tar.gz"
+  php_address="https://github.com/php/php-src/archive/php-7.1.12.tar.gz"
   read -e -i "$php_address" -p "Enter the download address for PHP 7 (tar.gz): " input_php_address
   php_address="${input_php_address:-$php_address}"
 
@@ -823,30 +823,15 @@ then
 	echo 'extension=mysqli.so' >> /usr/local/php7/lib/php.ini
 	echo 'extension=pdo_mysql.so' >> /usr/local/php7/lib/php.ini
 
-  touch /usr/local/php7/etc/php-fpm.d/www.conf
-  echo '[www]' > /usr/local/php7/etc/php-fpm.d/www.conf
-  echo 'user = www-data' >> /usr/local/php7/etc/php-fpm.d/www.conf
-  echo 'group = www-data' >> /usr/local/php7/etc/php-fpm.d/www.conf
-  echo 'listen = 127.0.0.1:9007' >> /usr/local/php7/etc/php-fpm.d/www.conf
-  echo 'pm = dynamic' >> /usr/local/php7/etc/php-fpm.d/www.conf
-  echo 'pm.max_children = 5' >> /usr/local/php7/etc/php-fpm.d/www.conf
-  echo 'pm.start_servers = 2' >> /usr/local/php7/etc/php-fpm.d/www.conf
-  echo 'pm.min_spare_servers = 1' >> /usr/local/php7/etc/php-fpm.d/www.conf
-  echo 'pm.max_spare_servers = 3' >> /usr/local/php7/etc/php-fpm.d/www.conf
+  cp ${BASEDIR}/files/php7/etc/php-fpm.d/www.conf /usr/local/php7/etc/php-fpm.d/www.conf
 
-  touch /usr/local/php7/etc/php-fpm.conf
-  echo '[global]' > /usr/local/php7/etc/php-fpm.conf
-  echo 'pid = /var/run/php7-fpm.pid' >> /usr/local/php7/etc/php-fpm.conf
-  echo 'error_log = /var/log/php7-fpm.log' >> /usr/local/php7/etc/php-fpm.conf
-  echo 'include=/usr/local/php7/etc/php-fpm.d/*.conf' >> /usr/local/php7/etc/php-fpm.conf
+  cp ${BASEDIR}/files/php7/etc/php-fpm.conf /usr/local/php7/etc/php-fpm.conf
 
-  touch /usr/local/php7/etc/conf.d/modules.ini
-  echo '# Zend OPcache' > /usr/local/php7/etc/conf.d/modules.ini
-  echo 'zend_extension=opcache.so' >> /usr/local/php7/etc/conf.d/modules.ini
+  cp ${BASEDIR}/files/php7/etc/conf.d/modules.ini /usr/local/php7/etc/conf.d/modules.ini
 
   # Add the init script
-  wget https://raw.githubusercontent.com/kasparsd/php-7-debian/master/conf/php7-fpm.init -O /etc/init.d/php7-fpm
-  chmod +x /etc/init.d/php7-fpm
+	cp ${BASEDIR}/files/php7/etc/init.d/php7-fpm /etc/init.d/php7-fpm
+	chmod +x /etc/init.d/php7-fpm
   update-rc.d php7-fpm defaults
 
   ldconfig
@@ -861,7 +846,7 @@ fi
 
 #####################################################################################################################
 #
-# INSTALL nginx (Tested with 1.13.1 - https://nginx.org/download/nginx-1.13.1.tar.gz)
+# INSTALL nginx (Tested with 1.13.7 - https://nginx.org/download/nginx-1.13.7.tar.gz)
 #
 #####################################################################################################################
 
@@ -872,7 +857,7 @@ then
 
 	adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
-  nginx_address="https://nginx.org/download/nginx-1.13.1.tar.gz"
+  nginx_address="https://nginx.org/download/nginx-1.13.7.tar.gz"
   read -e -i "$nginx_address" -p "Enter the download address for CURL (tar.gz): " input_nginx_address
   nginx_address="${input_nginx_address:-$nginx_address}"
 
@@ -992,17 +977,29 @@ then
 
 fi
 
+#####################################################################################################################
+#
+# blackfire.io - Only Agent - (https://blackfire.io)
+#
+#####################################################################################################################
 
-# NOTES:
-# PHP 7 OPcache
-# Nginx: https://fak3r.com/2015/09/29/howto-build-nginx-with-http-2-support/
-# https://www.nginx.com/blog/compiling-dynamic-modules-nginx-plus/
-# SSL config @see https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
-# MariaDb: https://www.digitalocean.com/community/tutorials/how-to-secure-mysql-and-mariadb-databases-in-a-linux-vps
-# http://howtolamp.com/lamp/mysql/5.6/securing/
+read -e -i "n" -p "Install blackfire.io Agent [Opcional] ? [Y/n]: " input_install_blackfire
 
-# TODO:
-# Install Let’s Encrypt Client @see https://www.nginx.com/blog/free-certificates-lets-encrypt-and-nginx/
-# https://raymii.org/s/tutorials/Strong_SSL_Security_On_nginx.html
-# https://www.linode.com/docs/security/securing-your-server
-# https://easyengine.io/tutorials/nginx/fail2ban/
+if [ $input_install_blackfire == "Y" ] || [ $input_install_blackfire == "y" ]
+then
+
+wget -O - https://packagecloud.io/gpg.key | sudo apt-key add -
+echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list
+apt-get update
+
+apt-get install blackfire-agent
+blackfire-agent -register
+
+/etc/init.d/blackfire-agent restart
+
+apt-get install blackfire-php
+
+service nginx reload
+service php7-fpm reload
+
+fi
