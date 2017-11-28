@@ -96,7 +96,7 @@ then
   g++-multilib g++-4.9-multilib gcc-multilib flex liblinear-tools liblinear-dev mcrypt \
   gcj-jdk valgrind kytea libkytea-dev valgrind-mpi valkyrie \
   libdbi-perl libboost-all-dev rsync net-tools libdbd-mysql-perl \
-  re2c
+  re2c needrestart
 
   apt-get -y remove --purge --auto-remove curl
   apt-get -y remove --purge --auto-remove cmake*
@@ -262,7 +262,7 @@ fi
 #####################################################################################################################
 #
 # INSTALL Nghttp2: HTTP/2 C Library
-# (Tested with v1.28.0 - https://github.com/nghttp2/nghttp2/archive/v1.28.0.tar.gz)
+# (Tested with v1.28.0 - https://github.com/nghttp2/nghttp2/releases/download/v1.28.0/nghttp2-1.28.0.tar.gz)
 #
 #####################################################################################################################
 
@@ -271,7 +271,7 @@ read -e -i "Y" -p "Install Nghttp2 ? [Y/n]: " input_install_nghttp2
 if [ $input_install_nghttp2 == "Y" ] || [ $input_install_nghttp2 == "y" ]
 then
 
-  nghttp2_address="https://github.com/nghttp2/nghttp2/archive/v1.28.0.tar.gz"
+  nghttp2_address="https://github.com/nghttp2/nghttp2/releases/download/v1.28.0/nghttp2-1.28.0.tar.gz"
   read -e -i "$nghttp2_address" -p "Enter the download address for Nghttp2 (tar.gz): " input_nghttp2_address
   nghttp2_address="${input_nghttp2_address:-$nghttp2_address}"
 
