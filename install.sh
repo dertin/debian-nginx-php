@@ -5,14 +5,14 @@
 
 BASEDIR="$PWD"
 MACHINE_TYPE=`uname -m`
-DEBIAN_VERSION=`cat /etc/debian_version`
+DEBIAN_VERSION=`cat /etc/debian_version | cut -d . -f 1`
 
 if [ "$MACHINE_TYPE" == "i386" ]; then
-	export CPPFLAGS="-I/usr/local/include -I/usr/include/i386-linux-gnu"
+    export CPPFLAGS="-I/usr/local/include -I/usr/include/i386-linux-gnu"
 fi
 
 if [ "$MACHINE_TYPE" == "x86_64" ]; then
-	export CPPFLAGS="-I/usr/local/include -I/usr/include/x86_64-linux-gnu"
+    export CPPFLAGS="-I/usr/local/include -I/usr/include/x86_64-linux-gnu"
 fi
 
 export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib"
@@ -35,13 +35,21 @@ function wgetAndDecompress(){
 
   if [ -z $dirTmp ] || [ -z $folderTmp ] || [ -z $downloadAddress ]
   then
-     read -n 1 -s -p "Critical error in wgetAndDecompress()" && echo -e "\n"
+     read -n 1 -s -p "Critical error in wgetAndDecompress() - create directories" && echo -e "\n"
     exit 0
   fi
 
-  # tar.gz or tar.xz
-  mkdir -p $dirTmp/$folderTmp
+  # tar.gz or tar.xz -> .tar
+  mkdir -p $dirTmp
   wget -O $dirTmp/$folderTmp.tar $downloadAddress
+
+  if [ ! -f $dirTmp/$folderTmp.tar ]
+  then
+       read -n 1 -s -p "Critical error in wgetAndDecompress() - file download" && echo -e "\n"
+      exit 0
+  fi
+
+  mkdir -p $dirTmp/$folderTmp
   rm -Rf $dirTmp/$folderTmp/*
   tar -xvf $dirTmp/$folderTmp.tar -C $dirTmp/$folderTmp --strip-components=1
   cd $dirTmp/$folderTmp
@@ -78,14 +86,14 @@ read -e -i "Y" -p "Install Essential ? [Y/n]: " input_install_essential
 if [ $input_install_essential == "Y" ] || [ $input_install_essential == "y" ]
 then
 
-	# Build Essential
+  # Build Essential
 
   apt-get -y update
   apt-get -y upgrade
   apt-get -y dist-upgrade
 
   apt-get -y install coreutils build-essential expect perl file sudo cron xsltproc docbook-xsl docbook-xml \
-  libpcre3 libpcre3-dev golang libssl-dev libtiffxx5 libexpat1-dev libfreetype6-dev \
+  libpcre3 libpcre3-dev golang libtiffxx5 libexpat1-dev libfreetype6-dev \
   pkg-config libfontconfig1-dev libjpeg62-turbo-dev xorg-sgml-doctools \
   x11proto-core-dev libxau-dev libxdmcp-dev needrestart g++ make binutils autoconf automake autotools-dev libtool \
   libbz2-dev zlib1g-dev libcunit1-dev libxml2-dev libev-dev libevent-dev libjansson-dev libc-ares-dev \
@@ -99,14 +107,18 @@ then
   libdbi-perl libboost-all-dev rsync net-tools libdbd-mysql-perl \
   re2c needrestart
 
-	DEBIAN_VERSION=`cat /etc/debian_version| cut -d . -f 1`
-	if (( $DEBIAN_VERSION >= 9 )); then
-		apt-get -y install libstdc++-6-dev gcc-6-locales g++-6-multilib
-		#TODO: compile kytea libkytea-dev
-	else
-		apt-get -y install libstdc++-4.9-dev gcc-4.9-locales g++-4.9-multilib
-		apt-get -y install kytea libkytea-dev
-	fi
+  if (( $DEBIAN_VERSION >= 9 )); then
+      apt-get -y install libstdc++-6-dev gcc-6-locales g++-6-multilib
+      #TODO: compile kytea libkytea-dev
+  else
+      apt-get -y install libstdc++-4.9-dev gcc-4.9-locales g++-4.9-multilib
+      apt-get -y install kytea libkytea-dev
+  fi
+
+  apt-get -y upgrade
+  apt-get -y autoremove
+
+  apt-get -y install libssl-dev
 
   apt-get -y remove --purge --auto-remove curl
   apt-get -y remove --purge --auto-remove cmake*
@@ -201,7 +213,7 @@ then
 
   ldconfig
 
-	pauseToContinue
+  pauseToContinue
 
 fi
 
@@ -233,7 +245,7 @@ then
 
   lz4 -V
 
-	pauseToContinue
+  pauseToContinue
 
 fi
 
@@ -265,7 +277,7 @@ then
 
   ldconfig
 
-	pauseToContinue
+  pauseToContinue
 
 fi
 
@@ -298,7 +310,7 @@ then
 
   ldconfig
 
-	pauseToContinue
+  pauseToContinue
 
 fi
 
@@ -335,7 +347,7 @@ then
 
   curl -V
 
-	pauseToContinue
+  pauseToContinue
 
 fi
 
@@ -408,17 +420,17 @@ then
 
   # Compile GnuTLS
 
-    # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
-    wgetAndDecompress $gnutls_install_tmp_dir gnutls_src $gnutls_address
+	  # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
+	  wgetAndDecompress $gnutls_install_tmp_dir gnutls_src $gnutls_address
 
-    ./configure --enable-shared --with-default-trust-store-file=`curl-config --ca`
+	  ./configure --enable-shared --with-default-trust-store-file=`curl-config --ca`
 
-    make
-    make install
+	  make
+	  make install
 
-    ldconfig
+	  ldconfig
 
-		pauseToContinue
+	  pauseToContinue
 
 fi
 
@@ -453,7 +465,7 @@ then
 
   cmake --version
 
-	pauseToContinue
+  pauseToContinue
 
 fi
 
@@ -507,7 +519,7 @@ then
   #create-cracklib-dict /usr/share/dict/cracklib-words /usr/share/dict/cracklib-extra-words
   create-cracklib-dict /usr/share/dict/cracklib-words
 
-	pauseToContinue
+  pauseToContinue
 
 fi
 
@@ -635,7 +647,7 @@ then
 
   groupadd mysql
   # useradd -c "MySQL Server" -g mysql -s /bin/false mysql
-	adduser --system --no-create-home --disabled-login --disabled-password --group mysql
+    adduser --system --no-create-home --disabled-login --disabled-password --group mysql
 
   cmake . -DBUILD_CONFIG=mysql_release \
   -DCMAKE_C_FLAGS="-I/usr/local/include -I/usr/include/i386-linux-gnu" \
@@ -737,7 +749,7 @@ then
     perl ./mysql-test-run.pl
   fi
 
-	pauseToContinue
+  pauseToContinue
 
 fi
 
@@ -753,7 +765,7 @@ read -e -i "Y" -p "Install PHP ? [Y/n]: " input_install_php
 if [ $input_install_php == "Y" ] || [ $input_install_php == "y" ]
 then
 
-	adduser --system --no-create-home --disabled-login --disabled-password --group www-data
+  adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
   php_address="https://github.com/php/php-src/archive/php-7.1.12.tar.gz"
   read -e -i "$php_address" -p "Enter the download address for PHP 7 (tar.gz): " input_php_address
@@ -826,12 +838,12 @@ then
   # Generate backup configuration file php.ini
   cp php.ini-production /usr/local/php7/lib/php.ini-production
   cp php.ini-development /usr/local/php7/lib/php.ini-development
-	# PHP configuration file
+  # PHP configuration file
   cp php.ini-production /usr/local/php7/lib/php.ini
-	# Enable PDO extension for mysql and extension mysqli, mysqlnd
-	echo 'extension=mysqlnd.so' >> /usr/local/php7/lib/php.ini
-	echo 'extension=mysqli.so' >> /usr/local/php7/lib/php.ini
-	echo 'extension=pdo_mysql.so' >> /usr/local/php7/lib/php.ini
+  # Enable PDO extension for mysql and extension mysqli, mysqlnd
+  echo 'extension=mysqlnd.so' >> /usr/local/php7/lib/php.ini
+  echo 'extension=mysqli.so' >> /usr/local/php7/lib/php.ini
+  echo 'extension=pdo_mysql.so' >> /usr/local/php7/lib/php.ini
 
   cp ${BASEDIR}/files/php7/etc/php-fpm.d/www.conf /usr/local/php7/etc/php-fpm.d/www.conf
 
@@ -840,9 +852,13 @@ then
   cp ${BASEDIR}/files/php7/etc/conf.d/modules.ini /usr/local/php7/etc/conf.d/modules.ini
 
   # Add the init script
-	cp ${BASEDIR}/files/php7/etc/init.d/php7-fpm /etc/init.d/php7-fpm
-	chmod +x /etc/init.d/php7-fpm
+    cp ${BASEDIR}/files/php7/etc/init.d/php7-fpm /etc/init.d/php7-fpm
+    chmod +x /etc/init.d/php7-fpm
   update-rc.d php7-fpm defaults
+
+  export PATH=$PATH:/usr/local/php7/bin
+  echo "export PATH=$PATH:/usr/local/php7/bin" >> /etc/profile
+  source /etc/profile
 
   ldconfig
 
@@ -850,7 +866,7 @@ then
 
   needrestart -r l
 
-	pauseToContinue
+  pauseToContinue
 
 fi
 
@@ -865,7 +881,7 @@ read -e -i "Y" -p "Install nginx ? [Y/n]: " input_install_nginx
 if [ $input_install_nginx == "Y" ] || [ $input_install_nginx == "y" ]
 then
 
-	adduser --system --no-create-home --disabled-login --disabled-password --group www-data
+    adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
   nginx_address="https://nginx.org/download/nginx-1.13.7.tar.gz"
   read -e -i "$nginx_address" -p "Enter the download address for CURL (tar.gz): " input_nginx_address
@@ -907,39 +923,39 @@ then
   openssl dhparam -out /etc/nginx/ssl/dhparam.pem 4096
 
   # FILE: /etc/nginx/nginx.conf
-	rm /etc/nginx/nginx.conf
-	cp ${BASEDIR}/files/nginx/nginx.conf /etc/nginx/nginx.conf
+  rm /etc/nginx/nginx.conf
+  cp ${BASEDIR}/files/nginx/nginx.conf /etc/nginx/nginx.conf
 
-	# FILE: /etc/nginx/conf.d/*
-	mkdir -p /etc/nginx/conf.d/
-	cp ${BASEDIR}/files/nginx/conf.d/mail.conf /etc/nginx/conf.d/mail.conf
+  # FILE: /etc/nginx/conf.d/*
+  mkdir -p /etc/nginx/conf.d/
+  cp ${BASEDIR}/files/nginx/conf.d/mail.conf /etc/nginx/conf.d/mail.conf
 
-	# FILE: /etc/nginx/snippets/*
-	mkdir -p /etc/nginx/snippets/
-	cp ${BASEDIR}/files/nginx/snippets/diffie-hellman /etc/nginx/snippets/diffie-hellman
-	cp ${BASEDIR}/files/nginx/snippets/security /etc/nginx/snippets/security
+  # FILE: /etc/nginx/snippets/*
+  mkdir -p /etc/nginx/snippets/
+  cp ${BASEDIR}/files/nginx/snippets/diffie-hellman /etc/nginx/snippets/diffie-hellman
+  cp ${BASEDIR}/files/nginx/snippets/security /etc/nginx/snippets/security
 
-	# FILE: /etc/nginx/sites-available/*
-	mkdir -p /etc/nginx/sites-available/
-	cp ${BASEDIR}/files/nginx/sites-available/xxdomainxx.conf /etc/nginx/sites-available/${global_domain}.conf
-	# Modify file
-	sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/nginx/sites-available/${global_domain}.conf
+  # FILE: /etc/nginx/sites-available/*
+  mkdir -p /etc/nginx/sites-available/
+  cp ${BASEDIR}/files/nginx/sites-available/xxdomainxx.conf /etc/nginx/sites-available/${global_domain}.conf
+  # Modify file
+  sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/nginx/sites-available/${global_domain}.conf
 
-	# DIR: /etc/nginx/sites-enabled/
-	mkdir -p /etc/nginx/sites-enabled/
-	ln -s /etc/nginx/sites-available/${global_domain}.conf /etc/nginx/sites-enabled/${global_domain}.conf
+  # DIR: /etc/nginx/sites-enabled/
+  mkdir -p /etc/nginx/sites-enabled/
+  ln -s /etc/nginx/sites-available/${global_domain}.conf /etc/nginx/sites-enabled/${global_domain}.conf
 
-	# FILE: /lib/systemd/system/nginx.service
-	cp ${BASEDIR}/files/nginx/systemd/nginx.service /lib/systemd/system/nginx.service
-	chmod +x /lib/systemd/system/nginx.service
-	update-rc.d nginx defaults
+  # FILE: /lib/systemd/system/nginx.service
+  cp ${BASEDIR}/files/nginx/systemd/nginx.service /lib/systemd/system/nginx.service
+  chmod +x /lib/systemd/system/nginx.service
+  update-rc.d nginx defaults
 
-	needrestart -r l
+  needrestart -r l
 
-	service nginx start
-  service nginx status
+  service nginx start
+	service nginx status
 
-  pauseToContinue
+	pauseToContinue
 
 fi
 
@@ -954,36 +970,36 @@ read -e -i "Y" -p "Install Let’s Encrypt ? [Y/n]: " input_install_letEncrypt
 if [ $input_install_letEncrypt == "Y" ] || [ $input_install_letEncrypt == "y" ]
 then
 
-  git clone https://github.com/certbot/certbot /opt/letsencrypt
-	chmod a+x /opt/letsencrypt/certbot-auto
+	git clone https://github.com/certbot/certbot /opt/letsencrypt
+  chmod a+x /opt/letsencrypt/certbot-auto
 
-	mkdir -p /var/www/${global_domain}/letsencrypt
-	chgrp www-data /var/www/${global_domain}/letsencrypt
+  mkdir -p /var/www/${global_domain}/letsencrypt
+  chgrp www-data /var/www/${global_domain}/letsencrypt
 
-  # FILE: /etc/letsencrypt/configs/my-domain.conf
-  mkdir -p /etc/letsencrypt/configs/
-	cp ${BASEDIR}/files/letsencrypt/configs/xxdomainxx.conf /etc/letsencrypt/configs/${global_domain}.conf
-	# Modify file
-	sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/letsencrypt/configs/${global_domain}.conf
-	sed -i "s#XXEMAILSUPPORTXX#${global_emailSupport}#g" /etc/letsencrypt/configs/${global_domain}.conf
+	# FILE: /etc/letsencrypt/configs/my-domain.conf
+	mkdir -p /etc/letsencrypt/configs/
+  cp ${BASEDIR}/files/letsencrypt/configs/xxdomainxx.conf /etc/letsencrypt/configs/${global_domain}.conf
+  # Modify file
+  sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/letsencrypt/configs/${global_domain}.conf
+  sed -i "s#XXEMAILSUPPORTXX#${global_emailSupport}#g" /etc/letsencrypt/configs/${global_domain}.conf
 
-	cd /opt/letsencrypt/
-	./certbot-auto --config /etc/letsencrypt/configs/${global_domain}.conf certonly
+  cd /opt/letsencrypt/
+  ./certbot-auto --config /etc/letsencrypt/configs/${global_domain}.conf certonly
 
-	mkdir -p /var/log/letsencrypt/
+  mkdir -p /var/log/letsencrypt/
 
-	# FILE: /etc/letsencrypt/crontab/
-	mkdir -p /etc/letsencrypt/crontab/
-	cp ${BASEDIR}/files/letsencrypt/crontab/renewLetsEncrypt.sh /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh
-	# Modify file
-	sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh
-	# Add crontab renew‑letsencrypt
-	crontab -l | { cat; echo "0 0 1 JAN,MAR,MAY,JUL,SEP,NOV * /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh"; } | crontab -
+  # FILE: /etc/letsencrypt/crontab/
+  mkdir -p /etc/letsencrypt/crontab/
+  cp ${BASEDIR}/files/letsencrypt/crontab/renewLetsEncrypt.sh /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh
+  # Modify file
+  sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh
+  # Add crontab renew‑letsencrypt
+  crontab -l | { cat; echo "0 0 1 JAN,MAR,MAY,JUL,SEP,NOV * /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh"; } | crontab -
 
-	# Enabled certificates in configuration file
-	sed -i "s/#REMOVE_AFTER_CONFIGURING_LE#//g" /etc/nginx/sites-enabled/${global_domain}.conf
-	# Reload nginx
-	service nginx reload
+  # Enabled certificates in configuration file
+  sed -i "s/#REMOVE_AFTER_CONFIGURING_LE#//g" /etc/nginx/sites-enabled/${global_domain}.conf
+  # Reload nginx
+  service nginx reload
 
 fi
 
@@ -998,18 +1014,18 @@ read -e -i "n" -p "Install blackfire.io Agent [Opcional] ? [Y/n]: " input_instal
 if [ $input_install_blackfire == "Y" ] || [ $input_install_blackfire == "y" ]
 then
 
-wget -O - https://packagecloud.io/gpg.key | sudo apt-key add -
-echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list
-apt-get update
+	wget -O - https://packagecloud.io/gpg.key | sudo apt-key add -
+	echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list
+	apt-get update
 
-apt-get install blackfire-agent
-blackfire-agent -register
+	apt-get install blackfire-agent
+	blackfire-agent -register
 
-/etc/init.d/blackfire-agent restart
+	/etc/init.d/blackfire-agent restart
 
-apt-get install blackfire-php
+	apt-get install blackfire-php
 
-service nginx reload
-service php7-fpm reload
+	service nginx reload
+	service php7-fpm reload
 
 fi
