@@ -5,6 +5,7 @@
 
 BASEDIR="$PWD"
 MACHINE_TYPE=`uname -m`
+DEBIAN_VERSION=`cat /etc/debian_version`
 
 if [ "$MACHINE_TYPE" == "i386" ]; then
 	export CPPFLAGS="-I/usr/local/include -I/usr/include/i386-linux-gnu"
@@ -92,11 +93,20 @@ then
   m4 libunistring-dev libgmp-dev trousers libidn2-0 libunbound-dev \
   bison libmcrypt-dev libicu-dev libltdl-dev libjpeg-dev libpng-dev libpspell-dev libreadline-dev \
   uuid-dev gnulib libc6-dev libc-dbg libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
-  libstdc++-4.9-dev autoconf-archive gnu-standards gettext gcc-4.9-locales debian-keyring \
-  g++-multilib g++-4.9-multilib gcc-multilib flex liblinear-tools liblinear-dev mcrypt \
-  gcj-jdk valgrind kytea libkytea-dev valgrind-mpi valkyrie \
+  autoconf-archive gnu-standards gettext debian-keyring \
+  g++-multilib  gcc-multilib flex liblinear-tools liblinear-dev mcrypt \
+  gcj-jdk valgrind valgrind-mpi valkyrie \
   libdbi-perl libboost-all-dev rsync net-tools libdbd-mysql-perl \
   re2c needrestart
+
+	DEBIAN_VERSION=`cat /etc/debian_version| cut -d . -f 1`
+	if (( $DEBIAN_VERSION >= 9 )); then
+		apt-get -y install libstdc++-6-dev gcc-6-locales g++-6-multilib
+		#TODO: compile kytea libkytea-dev
+	else
+		apt-get -y install libstdc++-4.9-dev gcc-4.9-locales g++-4.9-multilib
+		apt-get -y install kytea libkytea-dev
+	fi
 
   apt-get -y remove --purge --auto-remove curl
   apt-get -y remove --purge --auto-remove cmake*
