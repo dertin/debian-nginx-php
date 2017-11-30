@@ -1,4 +1,4 @@
-FROM amd64/debian:stable
+FROM debian:stable
 
 ADD . /root/workspace
 
