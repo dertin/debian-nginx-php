@@ -11,7 +11,7 @@ language: bash
 
 before_install:
 - docker build -t dertin/debian:lemp -f Dockerfile.debug .
-- docker run -t dertin/debian:lemp /bin/bash -c "/root/workspace/travis-test.sh"
+- docker run -t dertin/debian:lemp --entrypoint /bin/bash -c "/root/workspace/travis-test.sh"
 
 # Test
 script:
