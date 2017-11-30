@@ -15,6 +15,7 @@ before_install:
 
 # Test
 script:
+  - php -v
   - wget -V
 
 #after_success:
