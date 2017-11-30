@@ -105,7 +105,7 @@ then
   g++-multilib  gcc-multilib flex liblinear-tools liblinear-dev mcrypt \
   gcj-jdk valgrind valgrind-mpi valkyrie \
   libdbi-perl libboost-all-dev rsync net-tools libdbd-mysql-perl \
-  re2c needrestart
+  re2c needrestart wget
 
   if (( $DEBIAN_VERSION >= 9 )); then
       apt-get -y install libstdc++-6-dev gcc-6-locales g++-6-multilib

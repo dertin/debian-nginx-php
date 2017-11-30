@@ -1,0 +1,25 @@
+sudo: required
+
+branches:
+  only:
+    - develop
+
+services:
+  - docker
+
+language: bash
+
+before_install:
+- docker build -t dertin/debian:lemp -f Dockerfile.debug .
+- docker run -t --rm dertin/debian:lemp
+
+# Test
+script:
+  - curl -v
+
+#after_success:
+#after_failure:
+#after_script:
+
+notifications:
+  email: false

@@ -1,0 +1,10 @@
+FROM amd64/debian:stable
+
+RUN apt-get update && \
+    apt-get upgrade && \
+    rm -rf /var/lib/apt/lists/* \
+    mkdir -p /root/workspace
+
+ADD . /root/workspace
+
+CMD ["/root/workspace/travis-test.sh"]
