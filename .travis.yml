@@ -10,18 +10,21 @@ services:
 language: bash
 
 before_install:
-- docker build -t dertin/debian:lemp -f Dockerfile.debug .
-- docker run -t --name container_test dertin/debian:lemp /bin/bash -c "/root/workspace/travis-test.sh"
-- docker ps -a
+  - docker build -t dertin/debian:lemp -f Dockerfile.debug .
+  - docker run -t --name container_test dertin/debian:lemp /bin/bash -c "/root/workspace/travis-test.sh"
+  - docker start container_test
+  - docker ps -a
 
 # Test
 script:
-  - docker start container_test
   - docker exec -t container_test /bin/bash -c "php -v"
 
 #after_success:
 #after_failure:
-#after_script:
+
+after_script:
+  - docker stop container_test
+  - docker rm $(docker ps -a -q)
 
 notifications:
   email: false
