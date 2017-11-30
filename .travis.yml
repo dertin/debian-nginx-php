@@ -16,6 +16,7 @@ before_install:
 
 # Test
 script:
+  - docker start dertin/debian:lemp
   - docker exec -t dertin/debian:lemp /bin/bash -c "php -v"
 
 #after_success:
