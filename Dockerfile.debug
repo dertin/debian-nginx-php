@@ -1,7 +1,7 @@
 FROM amd64/debian:stable
 
-RUN apt-get update && \
-    apt-get upgrade && \
+RUN apt-get -y update && \
+    apt-get -y upgrade && \
     rm -rf /var/lib/apt/lists/* && \
     mkdir -p /root/workspace
 
