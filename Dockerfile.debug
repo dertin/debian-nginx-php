@@ -8,4 +8,4 @@ RUN apt-get -y update && \
     mkdir -p /root/workspace && \
     chmod +x /root/workspace/*.sh
 
-CMD ["/root/workspace/travis-test.sh"]
+ENTRYPOINT /bin/bash

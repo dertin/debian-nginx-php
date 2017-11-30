@@ -11,11 +11,11 @@ language: bash
 
 before_install:
 - docker build -t dertin/debian:lemp -f Dockerfile.debug .
-- docker run -t --rm dertin/debian:lemp
+- docker run -t dertin/debian:lemp /bin/bash -c "/root/workspace/travis-test.sh"
 
 # Test
 script:
-  - curl -v
+  - wget -V
 
 #after_success:
 #after_failure:
