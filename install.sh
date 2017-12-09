@@ -50,9 +50,9 @@ function wgetAndDecompress(){
   fi
 
   mkdir -p $dirTmp/$folderTmp
-  rm -Rf $dirTmp/$folderTmp/*
+  rm -Rf ${dirTmp:?}/$folderTmp/*
   tar -xvf $dirTmp/$folderTmp.tar -C $dirTmp/$folderTmp --strip-components=1
-  cd $dirTmp/$folderTmp
+  cd $dirTmp/$folderTmp || exit
 
 }
 
@@ -423,7 +423,7 @@ then
 	  # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
 	  wgetAndDecompress $gnutls_install_tmp_dir gnutls_src $gnutls_address
 
-	  ./configure --enable-shared --with-default-trust-store-file=`curl-config --ca`
+	  ./configure --enable-shared --with-default-trust-store-file="$(curl-config --ca)"
 
 	  make
 	  make install
@@ -490,7 +490,7 @@ then
 
   wgetAndDecompress $libcrack2_install_tmp_dir libcrack2_src $libcrack2_address
 
-  cd ./src
+  cd ./src || exit
 
   sed -i '/skipping/d' util/packer.c
 
@@ -508,7 +508,7 @@ then
 
   pauseToContinue
 
-  cd ../words
+  cd ../words || exit
 
   make all
 
@@ -663,7 +663,7 @@ then
   echo "export PATH=$PATH:/usr/local/mysql/bin" >> /etc/profile
   source /etc/profile
 
-  cd /usr/local/mysql
+  cd /usr/local/mysql || exit
 
   chown -R root .
   chown -R mysql mysql
@@ -740,7 +740,7 @@ then
      perl /usr/local/mysql/mysql-test/mysqltuner.pl --cvefile=/usr/local/mysql/mysql-test/vulnerabilities.csv
   fi
 
-  cd ./mysql-test
+  cd ./mysql-test || exit
 
   read -e -i "n" -p "Run Test MariaDB ? [Y/n]: " input_install_mariadb_test
 
@@ -983,7 +983,7 @@ then
   sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/letsencrypt/configs/${global_domain}.conf
   sed -i "s#XXEMAILSUPPORTXX#${global_emailSupport}#g" /etc/letsencrypt/configs/${global_domain}.conf
 
-  cd /opt/letsencrypt/
+  cd /opt/letsencrypt/ || exit
   ./certbot-auto --config /etc/letsencrypt/configs/${global_domain}.conf certonly
 
   mkdir -p /var/log/letsencrypt/
