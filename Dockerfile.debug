@@ -1,9 +1,9 @@
 FROM debian:stable
 
-ADD . /root/workspace
-
 RUN apt-get -y update && \
     apt-get -y upgrade && \
     rm -rf /var/lib/apt/lists/* && \
     mkdir -p /root/workspace && \
     chmod +x /root/workspace/*.sh
+
+ADD . /root/workspace
