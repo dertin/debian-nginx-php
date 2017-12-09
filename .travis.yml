@@ -14,10 +14,10 @@ before_install:
   - docker run -t --name container_test dertin/debian:lemp /bin/bash -c "uname -a"
   - docker start container_test
   - docker ps -a
-  - docker exec -t container_test /bin/bash -c "/root/workspace/install.sh travis Y"
 
 # Test
 script:
+  - docker exec -t container_test /bin/bash -c "/root/workspace/install.sh travis Y"
   - docker exec -t container_test /bin/bash -c "php -v"
 
 #after_success:
