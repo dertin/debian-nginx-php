@@ -11,13 +11,12 @@ language: bash
 
 before_install:
   - docker build -t dertin/debian:lemp -f Dockerfile.debug .
-  - docker run -t --name container_test dertin/debian:lemp /bin/bash -c "uname -a"
+  - docker run -t --name container_test dertin/debian:lemp /bin/bash -c "/root/workspace/install.sh travis Y"
   - docker start container_test
   - docker ps -a
 
 # Test
 script:
-  - docker exec -t container_test /bin/bash -c "/root/workspace/install.sh travis Y"
   - docker exec -t container_test /bin/bash -c "php -v"
 
 #after_success:
