@@ -12,9 +12,9 @@ language: bash
 before_install:
   - docker build -t dertin/debian:lemp -f Dockerfile.debug .
   - docker run -t --name container_test dertin/debian:lemp /bin/bash -c "uname -a"
-  - docker exec -t container_test /bin/bash -c "/root/workspace/install.sh travis Y"
   - docker start container_test
   - docker ps -a
+  - docker exec -t container_test /bin/bash -c "/root/workspace/install.sh travis Y"
 
 # Test
 script:
