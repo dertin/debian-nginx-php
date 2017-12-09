@@ -11,7 +11,7 @@ language: bash
 
 before_install:
   - docker build -t dertin/debian:lemp -f Dockerfile.debug .
-  - docker run -t --name container_test dertin/debian:lemp /bin/bash -c "/root/workspace/install.sh all Y"
+  - docker run -t --name container_test dertin/debian:lemp /bin/bash -c "/root/workspace/install.sh all Y 2>&1 >/dev/null"
   - docker start container_test
   - docker ps -a
 

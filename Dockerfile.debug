@@ -2,7 +2,7 @@ FROM debian:stable
 
 ADD . /root/workspace
 
-RUN apt-get -y update && \
-    apt-get -y upgrade && \
+RUN apt-get -y update > /dev/null 2>&1 && \
+    apt-get -y upgrade > /dev/null 2>&1 && \
     rm -rf /var/lib/apt/lists/* && \
     chmod +x /root/workspace/*.sh
