@@ -713,7 +713,7 @@ function mariadb_install() {
 
     groupadd mysql
     # useradd -c "MySQL Server" -g mysql -s /bin/false mysql
-      adduser --system --no-create-home --disabled-login --disabled-password --group mysql
+    adduser --system --no-create-home --disabled-login --disabled-password --group mysql
 
     cmake . -DBUILD_CONFIG=mysql_release \
     -DCMAKE_C_FLAGS="-I/usr/local/include -I/usr/include/i386-linux-gnu" \
@@ -1226,58 +1226,57 @@ case "$1" in
             letsencrypt_install
             blackfire_install
             ;;
-        "travis-test")
 
-            uname -a
+        "travis")
 
             travis_fold_start essential
-              essential_install > /dev/null 2>&1
+              essential_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start openssl
-              openssl_install > /dev/null 2>&1
+              openssl_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start zlib
-              zlib_install > /dev/null 2>&1
+              zlib_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start lz4
-              lz4_install > /dev/null 2>&1
+              lz4_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start libssh2
-              libssh2_install > /dev/null 2>&1
+              libssh2_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start nghttp2
-              nghttp2_install > /dev/null 2>&1
+              nghttp2_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start curl
-              curl_install > /dev/null 2>&1
+              curl_install 2>&1 > /dev/null
             travis_fold_end
 
             # gnutls_install
 
             travis_fold_start cmake
-              cmake_install > /dev/null 2>&1
+              cmake_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start libcrack2
-              libcrack2_install > /dev/null 2>&1
+              libcrack2_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start libxml2
-              libxml2_install > /dev/null 2>&1
+              libxml2_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start libxslt
-              libxslt_install > /dev/null 2>&1
+              libxslt_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start jemalloc
-              jemalloc_install > /dev/null 2>&1
+              jemalloc_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start mariadb
