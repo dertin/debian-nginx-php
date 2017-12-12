@@ -144,7 +144,7 @@ function essential_install() {
     g++-multilib  gcc-multilib flex liblinear-tools liblinear-dev mcrypt \
     gcj-jdk valgrind valgrind-mpi valkyrie \
     libdbi-perl libboost-all-dev rsync net-tools libdbd-mysql-perl \
-    re2c needrestart wget
+    re2c needrestart wget qt-sdk
 
     if (( $DEBIAN_VERSION >= 9 )); then
         apt-get -y install libstdc++-6-dev gcc-6-locales g++-6-multilib
@@ -1046,8 +1046,13 @@ function nginx_install() {
     ln -s /etc/nginx/sites-available/${global_domain}.conf /etc/nginx/sites-enabled/${global_domain}.conf
 
     # FILE: /lib/systemd/system/nginx.service
-    cp ${BASEDIR}/files/nginx/systemd/nginx.service /lib/systemd/system/nginx.service
-    chmod +x /lib/systemd/system/nginx.service
+    #cp ${BASEDIR}/files/nginx/systemd/nginx.service /lib/systemd/system/nginx.service
+    #chmod +x /lib/systemd/system/nginx.service
+    #update-rc.d nginx defaults
+
+    # FILE: /lib/systemd/system/nginx.service
+    cp ${BASEDIR}/files/nginx/init.d/nginx /etc/init.d/nginx
+    chmod +x /etc/init.d/nginx
     update-rc.d nginx defaults
 
     needrestart -r l
@@ -1280,7 +1285,7 @@ case "$1" in
             travis_fold_end
 
             travis_fold_start mariadb
-             mariadb_install 2>&1 > /dev/null
+             mariadb_install
             travis_fold_end
 
             travis_fold_start php
@@ -1292,7 +1297,6 @@ case "$1" in
             travis_fold_end
 
             # letsencrypt_install
-
             # blackfire_install
 
             ;;
