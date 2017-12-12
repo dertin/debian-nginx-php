@@ -1279,7 +1279,9 @@ case "$1" in
               jemalloc_install 2>&1 > /dev/null
             travis_fold_end
 
-            # mariadb_install
+            travis_fold_start mariadb
+             mariadb_install 2>&1 > /dev/null
+            travis_fold_end
 
             travis_fold_start php
               php_install 2>&1 > /dev/null
