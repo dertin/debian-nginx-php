@@ -17,6 +17,7 @@ before_install:
 
 # Test
 script:
+  - docker exec -t container_test /bin/bash -c "/usr/bin/openssl version"
   - docker exec -t container_test /bin/bash -c "/usr/local/php7/bin/php -v"
   - docker exec -t container_test /bin/bash -c "/usr/sbin/nginx -v"
 
