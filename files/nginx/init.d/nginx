@@ -10,8 +10,8 @@
 # Description:       starts nginx using start-stop-daemon
 ### END INIT INFO
 
-PATH=/opt/bin:/opt/sbin:/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DAEMON=/opt/sbin/nginx
+PATH=/sbin:/usr/sbin:/bin:/usr/bin
+DAEMON=/usr/sbin/nginx
 NAME=nginx
 DESC=nginx
 
