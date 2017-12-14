@@ -1279,7 +1279,7 @@ case "$1" in
         "travis")
 
             travis_fold_start essential
-              essential_install 2>&1 > /dev/null
+              essential_install
             travis_fold_end
 
             travis_fold_start openssl
