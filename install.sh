@@ -256,7 +256,7 @@ function python2_install() {
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $python_install_tmp_dir "python_src" $python_address
-
+    
     ./configure --prefix=/usr/local --enable-shared
     make
     make install
@@ -1204,6 +1204,9 @@ case "$1" in
         "openssl")
             openssl_install
             ;;
+        "python")
+            python2_install
+            ;;
         "zlib")
             zlib_install
             ;;
@@ -1255,6 +1258,7 @@ case "$1" in
         "all")
             essential_install
             openssl_install
+            python2_install
             zlib_install
             lz4_install
             libssh2_install
@@ -1281,6 +1285,10 @@ case "$1" in
 
             travis_fold_start openssl
               openssl_install 2>&1 > /dev/null
+            travis_fold_end
+
+            travis_fold_start python
+              python2_install  2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start zlib
