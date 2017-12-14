@@ -139,7 +139,7 @@ function essential_install() {
     perl libpcre3 libpcre3-dev file sudo cron libexpat1-dev xsltproc \
     docbook-xsl docbook-xml libxml2-dev libtiffxx5 libfreetype6-dev libfontconfig1-dev \
     libjpeg62-turbo-dev libbz2-dev zlib1g-dev libev-dev libevent-dev libjansson-dev \
-    libc-ares-dev libsqlite3-dev libgdbm-dev libreadline-gplv2-dev libdb-dev tk-dev \
+    libc-ares-dev libsqlite3-dev libgdbm-dev libdb-dev tk-dev \
     libjemalloc-dev libsystemd-dev libspdylay-dev cython libaio-dev libncurses5-dev \
     libunistring-dev libgmp-dev trousers libidn2-0 libunbound-dev \
     libicu-dev libltdl-dev libjpeg-dev libpng-dev libpspell-dev libreadline-dev \
