@@ -150,7 +150,6 @@ function essential_install() {
     libdbi-perl libboost-all-dev rsync net-tools libdbd-mysql-perl \
     re2c needrestart wget libboost-dev libboost-thread-dev qt4-qmake libqt4-dev
 
-
     if (( $DEBIAN_VERSION >= 9 )); then
         apt-get -y install libstdc++-6-dev gcc-6-locales g++-6-multilib
         #TODO: compile kytea libkytea-dev
@@ -171,7 +170,7 @@ function essential_install() {
     apt-get -y build-dep zlib
     apt-get -y build-dep openssl
 
-    apt-get -y golang python-dev python3-dev python-setuptools
+    apt-get -y install golang python-dev python3-dev python-setuptools
 
     apt-get -y upgrade
     apt-get -y autoremove
@@ -256,7 +255,7 @@ function python2_install() {
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $python_install_tmp_dir "python_src" $python_address
-    
+
     ./configure --prefix=/usr/local --enable-shared
     make
     make install
