@@ -64,7 +64,7 @@ function wgetAndDecompress(){
 
   # tar.gz or tar.xz -> .tar
   mkdir -p $dirTmp
-  wget -O $dirTmp/$folderTmp.tar $downloadAddress
+  wget --no-check-certificate -O $dirTmp/$folderTmp.tar $downloadAddress
 
   if [ ! -f $dirTmp/$folderTmp.tar ]
   then
@@ -131,20 +131,25 @@ function essential_install() {
     apt-get -y upgrade
     apt-get -y dist-upgrade
 
-    apt-get -y install coreutils build-essential expect perl file sudo cron xsltproc docbook-xsl docbook-xml \
-    libpcre3 libpcre3-dev golang libtiffxx5 libexpat1-dev libfreetype6-dev \
-    pkg-config libfontconfig1-dev libjpeg62-turbo-dev xorg-sgml-doctools \
-    x11proto-core-dev libxau-dev libxdmcp-dev needrestart g++ make binutils autoconf automake autotools-dev libtool \
-    libbz2-dev zlib1g-dev libcunit1-dev libxml2-dev libev-dev libevent-dev libjansson-dev libc-ares-dev \
-    libjemalloc-dev libsystemd-dev libspdylay-dev cython python3-dev python-setuptools libaio-dev libncurses5-dev \
-    m4 libunistring-dev libgmp-dev trousers libidn2-0 libunbound-dev \
-    bison libmcrypt-dev libicu-dev libltdl-dev libjpeg-dev libpng-dev libpspell-dev libreadline-dev \
-    uuid-dev gnulib libc6-dev libc-dbg libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
+    apt-get -y install coreutils build-essential g++ make \
+    uuid-dev gnulib pkg-config m4 bison needrestart binutils \
+    autoconf automake autotools-dev libtool \
+    expect libcunit1-dev mcrypt libmcrypt-dev x11proto-core-dev \
+    x11proto-core-dev libxau-dev libxdmcp-dev xorg-sgml-doctools \
+    perl libpcre3 libpcre3-dev file sudo cron libexpat1-dev xsltproc \
+    docbook-xsl docbook-xml libxml2-dev libtiffxx5 libfreetype6-dev libfontconfig1-dev \
+    libjpeg62-turbo-dev libbz2-dev zlib1g-dev libev-dev libevent-dev libjansson-dev \
+    libc-ares-dev libsqlite3-dev libgdbm-dev libreadline-gplv2-dev libdb-dev tk-dev \
+    libjemalloc-dev libsystemd-dev libspdylay-dev cython libaio-dev libncurses5-dev \
+    libunistring-dev libgmp-dev trousers libidn2-0 libunbound-dev \
+    libicu-dev libltdl-dev libjpeg-dev libpng-dev libpspell-dev libreadline-dev \
+    libc6-dev libc-dbg libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
     autoconf-archive gnu-standards gettext debian-keyring \
-    g++-multilib  gcc-multilib flex liblinear-tools liblinear-dev mcrypt \
+    g++-multilib  gcc-multilib flex liblinear-tools liblinear-dev \
     gcj-jdk valgrind valgrind-mpi valkyrie \
     libdbi-perl libboost-all-dev rsync net-tools libdbd-mysql-perl \
-    re2c needrestart wget qt-sdk
+    re2c needrestart wget libboost-dev libboost-thread-dev qt4-qmake libqt4-dev
+
 
     if (( $DEBIAN_VERSION >= 9 )); then
         apt-get -y install libstdc++-6-dev gcc-6-locales g++-6-multilib
@@ -165,6 +170,8 @@ function essential_install() {
     apt-get -y build-dep curl
     apt-get -y build-dep zlib
     apt-get -y build-dep openssl
+
+    apt-get -y golang python-dev python3-dev python-setuptools
 
     apt-get -y upgrade
     apt-get -y autoremove
@@ -227,6 +234,40 @@ function openssl_install() {
   fi
 }
 
+function python2_install() {
+
+  #####################################################################################################################
+  #
+  # INSTALL Python (Tested with 2.7.14 - https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tar.xz)
+  #
+  #####################################################################################################################
+
+  input_install_python="$(askOption "Install Python2 ? [Y/n]: " "Y" $AutoDebug)"
+
+  if [ $input_install_python == "Y" ] || [ $input_install_python == "y" ]
+  then
+
+    # Func askOption (question, defaultOption, skipQuestion)
+    python_address_default="https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tar.xz"
+    python_address="$(askOption "Enter the download address for Python2 (tar.gz): " $python_address_default $AutoDebug)"
+
+    # Func askOption (question, defaultOption, skipQuestion)
+    python_install_tmp_dir="$(askOption "Enter temporary directory for Python2 compilation: " "/var/tmp/python_build" $AutoDebug)"
+
+    # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
+    wgetAndDecompress $python_install_tmp_dir "python_src" $python_address
+
+    ./configure --prefix=/usr/local --enable-shared
+    make
+    make install
+
+    easy_install pyopenssl
+
+    python --version
+
+  fi
+
+}
 function zlib_install() {
   #####################################################################################################################
   #
@@ -368,7 +409,7 @@ function nghttp2_install() {
 function curl_install() {
   #####################################################################################################################
   #
-  # INSTALL curl (Tested with 7.56.1 - https://curl.haxx.se/download/curl-7.56.1.tar.gz)
+  # INSTALL curl (Tested with 7.57.0 - https://curl.haxx.se/download/curl-7.57.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -379,8 +420,8 @@ function curl_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    curl_address_default="https://curl.haxx.se/download/curl-7.56.1.tar.gz"
-    curl_address="$(askOption "Install curl ? [Y/n]: " $curl_address_default $AutoDebug)"
+    curl_address_default="https://curl.haxx.se/download/curl-7.57.0.tar.gz"
+    curl_address="$(askOption "Enter the download address for CURL (tar.gz) ? [Y/n]: " $curl_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
     curl_install_tmp_dir="$(askOption "Enter temporary directory for CURL compilation: " "/var/tmp/curl_build" $AutoDebug)"
@@ -492,7 +533,7 @@ function gnutls_install() {
 function cmake_install() {
   #####################################################################################################################
   #
-  # INSTALL cmake (Tested with 3.8.2 - https://cmake.org/files/v3.8/cmake-3.8.2.tar.gz)
+  # INSTALL cmake (Tested with 3.10.1 - https://cmake.org/files/v3.10/cmake-3.10.1.tar.gz)
   #
   #####################################################################################################################
 
@@ -503,7 +544,7 @@ function cmake_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    cmake_address_default="https://cmake.org/files/v3.8/cmake-3.8.2.tar.gz"
+    cmake_address_default="https://cmake.org/files/v3.10/cmake-3.10.1.tar.gz"
     cmake_address="$(askOption "Enter the download address for cmake (tar.gz): " $cmake_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
