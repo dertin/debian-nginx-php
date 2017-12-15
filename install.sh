@@ -262,6 +262,12 @@ function python2_install() {
 
     easy_install pyopenssl
 
+    wget https://bootstrap.pypa.io/get-pip.py
+    chmod +x get-pip.py
+    python get-pip.py
+
+    pip install -U pip setuptools
+
     python --version
 
   fi
@@ -1073,6 +1079,9 @@ function nginx_install() {
     # FILE: /etc/nginx/snippets/*
     mkdir -p /etc/nginx/snippets/
     cp ${BASEDIR}/files/nginx/snippets/diffie-hellman /etc/nginx/snippets/diffie-hellman
+    # Modify file
+    sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/nginx/snippets/diffie-hellman
+
     cp ${BASEDIR}/files/nginx/snippets/security /etc/nginx/snippets/security
 
     # FILE: /etc/nginx/sites-available/*
@@ -1279,7 +1288,7 @@ case "$1" in
         "travis")
 
             travis_fold_start essential
-              essential_install
+              essential_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start openssl

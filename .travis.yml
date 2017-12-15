@@ -11,7 +11,7 @@ language: bash
 
 before_install:
   - docker build -t dertin/debian:lemp -f Dockerfile.debug .
-  - docker run -t --name container_test dertin/debian:lemp /bin/bash -c "/root/workspace/install.sh travis Y"
+  - travis_wait 120 docker run -t --name container_test dertin/debian:lemp /bin/bash -c "/root/workspace/install.sh travis Y"
   - docker start container_test
   - docker ps -a
 
@@ -20,6 +20,8 @@ script:
   - docker exec -t container_test /bin/bash -c "/usr/bin/openssl version"
   - docker exec -t container_test /bin/bash -c "/usr/local/php7/bin/php -v"
   - docker exec -t container_test /bin/bash -c "/usr/sbin/nginx -v"
+  - docker exec -t container_test /bin/bash -c "service php7-fpm status"
+  - docker exec -t container_test /bin/bash -c "service nginx status"
 
 #after_success:
 #after_failure:
