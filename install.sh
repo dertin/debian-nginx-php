@@ -148,7 +148,7 @@ function essential_install() {
     g++-multilib  gcc-multilib flex liblinear-tools liblinear-dev \
     gcj-jdk valgrind valgrind-mpi valkyrie \
     libdbi-perl libboost-all-dev rsync net-tools libdbd-mysql-perl \
-    re2c needrestart wget libboost-dev libboost-thread-dev qt4-qmake libqt4-dev
+    re2c needrestart libboost-dev libboost-thread-dev qt4-qmake libqt4-dev wget
 
     if (( $DEBIAN_VERSION >= 9 )); then
         apt-get -y install libstdc++-6-dev gcc-6-locales g++-6-multilib
