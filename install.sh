@@ -1290,35 +1290,35 @@ case "$1" in
         "travis")
 
             travis_fold_start essential
-              essential_install
+              essential_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start openssl
-              openssl_install
+              openssl_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start python
-              python2_install
+              python2_install  2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start zlib
-              zlib_install
+              zlib_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start lz4
-              lz4_install
+              lz4_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start libssh2
-              libssh2_install
+              libssh2_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start nghttp2
-              nghttp2_install
+              nghttp2_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start curl
-              curl_install
+              curl_install 2>&1 > /dev/null
             travis_fold_end
 
             # gnutls_install
@@ -1328,19 +1328,19 @@ case "$1" in
             travis_fold_end
 
             travis_fold_start libcrack2
-              libcrack2_install
+              libcrack2_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start libxml2
-              libxml2_install
+              libxml2_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start libxslt
-              libxslt_install
+              libxslt_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start jemalloc
-              jemalloc_install
+              jemalloc_install 2>&1 > /dev/null
             travis_fold_end
 
             #travis_fold_start mariadb
@@ -1348,11 +1348,11 @@ case "$1" in
             #travis_fold_end
 
             travis_fold_start php
-              php_install
+              php_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start nginx
-              nginx_install
+              nginx_install 2>&1 > /dev/null
             travis_fold_end
 
             # letsencrypt_install
