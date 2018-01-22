@@ -313,7 +313,7 @@ function zlib_install() {
 function lz4_install() {
   #####################################################################################################################
   #
-  # INSTALL LZ4 (Tested with v1.8.0 - https://github.com/lz4/lz4/archive/v1.8.0.tar.gz)
+  # INSTALL LZ4 (Tested with v1.8.1.2 - https://github.com/lz4/lz4/archive/v1.8.1.2.tar.gz)
   #
   #####################################################################################################################
 
@@ -324,7 +324,7 @@ function lz4_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    lz4_address_default="https://github.com/lz4/lz4/archive/v1.8.0.tar.gz"
+    lz4_address_default="https://github.com/lz4/lz4/archive/v1.8.1.2.tar.gz"
     lz4_address="$(askOption "Enter the download address for lz4 (tar.gz): " $lz4_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -382,7 +382,7 @@ function nghttp2_install() {
   #####################################################################################################################
   #
   # INSTALL Nghttp2: HTTP/2 C Library
-  # (Tested with v1.28.0 - https://github.com/nghttp2/nghttp2/releases/download/v1.28.0/nghttp2-1.28.0.tar.gz)
+  # (Tested with v1.29.0 - https://github.com/nghttp2/nghttp2/releases/download/v1.29.0/nghttp2-1.29.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -393,7 +393,7 @@ function nghttp2_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.28.0/nghttp2-1.28.0.tar.gz"
+    nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.29.0/nghttp2-1.29.0.tar.gz"
     nghttp2_address="$(askOption "Enter the download address for Nghttp2 (tar.gz): " $nghttp2_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -540,7 +540,7 @@ function gnutls_install() {
 function cmake_install() {
   #####################################################################################################################
   #
-  # INSTALL cmake (Tested with 3.10.1 - https://cmake.org/files/v3.10/cmake-3.10.1.tar.gz)
+  # INSTALL cmake (Tested with 3.10.2 - https://cmake.org/files/v3.10/cmake-3.10.2.tar.gz)
   #
   #####################################################################################################################
 
@@ -551,7 +551,7 @@ function cmake_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    cmake_address_default="https://cmake.org/files/v3.10/cmake-3.10.1.tar.gz"
+    cmake_address_default="https://cmake.org/files/v3.10/cmake-3.10.2.tar.gz"
     cmake_address="$(askOption "Enter the download address for cmake (tar.gz): " $cmake_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -739,7 +739,7 @@ function jemalloc_install() {
 function mariadb_install() {
   #####################################################################################################################
   #
-  # INSTALL MariaDB 10.2.10 - https://mariadb.com/kb/en/mariadb/generic-build-instructions/
+  # INSTALL MariaDB 10.2.12 - https://mariadb.com/kb/en/mariadb/generic-build-instructions/
   #
   #####################################################################################################################
 
@@ -750,7 +750,7 @@ function mariadb_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    mariadb_address_default="https://downloads.mariadb.org/f/mariadb-10.2.10/source/mariadb-10.2.10.tar.gz?serve"
+    mariadb_address_default="https://downloads.mariadb.org/f/mariadb-10.2.12/source/mariadb-10.2.12.tar.gz?serve"
     mariadb_address="$(askOption "Enter the download address for MariaDB (tar.gz): " $mariadb_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -896,7 +896,7 @@ function mariadb_install() {
 function php_install() {
   #####################################################################################################################
   #
-  # INSTALL PHP (Tested with 7.1.12 - https://github.com/php/php-src/archive/php-7.1.12.tar.gz)
+  # INSTALL PHP (Tested with 7.1.13 - https://github.com/php/php-src/archive/php-7.1.13.tar.gz)
   # use config file from: https://github.com/kasparsd/php-7-debian/
   #
   #####################################################################################################################
@@ -910,7 +910,7 @@ function php_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    php_address_default="https://github.com/php/php-src/archive/php-7.1.12.tar.gz"
+    php_address_default="https://github.com/php/php-src/archive/php-7.1.13.tar.gz"
     php_address="$(askOption "Enter the download address for PHP 7 (tar.gz): " $php_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -1004,6 +1004,7 @@ function php_install() {
     ldconfig
 
     service php7-fpm start
+    service php7-fpm status
 
     needrestart -r l
 

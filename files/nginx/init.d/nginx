@@ -52,11 +52,14 @@ case "$1" in
           --exec $DAEMON
       echo "$NAME."
       ;;
+  status)
+      status_of_proc -p /var/run/nginx.pid "$DAEMON" nginx && exit 0 || exit $?
+      ;;
   *)
-        N=/etc/init.d/$NAME
-        echo "Usage: $N {start|stop|restart|force-reload}" >&2
-        exit 1
-        ;;
+      N=/etc/init.d/$NAME
+      echo "Usage: $N {start|stop|restart|force-reload|status}" >&2
+      exit 1
+      ;;
 esac
 
 exit 0
