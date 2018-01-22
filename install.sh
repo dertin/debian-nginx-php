@@ -50,7 +50,7 @@ travis_fold_end() {
   travis_fold end "$(cat ${TRAVISFOLDNAME})"
 }
 
-function wgetAndDecompress(){
+function wgetAndDecompress() {
 
   local dirTmp=$1
   local folderTmp=$2
@@ -85,6 +85,7 @@ function pauseToContinue() {
     read -n 1 -s -p "Press any key to continue" && echo -e "\n"
   fi
 }
+
 # Func askOption question defaultOption skipQuestion
 function askOption() {
 
@@ -273,6 +274,7 @@ function python2_install() {
   fi
 
 }
+
 function zlib_install() {
   #####################################################################################################################
   #
@@ -1288,57 +1290,57 @@ case "$1" in
         "travis")
 
             travis_fold_start essential
-              essential_install 2>&1 > /dev/null
+              essential_install
             travis_fold_end
 
             travis_fold_start openssl
-              openssl_install 2>&1 > /dev/null
+              openssl_install
             travis_fold_end
 
             travis_fold_start python
-              python2_install  2>&1 > /dev/null
+              python2_install
             travis_fold_end
 
             travis_fold_start zlib
-              zlib_install 2>&1 > /dev/null
+              zlib_install
             travis_fold_end
 
             travis_fold_start lz4
-              lz4_install 2>&1 > /dev/null
+              lz4_install
             travis_fold_end
 
             travis_fold_start libssh2
-              libssh2_install 2>&1 > /dev/null
+              libssh2_install
             travis_fold_end
 
             travis_fold_start nghttp2
-              nghttp2_install 2>&1 > /dev/null
+              nghttp2_install
             travis_fold_end
 
             travis_fold_start curl
-              curl_install 2>&1 > /dev/null
+              curl_install
             travis_fold_end
 
             # gnutls_install
 
             travis_fold_start cmake
-              cmake_install 2>&1 > /dev/null
+              cmake_install
             travis_fold_end
 
             travis_fold_start libcrack2
-              libcrack2_install 2>&1 > /dev/null
+              libcrack2_install
             travis_fold_end
 
             travis_fold_start libxml2
-              libxml2_install 2>&1 > /dev/null
+              libxml2_install
             travis_fold_end
 
             travis_fold_start libxslt
-              libxslt_install 2>&1 > /dev/null
+              libxslt_install
             travis_fold_end
 
             travis_fold_start jemalloc
-              jemalloc_install 2>&1 > /dev/null
+              jemalloc_install
             travis_fold_end
 
             #travis_fold_start mariadb
@@ -1346,11 +1348,11 @@ case "$1" in
             #travis_fold_end
 
             travis_fold_start php
-              php_install 2>&1 > /dev/null
+              php_install
             travis_fold_end
 
             travis_fold_start nginx
-              nginx_install 2>&1 > /dev/null
+              nginx_install
             travis_fold_end
 
             # letsencrypt_install
