@@ -11,7 +11,8 @@ language: bash
 
 before_install:
   - docker build -t dertin/debian:lemp -f Dockerfile.debug .
-  - travis_wait 50 docker run -t --name container_test dertin/debian:lemp /bin/bash -c "/root/workspace/install.sh travis Y"
+  # travis_wait 120
+  - docker run -t --name container_test dertin/debian:lemp /bin/bash -c "/root/workspace/install.sh travis Y"
   - docker start container_test
   - docker ps -a
 
