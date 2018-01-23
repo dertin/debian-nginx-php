@@ -22,6 +22,10 @@ if [ -f /etc/default/nginx ] ; then
         . /etc/default/nginx
 fi
 
+if [ -f /lib/lsb/init-functions ] ; then
+        . /lib/lsb/init-functions
+fi
+
 set -e
 
 case "$1" in
