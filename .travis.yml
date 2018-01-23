@@ -21,8 +21,8 @@ script:
   - docker exec -t container_test /bin/bash -c "/usr/bin/openssl version"
   - docker exec -t container_test /bin/bash -c "/usr/local/php7/bin/php -v"
   - docker exec -t container_test /bin/bash -c "/usr/sbin/nginx -v"
-  - docker exec -t container_test /bin/bash -c "service php7-fpm status"
-  - docker exec -t container_test /bin/bash -c "service nginx status"
+  - docker exec -t container_test /bin/bash -c "service php7-fpm start"
+  - docker exec -t container_test /bin/bash -c "service nginx start"
 
 #after_success:
 #after_failure:
