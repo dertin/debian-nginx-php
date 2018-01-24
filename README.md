@@ -6,4 +6,4 @@ The latest stable versions of software for a LAMP server are compiled with an op
 
 NOT COMPLETED, YOU MAY HAVE SERIOUS ERRORS in Development Branch
 
-![alt travis-ci](https://travis-ci.org/dertin/lemp-stack-debian.svg?branch=develop)
+[![alt travis-ci](https://travis-ci.org/dertin/lemp-stack-debian.svg?branch=develop)](https://travis-ci.org/dertin/lemp-stack-debian/)
