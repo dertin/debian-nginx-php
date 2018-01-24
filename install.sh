@@ -153,7 +153,6 @@ function essential_install() {
 
     if (( $DEBIAN_VERSION >= 9 )); then
         apt-get -y install libstdc++-6-dev gcc-6-locales g++-6-multilib
-        #TODO: compile kytea libkytea-dev
     else
         apt-get -y install libstdc++-4.9-dev gcc-4.9-locales g++-4.9-multilib
         apt-get -y install kytea libkytea-dev
@@ -416,7 +415,7 @@ function nghttp2_install() {
 function curl_install() {
   #####################################################################################################################
   #
-  # INSTALL curl (Tested with 7.57.0 - https://curl.haxx.se/download/curl-7.57.0.tar.gz)
+  # INSTALL curl (Tested with 7.58.0 - https://curl.haxx.se/download/curl-7.58.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -427,7 +426,7 @@ function curl_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    curl_address_default="https://curl.haxx.se/download/curl-7.57.0.tar.gz"
+    curl_address_default="https://curl.haxx.se/download/curl-7.58.0.tar.gz"
     curl_address="$(askOption "Enter the download address for CURL (tar.gz) ? [Y/n]: " $curl_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -896,7 +895,7 @@ function mariadb_install() {
 function php_install() {
   #####################################################################################################################
   #
-  # INSTALL PHP (Tested with 7.1.13 - https://github.com/php/php-src/archive/php-7.1.13.tar.gz)
+  # INSTALL PHP (Tested with 7.2.1 - https://github.com/php/php-src/archive/php-7.2.1.tar.gz)
   # use config file from: https://github.com/kasparsd/php-7-debian/
   #
   #####################################################################################################################
@@ -910,7 +909,7 @@ function php_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    php_address_default="https://github.com/php/php-src/archive/php-7.1.13.tar.gz"
+    php_address_default="https://github.com/php/php-src/archive/php-7.2.1.tar.gz"
     php_address="$(askOption "Enter the download address for PHP 7 (tar.gz): " $php_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -1016,7 +1015,7 @@ function php_install() {
 function nginx_install() {
   #####################################################################################################################
   #
-  # INSTALL nginx (Tested with 1.13.7 - https://nginx.org/download/nginx-1.13.7.tar.gz)
+  # INSTALL nginx (Tested with 1.13.8 - https://nginx.org/download/nginx-1.13.8.tar.gz)
   #
   #####################################################################################################################
 
@@ -1029,7 +1028,7 @@ function nginx_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nginx_address_default="https://nginx.org/download/nginx-1.13.7.tar.gz"
+    nginx_address_default="https://nginx.org/download/nginx-1.13.8.tar.gz"
     nginx_address="$(askOption "Enter the download address for nginx (tar.gz): " $nginx_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
