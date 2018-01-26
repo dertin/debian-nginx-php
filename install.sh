@@ -1152,6 +1152,8 @@ function letsencrypt_install() {
     cp ${BASEDIR}/files/letsencrypt/crontab/renewLetsEncrypt.sh /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh
     # Modify file
     sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh
+    # Permission for execution
+    chmod +x /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh
     # Add crontab renew‑letsencrypt
     crontab -l | { cat; echo "0 0 1 JAN,MAR,MAY,JUL,SEP,NOV * /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh"; } | crontab -
 
