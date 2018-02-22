@@ -175,6 +175,8 @@ function essential_install() {
     apt-get -y upgrade
     apt-get -y autoremove
 
+    tzselect
+
     pauseToContinue
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -981,10 +983,12 @@ function php_install() {
     # PHP configuration file
     cp php.ini-production /usr/local/php7/lib/php.ini
     # Enable PDO extension for mysql and extension mysqli, mysqlnd
-    echo 'extension=mysqlnd.so' >> /usr/local/php7/lib/php.ini
-    echo 'extension=mysqli.so' >> /usr/local/php7/lib/php.ini
-    echo 'extension=pdo_mysql.so' >> /usr/local/php7/lib/php.ini
-
+    echo -e 'extension=mysqlnd.so\n' >> /usr/local/php7/lib/php.ini
+    echo -e 'extension=mysqli.so\n' >> /usr/local/php7/lib/php.ini
+    echo -e 'extension=pdo_mysql.so\n' >> /usr/local/php7/lib/php.ini
+    echo -e 'openssl.cafile=/etc/ssl/certs/ca-certificates.crt\n' >> /usr/local/php7/lib/php.ini
+    echo -e 'curl.cainfo=/etc/ssl/certs/ca-certificates.crt\n' >> /usr/local/php7/lib/php.ini
+    
     cp ${BASEDIR}/files/php7/etc/php-fpm.d/www.conf /usr/local/php7/etc/php-fpm.d/www.conf
 
     cp ${BASEDIR}/files/php7/etc/php-fpm.conf /usr/local/php7/etc/php-fpm.conf
@@ -997,8 +1001,16 @@ function php_install() {
     update-rc.d php7-fpm defaults
 
     export PATH=$PATH:/usr/local/php7/bin
-    echo "export PATH=$PATH:/usr/local/php7/bin" >> /etc/profile
+    echo "export PATH=$PATH" >> /etc/profile
     source /etc/profile
+
+    chmod 666 /etc/environment
+    truncate -s 0 /etc/environment
+    echo -e "LC_ALL=en_US.UTF-8\n" >> /etc/environment
+    echo -e "LC_CTYPE=UTF-8\n" >> /etc/environment
+    echo -e "LANG=en_US.UTF-8\n" >> /etc/environment
+    echo -e "PATH=$PATH\n" >> /etc/environment
+    chmod 644 /etc/environment
 
     ldconfig
 
