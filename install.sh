@@ -175,7 +175,10 @@ function essential_install() {
     apt-get -y upgrade
     apt-get -y autoremove
 
-    tzselect
+    if [ "$AutoDebug" != "Y" ]
+    then
+      tzselect
+    fi
 
     pauseToContinue
 
