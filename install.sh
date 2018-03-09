@@ -383,7 +383,7 @@ function nghttp2_install() {
   #####################################################################################################################
   #
   # INSTALL Nghttp2: HTTP/2 C Library
-  # (Tested with v1.29.0 - https://github.com/nghttp2/nghttp2/releases/download/v1.29.0/nghttp2-1.29.0.tar.gz)
+  # (Tested with v1.31.0 - https://github.com/nghttp2/nghttp2/releases/download/v1.31.0/nghttp2-1.31.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -394,7 +394,7 @@ function nghttp2_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.29.0/nghttp2-1.29.0.tar.gz"
+    nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.31.0/nghttp2-1.31.0.tar.gz"
     nghttp2_address="$(askOption "Enter the download address for Nghttp2 (tar.gz): " $nghttp2_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -634,7 +634,7 @@ function libcrack2_install() {
 function libxml2_install() {
   #####################################################################################################################
   #
-  # INSTALL LibXML2  (Tested with 2.9.7 - http://xmlsoft.org/sources/libxml2-2.9.7.tar.gz)
+  # INSTALL LibXML2  (Tested with 2.9.8 - http://xmlsoft.org/sources/libxml2-2.9.8.tar.gz)
   #
   #####################################################################################################################
 
@@ -645,7 +645,7 @@ function libxml2_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libXML2_address_default="http://xmlsoft.org/sources/libxml2-2.9.7.tar.gz"
+    libXML2_address_default="http://xmlsoft.org/sources/libxml2-2.9.8.tar.gz"
     libXML2_address="$(askOption "Enter the download address for LibXML2 (tar.gz): " $libXML2_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -897,7 +897,7 @@ function mariadb_install() {
 function php_install() {
   #####################################################################################################################
   #
-  # INSTALL PHP (Tested with 7.2.1 - https://github.com/php/php-src/archive/php-7.2.1.tar.gz)
+  # INSTALL PHP (Tested with 7.2.3 - https://github.com/php/php-src/archive/php-7.2.3.tar.gz)
   # use config file from: https://github.com/kasparsd/php-7-debian/
   #
   #####################################################################################################################
@@ -911,7 +911,7 @@ function php_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    php_address_default="https://github.com/php/php-src/archive/php-7.2.1.tar.gz"
+    php_address_default="https://github.com/php/php-src/archive/php-7.2.3.tar.gz"
     php_address="$(askOption "Enter the download address for PHP 7 (tar.gz): " $php_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -988,7 +988,7 @@ function php_install() {
     echo -e 'extension=pdo_mysql.so\n' >> /usr/local/php7/lib/php.ini
     echo -e 'openssl.cafile=/etc/ssl/certs/ca-certificates.crt\n' >> /usr/local/php7/lib/php.ini
     echo -e 'curl.cainfo=/etc/ssl/certs/ca-certificates.crt\n' >> /usr/local/php7/lib/php.ini
-    
+
     cp ${BASEDIR}/files/php7/etc/php-fpm.d/www.conf /usr/local/php7/etc/php-fpm.d/www.conf
 
     cp ${BASEDIR}/files/php7/etc/php-fpm.conf /usr/local/php7/etc/php-fpm.conf
@@ -1027,7 +1027,7 @@ function php_install() {
 function nginx_install() {
   #####################################################################################################################
   #
-  # INSTALL nginx (Tested with 1.13.8 - https://nginx.org/download/nginx-1.13.8.tar.gz)
+  # INSTALL nginx (Tested with 1.13.9 - https://nginx.org/download/nginx-1.13.9.tar.gz)
   #
   #####################################################################################################################
 
@@ -1040,7 +1040,7 @@ function nginx_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nginx_address_default="https://nginx.org/download/nginx-1.13.8.tar.gz"
+    nginx_address_default="https://nginx.org/download/nginx-1.13.9.tar.gz"
     nginx_address="$(askOption "Enter the download address for nginx (tar.gz): " $nginx_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
