@@ -942,7 +942,7 @@ function php_install() {
     --with-gd \
     --with-jpeg-dir \
     --enable-mbstring \
-    --with-mcrypt \
+    --with-libzip \
     --with-mhash \
     --enable-mysqlnd=shared \
     --with-mysqli=shared,mysqlnd \
@@ -1341,7 +1341,7 @@ case "$1" in
             # gnutls_install
 
             travis_fold_start cmake
-              cmake_install
+              cmake_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start libcrack2
