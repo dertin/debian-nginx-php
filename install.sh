@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Tested on Debian 9 32bit / 64bit
-# NOT COMPLETED, MAY HAVE SERIOUS ERRORS
+# Use at your own risk
 
 #####################################################################################################################
 #
@@ -9,9 +9,13 @@
 #
 #####################################################################################################################
 
+DEBIAN_VERSION=`cat /etc/debian_version | cut -d . -f 1`
+if (( $DEBIAN_VERSION < 9 )); then
+    echo "Cancelled: Only run in Debian >= 9"
+fi
+
 BASEDIR="$PWD"
 MACHINE_TYPE=`uname -m`
-DEBIAN_VERSION=`cat /etc/debian_version | cut -d . -f 1`
 TRAVISFOLDNAME=/tmp/.travis_fold_name
 
 if [ "$MACHINE_TYPE" == "i386" ]; then
@@ -86,7 +90,7 @@ function pauseToContinue() {
   fi
 }
 
-# Func askOption question defaultOption skipQuestion
+# use: askOption question defaultOption skipQuestion
 function askOption() {
 
   local question="$1"
@@ -149,14 +153,8 @@ function essential_install() {
     g++-multilib  gcc-multilib flex liblinear-tools liblinear-dev \
     gcj-jdk valgrind valgrind-mpi valkyrie \
     libdbi-perl libboost-all-dev rsync net-tools libdbd-mysql-perl \
-    re2c needrestart libboost-dev libboost-thread-dev qt4-qmake libqt4-dev libzip-dev wget
-
-    if (( $DEBIAN_VERSION >= 9 )); then
-        apt-get -y install libstdc++-6-dev gcc-6-locales g++-6-multilib
-    else
-        apt-get -y install libstdc++-4.9-dev gcc-4.9-locales g++-4.9-multilib
-        apt-get -y install kytea libkytea-dev
-    fi
+    re2c needrestart libboost-dev libboost-thread-dev qt4-qmake libqt4-dev libzip-dev wget \
+    libstdc++-6-dev gcc-6-locales g++-6-multilib
 
     apt-get -y upgrade
     apt-get -y autoremove
@@ -174,6 +172,8 @@ function essential_install() {
 
     apt-get -y upgrade
     apt-get -y autoremove
+    apt-get clean
+
 
     if [ "$AutoDebug" != "Y" ]
     then
@@ -197,7 +197,7 @@ function essential_install() {
 function openssl_install() {
   #####################################################################################################################
   #
-  # INSTALL OpenSSL (Tested with 1.1.0g - https://www.openssl.org/source/openssl-1.1.0g.tar.gz)
+  # INSTALL OpenSSL (Tested with 1.1.0h - https://www.openssl.org/source/openssl-1.1.0h.tar.gz)
   # config file: /usr/local/ssl/openssl.cnf
   #
   #####################################################################################################################
@@ -209,7 +209,7 @@ function openssl_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    openssl_address_default="https://www.openssl.org/source/openssl-1.1.0g.tar.gz"
+    openssl_address_default="https://www.openssl.org/source/openssl-1.1.0h.tar.gz"
     openssl_address="$(askOption "Enter the download address for OpenSSL (tar.gz): " $openssl_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -386,7 +386,7 @@ function nghttp2_install() {
   #####################################################################################################################
   #
   # INSTALL Nghttp2: HTTP/2 C Library
-  # (Tested with v1.31.0 - https://github.com/nghttp2/nghttp2/releases/download/v1.31.0/nghttp2-1.31.0.tar.gz)
+  # (Tested with v1.31.1 - https://github.com/nghttp2/nghttp2/releases/download/v1.31.1/nghttp2-1.31.1.tar.gz)
   #
   #####################################################################################################################
 
@@ -397,7 +397,7 @@ function nghttp2_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.31.0/nghttp2-1.31.0.tar.gz"
+    nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.31.1/nghttp2-1.31.1.tar.gz"
     nghttp2_address="$(askOption "Enter the download address for Nghttp2 (tar.gz): " $nghttp2_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -420,7 +420,7 @@ function nghttp2_install() {
 function curl_install() {
   #####################################################################################################################
   #
-  # INSTALL curl (Tested with 7.58.0 - https://curl.haxx.se/download/curl-7.58.0.tar.gz)
+  # INSTALL curl (Tested with 7.59.0 - https://curl.haxx.se/download/curl-7.59.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -431,7 +431,7 @@ function curl_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    curl_address_default="https://curl.haxx.se/download/curl-7.58.0.tar.gz"
+    curl_address_default="https://curl.haxx.se/download/curl-7.59.0.tar.gz"
     curl_address="$(askOption "Enter the download address for CURL (tar.gz) ? [Y/n]: " $curl_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -457,6 +457,9 @@ function curl_install() {
 }
 
 function gnutls_install() {
+  #
+  # -- The function is not being updated at present. --
+  #
   #####################################################################################################################
   #
   # INSTALL GnuTLS 3.5.16 (https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.16.tar.xz)
@@ -544,7 +547,7 @@ function gnutls_install() {
 function cmake_install() {
   #####################################################################################################################
   #
-  # INSTALL cmake (Tested with 3.10.2 - https://cmake.org/files/v3.10/cmake-3.10.2.tar.gz)
+  # INSTALL cmake (Tested with 3.11.0 - https://cmake.org/files/v3.11/cmake-3.11.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -555,7 +558,7 @@ function cmake_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    cmake_address_default="https://cmake.org/files/v3.10/cmake-3.10.2.tar.gz"
+    cmake_address_default="https://cmake.org/files/v3.11/cmake-3.11.0.tar.gz"
     cmake_address="$(askOption "Enter the download address for cmake (tar.gz): " $cmake_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -671,7 +674,7 @@ function libxml2_install() {
 function libxslt_install() {
   #####################################################################################################################
   #
-  # INSTALL libxslt  (Tested with 1.1.32 - http://xmlsoft.org/sources/libxslt-1.1.32.tar.gz)
+  # INSTALL libxslt  (Tested with 1.1.33-rc1 - http://xmlsoft.org/sources/libxslt-1.1.33-rc1.tar.gz)
   #
   #####################################################################################################################
 
@@ -682,7 +685,7 @@ function libxslt_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libxslt_address_default="http://xmlsoft.org/sources/libxslt-1.1.32.tar.gz"
+    libxslt_address_default="http://xmlsoft.org/sources/libxslt-1.1.33-rc1.tar.gz"
     libxslt_address="$(askOption "Enter the download address for libxslt (tar.gz): " $libxslt_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -741,6 +744,9 @@ function jemalloc_install() {
 }
 
 function mariadb_install() {
+  #
+  # -- The function is not being updated at present. --
+  #
   #####################################################################################################################
   #
   # INSTALL MariaDB 10.2.12 - https://mariadb.com/kb/en/mariadb/generic-build-instructions/
@@ -900,7 +906,7 @@ function mariadb_install() {
 function php_install() {
   #####################################################################################################################
   #
-  # INSTALL PHP (Tested with 7.2.3 - https://github.com/php/php-src/archive/php-7.2.3.tar.gz)
+  # INSTALL PHP (Tested with 7.2.4 - https://github.com/php/php-src/archive/php-7.2.4.tar.gz)
   # use config file from: https://github.com/kasparsd/php-7-debian/
   #
   #####################################################################################################################
@@ -914,7 +920,7 @@ function php_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    php_address_default="https://github.com/php/php-src/archive/php-7.2.3.tar.gz"
+    php_address_default="https://github.com/php/php-src/archive/php-7.2.4.tar.gz"
     php_address="$(askOption "Enter the download address for PHP 7 (tar.gz): " $php_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -1030,7 +1036,7 @@ function php_install() {
 function nginx_install() {
   #####################################################################################################################
   #
-  # INSTALL nginx (Tested with 1.13.9 - https://nginx.org/download/nginx-1.13.9.tar.gz)
+  # INSTALL nginx (Tested with 1.13.12 - https://nginx.org/download/nginx-1.13.12.tar.gz)
   #
   #####################################################################################################################
 
@@ -1043,7 +1049,7 @@ function nginx_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nginx_address_default="https://nginx.org/download/nginx-1.13.9.tar.gz"
+    nginx_address_default="https://nginx.org/download/nginx-1.13.12.tar.gz"
     nginx_address="$(askOption "Enter the download address for nginx (tar.gz): " $nginx_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
