@@ -1347,7 +1347,7 @@ case "$1" in
             # gnutls_install
 
             travis_fold_start cmake
-              cmake_install 2>&1 > /dev/null
+              cmake_install
             travis_fold_end
 
             travis_fold_start libcrack2
