@@ -177,6 +177,7 @@ function essential_install() {
     apt-get -y upgrade
     apt-get -y dist-upgrade
 
+    # TODO: check this: Packages that can be deleted after the script is finished.
     apt-get -y install libxau-dev libxdmcp-dev xorg-sgml-doctools \
     libexpat1-dev xsltproc docbook-xsl \
     docbook-xml needrestart autoconf \
@@ -191,16 +192,17 @@ function essential_install() {
     valkyrie gcj-jdk flex \
     tk-dev libc-ares-dev
 
+    # TODO: check this: Important packages that must be installed.
     apt-get -y install coreutils binutils uuid-dev wget \
     mcrypt libmcrypt-dev cython \
     perl libpcre3 libpcre3-dev  \
     libxml2-dev libxslt1-dev \
     libfreetype6-dev libfontconfig1-dev \
-    libtiffxx5 libjpeg62-turbo-dev libjpeg-dev libpng-dev
+    libtiffxx5 libjpeg62-turbo-dev libjpeg-dev libpng-dev \
     libbz2-dev zlib1g-dev libzip-dev \
     libjansson-dev \
     libgmp-dev libev-dev libevent-dev \
-    libsqlite3-dev libgdbm-dev libdb-dev
+    libsqlite3-dev libgdbm-dev libdb-dev \
     libsystemd-dev libspdylay-dev \
     libaio-dev libncurses5-dev \
     libunistring-dev libunbound-dev \
@@ -209,7 +211,7 @@ function essential_install() {
     libc6-dev libc-dbg libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
     gettext debian-keyring liblinear-tools liblinear-dev \
     libdbi-perl libboost-all-dev rsync net-tools libdbd-mysql-perl \
-    re2c libboost-dev libboost-thread-dev qt4-qmake libqt4-dev \
+    re2c libboost-dev libboost-thread-dev qt4-qmake libqt4-dev
 
     apt-get -y upgrade
     apt-get -y autoremove
