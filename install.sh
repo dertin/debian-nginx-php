@@ -145,6 +145,9 @@ function clear_compile() {
     valkyrie gcj-jdk flex \
     tk-dev libc-ares-dev
 
+    apt-get -y autoremove
+    apt-get clean
+
   fi
 
 
@@ -211,12 +214,11 @@ function essential_install() {
     libc6-dev libc-dbg libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
     gettext debian-keyring liblinear-tools liblinear-dev \
     libdbi-perl libboost-all-dev rsync net-tools libdbd-mysql-perl \
-    re2c libboost-dev libboost-thread-dev qt4-qmake libqt4-dev
+    re2c libboost-dev libboost-thread-dev qt4-qmake libqt4-dev \
+    libssl-dev golang python-dev python3-dev python-setuptools
 
     apt-get -y upgrade
     apt-get -y autoremove
-
-    apt-get -y install libssl-dev
 
     apt-get -y remove --purge --auto-remove curl
     apt-get -y remove --purge --auto-remove cmake*
@@ -225,10 +227,9 @@ function essential_install() {
     apt-get -y build-dep zlib
     apt-get -y build-dep openssl
 
-    apt-get -y install golang python-dev python3-dev python-setuptools
-
     apt-get -y upgrade
     apt-get -y autoremove
+
     apt-get clean
 
 
