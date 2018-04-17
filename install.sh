@@ -109,6 +109,47 @@ function askOption() {
 
 }
 
+function service_stop() {
+  # Func askOption (question, defaultOption, skipQuestion)
+  input_install_service_stop="$(askOption "Stop All Services? [Y/n]: " "Y" $AutoDebug)"
+
+  if [ $input_install_service_stop == "Y" ] || [ $input_install_service_stop == "y" ]
+  then
+
+    service stop nginx
+    service stop php7-fpm
+    service mysql start
+
+  fi
+}
+
+function clear_compile() {
+
+  # Func askOption (question, defaultOption, skipQuestion)
+  input_install_clear_compile="$(askOption "Clear Compile ? [Y/n]: " "Y" $AutoDebug)"
+
+  if [ $input_install_clear_compile == "Y" ] || [ $input_install_clear_compile == "y" ]
+  then
+
+    apt-get -y remove libxau-dev libxdmcp-dev xorg-sgml-doctools \
+    libexpat1-dev xsltproc docbook-xsl \
+    docbook-xml needrestart autoconf \
+    automake m4 bison \
+    build-essential g++ pkg-config \
+    autotools-dev libtool expect \
+    libcunit1-dev x11proto-core-dev file \
+    libenchant-dev libjemalloc-dev gnu-standards \
+    autoconf-archive g++-multilib gcc-multilib \
+    libstdc++-6-dev gcc-6-locales \
+    g++-6-multilib valgrind valgrind-mpi \
+    valkyrie gcj-jdk flex \
+    tk-dev libc-ares-dev
+
+  fi
+
+
+}
+
 function essential_install() {
   #####################################################################################################################
   #
@@ -136,25 +177,39 @@ function essential_install() {
     apt-get -y upgrade
     apt-get -y dist-upgrade
 
-    apt-get -y install coreutils build-essential g++ make \
-    uuid-dev gnulib pkg-config m4 bison needrestart binutils \
-    autoconf automake autotools-dev libtool \
-    expect libcunit1-dev mcrypt libmcrypt-dev x11proto-core-dev \
-    x11proto-core-dev libxau-dev libxdmcp-dev xorg-sgml-doctools \
-    perl libpcre3 libpcre3-dev file sudo cron libexpat1-dev xsltproc \
-    docbook-xsl docbook-xml libxml2-dev libtiffxx5 libfreetype6-dev libfontconfig1-dev \
-    libjpeg62-turbo-dev libbz2-dev zlib1g-dev libev-dev libevent-dev libjansson-dev \
-    libc-ares-dev libsqlite3-dev libgdbm-dev libdb-dev tk-dev \
-    libjemalloc-dev libsystemd-dev libspdylay-dev cython libaio-dev libncurses5-dev \
-    libunistring-dev libgmp-dev trousers libidn2-0 libunbound-dev \
-    libicu-dev libltdl-dev libjpeg-dev libpng-dev libpspell-dev libreadline-dev \
+    apt-get -y install libxau-dev libxdmcp-dev xorg-sgml-doctools \
+    libexpat1-dev xsltproc docbook-xsl \
+    docbook-xml needrestart autoconf \
+    automake m4 bison \
+    build-essential g++ pkg-config \
+    autotools-dev libtool expect \
+    libcunit1-dev x11proto-core-dev file \
+    libenchant-dev libjemalloc-dev gnu-standards \
+    autoconf-archive g++-multilib gcc-multilib \
+    libstdc++-6-dev gcc-6-locales \
+    g++-6-multilib valgrind valgrind-mpi \
+    valkyrie gcj-jdk flex \
+    tk-dev libc-ares-dev
+
+    apt-get -y install coreutils binutils uuid-dev wget \
+    mcrypt libmcrypt-dev cython \
+    perl libpcre3 libpcre3-dev  \
+    libxml2-dev libxslt1-dev \
+    libfreetype6-dev libfontconfig1-dev \
+    libtiffxx5 libjpeg62-turbo-dev libjpeg-dev libpng-dev
+    libbz2-dev zlib1g-dev libzip-dev \
+    libjansson-dev \
+    libgmp-dev libev-dev libevent-dev \
+    libsqlite3-dev libgdbm-dev libdb-dev
+    libsystemd-dev libspdylay-dev \
+    libaio-dev libncurses5-dev \
+    libunistring-dev libunbound-dev \
+    trousers libidn2-0 \
+    libicu-dev libltdl-dev libpspell-dev libreadline-dev \
     libc6-dev libc-dbg libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
-    autoconf-archive gnu-standards gettext debian-keyring \
-    g++-multilib  gcc-multilib flex liblinear-tools liblinear-dev \
-    gcj-jdk valgrind valgrind-mpi valkyrie \
+    gettext debian-keyring liblinear-tools liblinear-dev \
     libdbi-perl libboost-all-dev rsync net-tools libdbd-mysql-perl \
-    re2c needrestart libboost-dev libboost-thread-dev qt4-qmake libqt4-dev libzip-dev wget \
-    libstdc++-6-dev gcc-6-locales g++-6-multilib
+    re2c libboost-dev libboost-thread-dev qt4-qmake libqt4-dev \
 
     apt-get -y upgrade
     apt-get -y autoremove
@@ -222,7 +277,6 @@ function openssl_install() {
 
     make
     make test
-    #sed -i 's# libcrypto.a##;s# libssl.a##;/INSTALL_LIBS/s#libcrypto.a##' Makefile
     make MANSUFFIX=ssl install
 
     ldconfig
@@ -265,15 +319,15 @@ function python2_install() {
     make
     make install
 
-    easy_install pyopenssl
-
     wget https://bootstrap.pypa.io/get-pip.py
     chmod +x get-pip.py
     python get-pip.py
 
     pip install -U pip setuptools
+    pip install pyopenssl
 
     python --version
+    pip -V
 
   fi
 
@@ -452,94 +506,6 @@ function curl_install() {
     curl -V
 
     pauseToContinue
-
-  fi
-}
-
-function gnutls_install() {
-  #
-  # -- The function is not being updated at present. --
-  #
-  #####################################################################################################################
-  #
-  # INSTALL GnuTLS 3.5.16 (https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.16.tar.xz)
-  # - Optional
-  #
-  #####################################################################################################################
-
-  # Func askOption (question, defaultOption, skipQuestion)
-  input_install_gnutls="$(askOption "Install GnuTLS [Opcional] ? [y/N]: " "N" $AutoDebug)"
-
-  if [ $input_install_gnutls == "Y" ] || [ $input_install_gnutls == "y" ]
-  then
-
-    apt-get -y build-dep nettle
-    apt-get -y build-dep p11-kit
-
-    # Func askOption (question, defaultOption, skipQuestion)
-    gnutls_address_default="https://www.gnupg.org/ftp/gcrypt/gnutls/v3.5/gnutls-3.5.16.tar.xz"
-    gnutls_address="$(askOption "Enter the download address for GnuTLS (tar.gz): " $gnutls_address_default $AutoDebug)"
-
-    # Func askOption (question, defaultOption, skipQuestion)
-    gnutls_install_tmp_dir="$(askOption "Enter temporary directory for GnuTLS compilation: " "/var/tmp/gnutls_build" $AutoDebug)"
-
-    # GnuTLS Dependencies: Nettle >= 3.3
-
-      # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
-      wgetAndDecompress '/var/tmp/nettle_build' "nettle_src" 'https://ftp.gnu.org/gnu/nettle/nettle-3.4.tar.gz'
-
-      ./configure
-
-      make
-      make install
-
-      chmod -v 755 /usr/lib/lib{hogweed,nettle}.so
-
-      ldconfig
-
-      pauseToContinue
-
-    # GnuTLS Dependencies: Libtasn1 >= 4.9
-
-      # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
-      wgetAndDecompress '/var/tmp/libtasn1_build' "libtasn1_src" 'https://ftp.gnu.org/gnu/libtasn1/libtasn1-4.12.tar.gz'
-
-      ./configure
-
-      make
-      make install
-
-      ldconfig
-
-      pauseToContinue
-
-    # GnuTLS Dependencies: p11-kit >= 0.23.1
-
-      # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
-      wgetAndDecompress '/var/tmp/p11kit_build' "p11kit_src" 'http://p11-glue.freedesktop.org/releases/p11-kit-0.23.2.tar.gz'
-
-      ./configure --with-trust-paths=/etc/ssl/certs
-
-      make
-      make install
-
-      ldconfig
-
-      pauseToContinue
-
-    # Compile GnuTLS
-
-  	  # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
-  	  wgetAndDecompress $gnutls_install_tmp_dir gnutls_src $gnutls_address
-
-  	  ./configure --enable-shared --with-default-trust-store-file="$(curl-config --ca)"
-
-  	  make
-  	  make install
-
-  	  ldconfig
-
-  	  pauseToContinue
 
   fi
 }
@@ -745,11 +711,11 @@ function jemalloc_install() {
 
 function mariadb_install() {
   #
-  # -- The function is not being updated at present. --
+  # -- This function is little tested by the main developer. --
   #
   #####################################################################################################################
   #
-  # INSTALL MariaDB 10.2.12 - https://mariadb.com/kb/en/mariadb/generic-build-instructions/
+  # INSTALL MariaDB 10.2.14 - https://mariadb.com/kb/en/mariadb/generic-build-instructions/
   #
   #####################################################################################################################
 
@@ -760,7 +726,7 @@ function mariadb_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    mariadb_address_default="https://downloads.mariadb.org/f/mariadb-10.2.12/source/mariadb-10.2.12.tar.gz?serve"
+    mariadb_address_default="https://downloads.mariadb.org/f/mariadb-10.2.14/source/mariadb-10.2.14.tar.gz?serve"
     mariadb_address="$(askOption "Enter the download address for MariaDB (tar.gz): " $mariadb_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -1216,6 +1182,7 @@ function blackfire_install() {
   fi
 }
 
+
 #####################################################################################################################
 #
 # main
@@ -1255,9 +1222,6 @@ case "$1" in
         "curl")
             curl_install
             ;;
-        "gnutls")
-            gnutls_install
-            ;;
         "cmake")
             cmake_install
             ;;
@@ -1289,6 +1253,7 @@ case "$1" in
             blackfire_install
             ;;
         "all")
+            service_stop
             essential_install
             openssl_install
             python2_install
@@ -1297,7 +1262,6 @@ case "$1" in
             libssh2_install
             nghttp2_install
             curl_install
-            gnutls_install
             cmake_install
             libcrack2_install
             libxml2_install
@@ -1308,8 +1272,17 @@ case "$1" in
             nginx_install
             letsencrypt_install
             blackfire_install
+            clear_compile
             ;;
-
+        "upgrade")
+            service_stop
+            essential_install
+            openssl_install
+            mariadb_install
+            php_install
+            nginx_install
+            clear_compile
+            ;;
         "travis")
 
             travis_fold_start essential
@@ -1343,8 +1316,6 @@ case "$1" in
             travis_fold_start curl
               curl_install 2>&1 > /dev/null
             travis_fold_end
-
-            # gnutls_install
 
             travis_fold_start cmake
               cmake_install
@@ -1380,6 +1351,9 @@ case "$1" in
 
             # letsencrypt_install
             # blackfire_install
+            travis_fold_start clear_compile
+              clear_compile
+            travis_fold_end
 
             ;;
         *)
