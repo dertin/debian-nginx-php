@@ -2,6 +2,16 @@
 
 The latest stable versions of software for a LEMP stack on a Debian server are compiled with an optimized configuration for the best performance, speed of response and security.
 
+The basic usage is
+```sh
+git clone https://github.com/dertin/lemp-stack-debian.git
+cd lemp-stack-debian/
+chmod +x install.sh
+sudo ./install.sh all
+```
+
+You must have a domain address before executing the script, so that your https certificate is correctly configured automatically. If you do not have a domain now, enter the domain you are going to buy later, and then manually configure your https certificate.
+
 List of installed programs:
 
 | Program       | Version    |

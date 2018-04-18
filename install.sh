@@ -116,8 +116,8 @@ function service_stop() {
   if [ $input_install_service_stop == "Y" ] || [ $input_install_service_stop == "y" ]
   then
 
-    service stop nginx
-    service stop php7-fpm
+    service nginx stop
+    service php7-fpm stop
     service mysql start
 
   fi
