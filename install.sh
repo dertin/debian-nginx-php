@@ -429,7 +429,8 @@ function libzip_install() {
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $libzip_install_tmp_dir "libzip_src" $libzip_address
-
+    
+    cmake .
     make
     make test
     make install
@@ -1240,6 +1241,9 @@ case "$1" in
         "essential")
             essential_install
             ;;
+        "cmake")
+            cmake_install
+            ;;
         "openssl")
             openssl_install
             ;;
@@ -1263,9 +1267,6 @@ case "$1" in
             ;;
         "curl")
             curl_install
-            ;;
-        "cmake")
-            cmake_install
             ;;
         "libcrack2")
             libcrack2_install
@@ -1297,6 +1298,7 @@ case "$1" in
         "all")
             service_stop
             essential_install
+            cmake_install
             openssl_install
             python2_install
             zlib_install
@@ -1305,7 +1307,6 @@ case "$1" in
             libssh2_install
             nghttp2_install
             curl_install
-            cmake_install
             libcrack2_install
             libxml2_install
             libxslt_install
@@ -1321,6 +1322,10 @@ case "$1" in
 
             travis_fold_start essential
               essential_install 2>&1 > /dev/null
+            travis_fold_end
+
+            travis_fold_start cmake
+              cmake_install
             travis_fold_end
 
             travis_fold_start openssl
@@ -1354,10 +1359,6 @@ case "$1" in
             travis_fold_start curl
               curl_install 2>&1 > /dev/null
             travis_fold_end
-
-            #travis_fold_start cmake
-            #  cmake_install
-            #travis_fold_end
 
             travis_fold_start libcrack2
               libcrack2_install 2>&1 > /dev/null
