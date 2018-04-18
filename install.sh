@@ -30,13 +30,6 @@ export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib"
 export LDCONFIG=-L/usr/local/lib
 export LIBS="-ldl" # for curl / openssl
 
-chmod 666 /etc/environment
-truncate -s 0 /etc/environment
-echo -e "LC_ALL=en_US.UTF-8\n" >> /etc/environment
-echo -e "LC_CTYPE=UTF-8\n" >> /etc/environment
-echo -e "LANG=en_US.UTF-8\n" >> /etc/environment
-chmod 644 /etc/environment
-
 source /etc/profile
 
 #####################################################################################################################
@@ -182,6 +175,14 @@ function essential_install() {
 
   if [ $input_install_essential == "Y" ] || [ $input_install_essential == "y" ]
   then
+
+    chmod 666 /etc/environment
+    truncate -s 0 /etc/environment
+    echo -e "LC_ALL=en_US.UTF-8\n" >> /etc/environment
+    echo -e "LC_CTYPE=UTF-8\n" >> /etc/environment
+    echo -e "LANG=en_US.UTF-8\n" >> /etc/environment
+    chmod 644 /etc/environment
+    locale-gen en_US.UTF-8
 
     # Build Essential
 
