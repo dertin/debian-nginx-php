@@ -1,8 +1,32 @@
-# LEMP Stack
+# LEMP stack on a Debian server
 
-Install MariaDB, PHP, Nginx, Let’s Encrypt (...) on Debian (stable)
+The latest stable versions of software for a LEMP stack on a Debian server are compiled with an optimized configuration for the best performance, speed of response and security.
 
-The latest stable versions of software for a LAMP server are compiled with an optimized configuration for the best performance, speed of response and security.
+List of installed programs:
+
+| Program       | Version    |
+| ------------- |:----------:|
+| cmake         | 3.11.1     |
+| openssl       | 1.1.0h     |
+| python2       | 2.7.14     |
+| zlib          | 1.2.11     |
+| lz4           | 1.8.1.2    |
+| libzip        | 1.5.1      |
+| libssh2       | 1.8.0      |
+| nghttp2       | 1.31.1     |
+| curl          | 7.59.0     |
+| libcrack2     | 2.9.6      |
+| libxml2       | 2.9.8      |
+| libxslt       | 1.1.33-rc1 |
+| jemalloc      | 5.0.1      |
+| mariadb       | 10.2.14    |
+| php           | 7.2.4      |
+| nginx         | 1.14.0     |
+| letsencrypt   | last       |
+| blackfire     | last       |
+
+
+All collaboration is appreciated, through https://github.com/dertin/lemp-stack-debian/issues
 
 Use at your own risk
 

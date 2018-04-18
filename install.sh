@@ -254,6 +254,43 @@ function essential_install() {
   fi
 }
 
+function cmake_install() {
+  #####################################################################################################################
+  #
+  # INSTALL cmake (Tested with 3.11.1 - https://cmake.org/files/v3.11/cmake-3.11.1.tar.gz)
+  #
+  #####################################################################################################################
+
+  # Func askOption (question, defaultOption, skipQuestion)
+  input_install_cmake="$(askOption "Install cmake ? [Y/n]: " "Y" $AutoDebug)"
+
+  if [ $input_install_cmake == "Y" ] || [ $input_install_cmake == "y" ]
+  then
+
+    # Func askOption (question, defaultOption, skipQuestion)
+    cmake_address_default="https://cmake.org/files/v3.11/cmake-3.11.1.tar.gz"
+    cmake_address="$(askOption "Enter the download address for cmake (tar.gz): " $cmake_address_default $AutoDebug)"
+
+    # Func askOption (question, defaultOption, skipQuestion)
+    cmake_install_tmp_dir="$(askOption "Enter temporary directory for cmake compilation: " "/var/tmp/cmake_build" $AutoDebug)"
+
+    # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
+    wgetAndDecompress $cmake_install_tmp_dir "cmake_src" $cmake_address
+
+    ./bootstrap
+
+    make
+    make install
+
+    ldconfig
+
+    cmake --version
+
+    pauseToContinue
+
+  fi
+}
+
 function openssl_install() {
   #####################################################################################################################
   #
@@ -552,43 +589,6 @@ function curl_install() {
   fi
 }
 
-function cmake_install() {
-  #####################################################################################################################
-  #
-  # INSTALL cmake (Tested with 3.11.1 - https://cmake.org/files/v3.11/cmake-3.11.1.tar.gz)
-  #
-  #####################################################################################################################
-
-  # Func askOption (question, defaultOption, skipQuestion)
-  input_install_cmake="$(askOption "Install cmake ? [Y/n]: " "Y" $AutoDebug)"
-
-  if [ $input_install_cmake == "Y" ] || [ $input_install_cmake == "y" ]
-  then
-
-    # Func askOption (question, defaultOption, skipQuestion)
-    cmake_address_default="https://cmake.org/files/v3.11/cmake-3.11.1.tar.gz"
-    cmake_address="$(askOption "Enter the download address for cmake (tar.gz): " $cmake_address_default $AutoDebug)"
-
-    # Func askOption (question, defaultOption, skipQuestion)
-    cmake_install_tmp_dir="$(askOption "Enter temporary directory for cmake compilation: " "/var/tmp/cmake_build" $AutoDebug)"
-
-    # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
-    wgetAndDecompress $cmake_install_tmp_dir "cmake_src" $cmake_address
-
-    ./bootstrap
-
-    make
-    make install
-
-    ldconfig
-
-    cmake --version
-
-    pauseToContinue
-
-  fi
-}
-
 function libcrack2_install() {
   #####################################################################################################################
   #
@@ -716,7 +716,7 @@ function libxslt_install() {
 function jemalloc_install() {
   #####################################################################################################################
   #
-  # INSTALL jemalloc - https://github.com/jemalloc/jemalloc/archive/5.0.1.tar.gz
+  # INSTALL jemalloc 5.0.1 - https://github.com/jemalloc/jemalloc/archive/5.0.1.tar.gz
   #
   #####################################################################################################################
 
