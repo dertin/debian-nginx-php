@@ -193,7 +193,7 @@ function essential_install() {
     # TODO: check this: Packages that can be deleted after the script is finished.
     apt-get -y install libxau-dev libxdmcp-dev xorg-sgml-doctools \
     libexpat1-dev xsltproc docbook-xsl \
-    docbook-xml needrestart autoconf \
+    docbook-xml needrestart autoconf autogen autopoint \
     automake m4 bison \
     build-essential g++ pkg-config \
     autotools-dev libtool expect \
