@@ -1247,9 +1247,6 @@ case "$1" in
         "essential")
             essential_install
             ;;
-        "cmake")
-            cmake_install
-            ;;
         "openssl")
             openssl_install
             ;;
@@ -1262,9 +1259,6 @@ case "$1" in
         "lz4")
             lz4_install
             ;;
-        "libzip")
-            libzip_install
-            ;;
         "libssh2")
             libssh2_install
             ;;
@@ -1273,6 +1267,12 @@ case "$1" in
             ;;
         "curl")
             curl_install
+            ;;
+        "cmake")
+            cmake_install
+            ;;
+        "libzip")
+            libzip_install
             ;;
         "libcrack2")
             libcrack2_install
@@ -1304,15 +1304,15 @@ case "$1" in
         "all")
             service_stop
             essential_install
-            cmake_install
             openssl_install
             python2_install
             zlib_install
             lz4_install
-            libzip_install
             libssh2_install
             nghttp2_install
             curl_install
+            cmake_install
+            libzip_install
             libcrack2_install
             libxml2_install
             libxslt_install
@@ -1330,15 +1330,11 @@ case "$1" in
               essential_install 2>&1 > /dev/null
             travis_fold_end
 
-            travis_fold_start cmake
-              cmake_install
-            travis_fold_end
-
             travis_fold_start openssl
               openssl_install 2>&1 > /dev/null
             travis_fold_end
 
-            travis_fold_start python
+            travis_fold_start python2
               python2_install  2>&1 > /dev/null
             travis_fold_end
 
@@ -1348,10 +1344,6 @@ case "$1" in
 
             travis_fold_start lz4
               lz4_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start libzip
-              libzip_install
             travis_fold_end
 
             travis_fold_start libssh2
@@ -1364,6 +1356,14 @@ case "$1" in
 
             travis_fold_start curl
               curl_install 2>&1 > /dev/null
+            travis_fold_end
+
+            travis_fold_start cmake
+              cmake_install
+            travis_fold_end
+
+            travis_fold_start libzip
+              libzip_install
             travis_fold_end
 
             travis_fold_start libcrack2
@@ -1402,7 +1402,7 @@ case "$1" in
 
             ;;
         *)
-            echo $"Usage: $0 {all|program_name} {N|Y}(Automatic mode)"
+            echo $"Usage: sudo $0 {all|program_name} {N|Y}(Automatic mode)"
             exit 1
 
 esac

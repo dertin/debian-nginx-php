@@ -16,15 +16,15 @@ List of installed programs:
 
 | Program       | Version    |
 | ------------- |:----------:|
-| cmake         | 3.11.1     |
 | openssl       | 1.1.0h     |
 | python2       | 2.7.14     |
 | zlib          | 1.2.11     |
 | lz4           | 1.8.1.2    |
-| libzip        | 1.5.1      |
 | libssh2       | 1.8.0      |
 | nghttp2       | 1.31.1     |
 | curl          | 7.59.0     |
+| cmake         | 3.11.1     |
+| libzip        | 1.5.1      |
 | libcrack2     | 2.9.6      |
 | libxml2       | 2.9.8      |
 | libxslt       | 1.1.33-rc1 |
