@@ -131,6 +131,8 @@ function clear_compile() {
   if [ $input_install_clear_compile == "Y" ] || [ $input_install_clear_compile == "y" ]
   then
 
+    rm -rf /var/tmp/*_build
+
     apt-get -y remove libxau-dev libxdmcp-dev xorg-sgml-doctools \
     libexpat1-dev xsltproc docbook-xsl \
     docbook-xml needrestart autoconf \
@@ -202,7 +204,7 @@ function essential_install() {
     libxml2-dev libxslt1-dev \
     libfreetype6-dev libfontconfig1-dev \
     libtiffxx5 libjpeg62-turbo-dev libjpeg-dev libpng-dev \
-    libbz2-dev zlib1g-dev libzip-dev \
+    bzip2 libbz2-dev zlib1g-dev libzip-dev \
     libjansson-dev \
     libgmp-dev libev-dev libevent-dev \
     libsqlite3-dev libgdbm-dev libdb-dev \
@@ -405,6 +407,40 @@ function lz4_install() {
   fi
 }
 
+function libzip_install() {
+  #####################################################################################################################
+  #
+  # INSTALL libzip (Tested with 1.5.1 - https://libzip.org/download/libzip-1.5.1.tar.gz)
+  #
+  #####################################################################################################################
+
+  # Func askOption (question, defaultOption, skipQuestion)
+  input_install_zlib="$(askOption "Install libzip ? [Y/n]: " "Y" $AutoDebug)"
+
+  if [ $input_install_libzip == "Y" ] || [ $input_install_libzip == "y" ]
+  then
+
+    # Func askOption (question, defaultOption, skipQuestion)
+    libzip_address_default="https://libzip.org/download/libzip-1.5.1.tar.gz"
+    libzip_address="$(askOption "Enter the download address for libzip (tar.gz): " $libzip_address_default $AutoDebug)"
+
+    # Func askOption (question, defaultOption, skipQuestion)
+    libzip_install_tmp_dir="$(askOption "Enter temporary directory for libzip compilation: " "/var/tmp/libzip_build" $AutoDebug)"
+
+    # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
+    wgetAndDecompress $libzip_install_tmp_dir "libzip_src" $libzip_address
+
+    make
+    make test
+    make install
+
+    ldconfig
+
+    pauseToContinue
+
+  fi
+}
+
 function libssh2_install() {
   #####################################################################################################################
   #
@@ -516,7 +552,7 @@ function curl_install() {
 function cmake_install() {
   #####################################################################################################################
   #
-  # INSTALL cmake (Tested with 3.11.0 - https://cmake.org/files/v3.11/cmake-3.11.0.tar.gz)
+  # INSTALL cmake (Tested with 3.11.1 - https://cmake.org/files/v3.11/cmake-3.11.1.tar.gz)
   #
   #####################################################################################################################
 
@@ -527,7 +563,7 @@ function cmake_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    cmake_address_default="https://cmake.org/files/v3.11/cmake-3.11.0.tar.gz"
+    cmake_address_default="https://cmake.org/files/v3.11/cmake-3.11.1.tar.gz"
     cmake_address="$(askOption "Enter the download address for cmake (tar.gz): " $cmake_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -1005,7 +1041,7 @@ function php_install() {
 function nginx_install() {
   #####################################################################################################################
   #
-  # INSTALL nginx (Tested with 1.13.12 - https://nginx.org/download/nginx-1.13.12.tar.gz)
+  # INSTALL nginx (Tested with 1.14.0 - https://nginx.org/download/nginx-1.14.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -1018,7 +1054,7 @@ function nginx_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nginx_address_default="https://nginx.org/download/nginx-1.13.12.tar.gz"
+    nginx_address_default="https://nginx.org/download/nginx-1.14.0.tar.gz"
     nginx_address="$(askOption "Enter the download address for nginx (tar.gz): " $nginx_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -1216,6 +1252,9 @@ case "$1" in
         "lz4")
             lz4_install
             ;;
+        "libzip")
+            libzip_install
+            ;;
         "libssh2")
             libssh2_install
             ;;
@@ -1262,6 +1301,7 @@ case "$1" in
             python2_install
             zlib_install
             lz4_install
+            libzip_install
             libssh2_install
             nghttp2_install
             curl_install
@@ -1275,15 +1315,6 @@ case "$1" in
             nginx_install
             letsencrypt_install
             blackfire_install
-            clear_compile
-            ;;
-        "upgrade")
-            service_stop
-            essential_install
-            openssl_install
-            mariadb_install
-            php_install
-            nginx_install
             clear_compile
             ;;
         "travis")
@@ -1308,6 +1339,10 @@ case "$1" in
               lz4_install 2>&1 > /dev/null
             travis_fold_end
 
+            travis_fold_start libzip
+              libzip_install 2>&1 > /dev/null
+            travis_fold_end
+
             travis_fold_start libssh2
               libssh2_install 2>&1 > /dev/null
             travis_fold_end
@@ -1320,9 +1355,9 @@ case "$1" in
               curl_install 2>&1 > /dev/null
             travis_fold_end
 
-            travis_fold_start cmake
-              cmake_install
-            travis_fold_end
+            #travis_fold_start cmake
+            #  cmake_install
+            #travis_fold_end
 
             travis_fold_start libcrack2
               libcrack2_install 2>&1 > /dev/null
