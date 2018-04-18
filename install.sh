@@ -429,8 +429,10 @@ function libzip_install() {
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $libzip_install_tmp_dir "libzip_src" $libzip_address
-    
-    cmake .
+
+    mkdir build
+    cd build
+    cmake ..
     make
     make test
     make install
@@ -1345,7 +1347,7 @@ case "$1" in
             travis_fold_end
 
             travis_fold_start libzip
-              libzip_install 2>&1 > /dev/null
+              libzip_install
             travis_fold_end
 
             travis_fold_start libssh2
@@ -1391,7 +1393,7 @@ case "$1" in
             # letsencrypt_install
             # blackfire_install
             travis_fold_start clear_compile
-              clear_compile
+              clear_compile 2>&1 > /dev/null
             travis_fold_end
 
             ;;
