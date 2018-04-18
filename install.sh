@@ -415,7 +415,7 @@ function libzip_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_zlib="$(askOption "Install libzip ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_libzip="$(askOption "Install libzip ? [Y/n]: " "Y" $AutoDebug)"
 
   if [ $input_install_libzip == "Y" ] || [ $input_install_libzip == "y" ]
   then
