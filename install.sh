@@ -135,7 +135,7 @@ function clear_compile() {
 
     apt-get -y remove libxau-dev libxdmcp-dev xorg-sgml-doctools \
     libexpat1-dev xsltproc docbook-xsl \
-    docbook-xml needrestart autoconf \
+    docbook-xml needrestart autoconf autogen autopoint \
     automake m4 bison \
     build-essential g++ pkg-config \
     autotools-dev libtool expect \
@@ -145,7 +145,21 @@ function clear_compile() {
     libstdc++-6-dev gcc-6-locales \
     g++-6-multilib valgrind valgrind-mpi \
     valkyrie gcj-jdk flex \
-    tk-dev libc-ares-dev
+    tk-dev libc-ares-dev \
+    libpcre3-dev libxml2-dev libxslt1-dev \
+    libfreetype6-dev libfontconfig1-dev \
+    libjpeg62-turbo-dev libjpeg-dev libpng-dev \
+    libbz2-dev zlib1g-dev libzip-dev \
+    libjansson-dev libmcrypt-dev \
+    libgmp-dev libev-dev libevent-dev \
+    libsqlite3-dev libgdbm-dev libdb-dev \
+    libsystemd-dev libspdylay-dev \
+    libaio-dev libncurses5-dev libboost-all-dev \
+    libunistring-dev libunbound-dev libqt4-dev \
+    libicu-dev libltdl-dev libpspell-dev libreadline-dev \
+    libc6-dev libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
+    liblinear-dev libssl-dev libboost-dev libboost-thread-dev \
+    python-dev python3-dev
 
     apt-get -y autoremove
     apt-get clean
@@ -203,29 +217,29 @@ function essential_install() {
     libstdc++-6-dev gcc-6-locales \
     g++-6-multilib valgrind valgrind-mpi \
     valkyrie gcj-jdk flex \
-    tk-dev libc-ares-dev
-
-    # TODO: check this: Important packages that must be installed.
-    apt-get -y install coreutils binutils uuid-dev wget \
-    mcrypt libmcrypt-dev cython \
-    perl libpcre3 libpcre3-dev  \
-    libxml2-dev libxslt1-dev \
+    tk-dev libc-ares-dev \
+    libpcre3-dev libxml2-dev libxslt1-dev \
     libfreetype6-dev libfontconfig1-dev \
-    libtiffxx5 libjpeg62-turbo-dev libjpeg-dev libpng-dev \
-    bzip2 libbz2-dev zlib1g-dev libzip-dev \
-    libjansson-dev \
+    libjpeg62-turbo-dev libjpeg-dev libpng-dev \
+    libbz2-dev zlib1g-dev libzip-dev \
+    libjansson-dev libmcrypt-dev \
     libgmp-dev libev-dev libevent-dev \
     libsqlite3-dev libgdbm-dev libdb-dev \
     libsystemd-dev libspdylay-dev \
-    libaio-dev libncurses5-dev \
-    libunistring-dev libunbound-dev \
-    trousers libidn2-0 \
+    libaio-dev libncurses5-dev libboost-all-dev \
+    libunistring-dev libunbound-dev libqt4-dev \
     libicu-dev libltdl-dev libpspell-dev libreadline-dev \
-    libc6-dev libc-dbg libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
-    gettext debian-keyring liblinear-tools liblinear-dev \
-    libdbi-perl libboost-all-dev rsync net-tools libdbd-mysql-perl \
-    re2c libboost-dev libboost-thread-dev qt4-qmake libqt4-dev \
-    libssl-dev golang python-dev python3-dev python-setuptools
+    libc6-dev libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
+    liblinear-dev libssl-dev libboost-dev libboost-thread-dev \
+    python-dev python3-dev
+
+    # TODO: check this: Important packages that must be installed.
+    apt-get -y install coreutils binutils uuid-dev wget \
+    mcrypt cython perl libpcre3 bzip2 \
+    trousers libidn2-0 libtiffxx5 \
+    libc-dbg gettext debian-keyring liblinear-tools \
+    libdbi-perl rsync net-tools libdbd-mysql-perl \
+    re2c qt4-qmake golang python-setuptools
 
     apt-get -y upgrade
     apt-get -y autoremove
