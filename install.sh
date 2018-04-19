@@ -144,22 +144,7 @@ function clear_compile() {
     autoconf-archive g++-multilib gcc-multilib \
     libstdc++-6-dev gcc-6-locales \
     g++-6-multilib valgrind valgrind-mpi \
-    valkyrie gcj-jdk flex \
-    tk-dev libc-ares-dev \
-    libpcre3-dev libxml2-dev libxslt1-dev \
-    libfreetype6-dev libfontconfig1-dev \
-    libjpeg62-turbo-dev libjpeg-dev libpng-dev \
-    libbz2-dev zlib1g-dev libzip-dev \
-    libjansson-dev libmcrypt-dev \
-    libgmp-dev libev-dev libevent-dev \
-    libsqlite3-dev libgdbm-dev libdb-dev \
-    libsystemd-dev libspdylay-dev \
-    libaio-dev libncurses5-dev libboost-all-dev \
-    libunistring-dev libunbound-dev libqt4-dev \
-    libicu-dev libltdl-dev libpspell-dev libreadline-dev \
-    libc6-dev libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
-    liblinear-dev libssl-dev libboost-dev libboost-thread-dev \
-    python-dev python3-dev
+    valkyrie gcj-jdk flex tk-dev
 
     apt-get -y autoremove
     apt-get clean
@@ -216,9 +201,16 @@ function essential_install() {
     autoconf-archive g++-multilib gcc-multilib \
     libstdc++-6-dev gcc-6-locales \
     g++-6-multilib valgrind valgrind-mpi \
-    valkyrie gcj-jdk flex \
-    tk-dev libc-ares-dev \
-    libpcre3-dev libxml2-dev libxslt1-dev \
+    valkyrie gcj-jdk flex tk-dev
+
+    # TODO: check this: Important packages that must be installed.
+    apt-get -y install coreutils binutils uuid-dev wget \
+    mcrypt cython perl libpcre3 bzip2 \
+    trousers libidn2-0 libtiffxx5 \
+    libc-dbg gettext debian-keyring liblinear-tools \
+    libdbi-perl rsync net-tools libdbd-mysql-perl \
+    re2c qt4-qmake golang python-setuptools \
+    libc-ares-dev libpcre3-dev libxml2-dev libxslt1-dev \
     libfreetype6-dev libfontconfig1-dev \
     libjpeg62-turbo-dev libjpeg-dev libpng-dev \
     libbz2-dev zlib1g-dev libzip-dev \
@@ -228,18 +220,11 @@ function essential_install() {
     libsystemd-dev libspdylay-dev \
     libaio-dev libncurses5-dev libboost-all-dev \
     libunistring-dev libunbound-dev libqt4-dev \
-    libicu-dev libltdl-dev libpspell-dev libreadline-dev \
+    libicu-dev libltdl-dev libreadline-dev \
+    libaspell-dev libpspell-dev \
     libc6-dev libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
     liblinear-dev libssl-dev libboost-dev libboost-thread-dev \
     python-dev python3-dev
-
-    # TODO: check this: Important packages that must be installed.
-    apt-get -y install coreutils binutils uuid-dev wget \
-    mcrypt cython perl libpcre3 bzip2 \
-    trousers libidn2-0 libtiffxx5 \
-    libc-dbg gettext debian-keyring liblinear-tools \
-    libdbi-perl rsync net-tools libdbd-mysql-perl \
-    re2c qt4-qmake golang python-setuptools
 
     apt-get -y upgrade
     apt-get -y autoremove
@@ -1008,6 +993,7 @@ function php_install() {
     ./configure $CONFIGURE_STRING
 
     make
+    make test
     make install
 
     # Create a dir for storing PHP module conf
