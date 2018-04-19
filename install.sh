@@ -134,10 +134,8 @@ function clear_compile() {
     rm -rf /var/tmp/*_build
 
     apt-get -y remove libxau-dev libxdmcp-dev xorg-sgml-doctools \
-    libexpat1-dev xsltproc docbook-xsl \
-    docbook-xml needrestart autoconf autogen autopoint \
-    automake m4 bison \
-    build-essential g++ pkg-config \
+    docbook-xsl docbook-xml needrestart autoconf autogen autopoint \
+    automake m4 bison build-essential g++ pkg-config \
     autotools-dev libtool expect \
     libcunit1-dev x11proto-core-dev file \
     libenchant-dev libjemalloc-dev gnu-standards \
@@ -191,10 +189,8 @@ function essential_install() {
 
     # TODO: check this: Packages that can be deleted after the script is finished.
     apt-get -y install libxau-dev libxdmcp-dev xorg-sgml-doctools \
-    libexpat1-dev xsltproc docbook-xsl \
-    docbook-xml needrestart autoconf autogen autopoint \
-    automake m4 bison \
-    build-essential g++ pkg-config \
+    docbook-xsl docbook-xml needrestart autoconf autogen autopoint \
+    automake m4 bison build-essential g++ pkg-config \
     autotools-dev libtool expect \
     libcunit1-dev x11proto-core-dev file \
     libenchant-dev libjemalloc-dev gnu-standards \
@@ -205,8 +201,8 @@ function essential_install() {
 
     # TODO: check this: Important packages that must be installed.
     apt-get -y install coreutils binutils uuid-dev wget \
-    mcrypt cython perl libpcre3 bzip2 \
-    trousers libidn2-0 libtiffxx5 \
+    mcrypt cython perl libpcre3 bzip2 xsltproc \
+    trousers libidn2-0 libtiffxx5 libexpat1-dev \
     libc-dbg gettext debian-keyring liblinear-tools \
     libdbi-perl rsync net-tools libdbd-mysql-perl \
     re2c qt4-qmake golang python-setuptools \
@@ -993,8 +989,17 @@ function php_install() {
     ./configure $CONFIGURE_STRING
 
     make
-    make test
+
+    # is discarded for rapid tests
+    if [ $AutoDebug != "Y" ]
+    then
+      make test
+    fi
+
     make install
+
+    # Socket
+    mkdir -p /run/php
 
     # Create a dir for storing PHP module conf
     mkdir /usr/local/php7/etc/conf.d
@@ -1190,8 +1195,14 @@ function letsencrypt_install() {
     # Add crontab renew‑letsencrypt
     crontab -l | { cat; echo "0 0 1 JAN,MAR,MAY,JUL,SEP,NOV * /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh"; } | crontab -
 
-    # Enabled certificates in configuration file
-    sed -i "s/#REMOVE_AFTER_CONFIGURING_LE#//g" /etc/nginx/sites-enabled/${global_domain}.conf
+    input_install_letEncrypt_isOK="$(askOption "Install Let’s Encrypt is OK ? [Y/n]: " "Y" $AutoDebug)"
+    if [ $input_install_letEncrypt_isOK == "Y" ] || [ $input_install_letEncrypt_isOK == "y" ]
+    then
+      # Enabled certificates in configuration file
+      sed -i "s/#REMOVE_AFTER_CONFIGURING_LE#//g" /etc/nginx/sites-enabled/${global_domain}.conf
+    else
+      echo "[warning] Remember to remove the comments '#REMOVE_AFTER_CONFIGURING_LE#' from the file '/etc/nginx/sites-enabled/${global_domain}.conf' after you set up your certificate."
+    fi
     # Reload nginx
     service nginx reload
 
