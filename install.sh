@@ -317,7 +317,7 @@ function openssl_install() {
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $openssl_install_tmp_dir "openssl_src" $openssl_address
-
+    # enable-tls1_3
     ./config -Wl,--enable-new-dtags,-rpath,'$(LIBRPATH)' no-comp no-zlib no-zlib-dynamic shared
 
     make
@@ -1105,7 +1105,7 @@ function nginx_install() {
     # is discarded for rapid tests
     if [ $AutoDebug != "Y" ]
     then
-      openssl dhparam -out /etc/nginx/ssl/dhparam.pem 4096
+      openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
     fi
 
     # FILE: /etc/nginx/nginx.conf
