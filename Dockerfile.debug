@@ -12,8 +12,6 @@ RUN
 
 RUN apt-get clean && \
     apt-get -y update > /dev/null && \
-    apt-get install -y locales && \
-    locale-gen en_US.UTF-8 && \
     apt-get install -y --no-install-recommends apt-utils && \
     apt-get -y upgrade > /dev/null && \
     rm -rf /var/lib/apt/lists/* && \
