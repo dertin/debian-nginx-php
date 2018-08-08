@@ -173,17 +173,19 @@ function essential_install() {
   if [ $input_install_essential == "Y" ] || [ $input_install_essential == "y" ]
   then
 
+    # Build Essential
+
+    apt-get -y update
+
     chmod 666 /etc/environment
     truncate -s 0 /etc/environment
     echo -e "LC_ALL=en_US.UTF-8\n" >> /etc/environment
     echo -e "LC_CTYPE=UTF-8\n" >> /etc/environment
     echo -e "LANG=en_US.UTF-8\n" >> /etc/environment
     chmod 644 /etc/environment
+    apt-get -y install locales
     locale-gen en_US.UTF-8
 
-    # Build Essential
-
-    apt-get -y update
     apt-get -y upgrade
     apt-get -y dist-upgrade
 
@@ -578,7 +580,7 @@ function curl_install() {
 
     ./buildconf
 
-    ./configure --enable-versioned-symbols --enable-threaded-resolver --with-ssl=/usr/local/ssl --with-libssl-prefix=/usr/local --with-zlib=/usr/local/zlib --with-nghttp2 --with-libssh2
+    ./configure --enable-versioned-symbols --enable-threaded-resolver --with-ssl=/usr/include/openssl --with-libssl-prefix=/usr/local --with-zlib --with-nghttp2 --with-libssh2
 
     make
     make install
