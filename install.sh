@@ -260,7 +260,7 @@ function essential_install() {
 function cmake_install() {
   #####################################################################################################################
   #
-  # INSTALL cmake (Tested with 3.11.1 - https://cmake.org/files/v3.11/cmake-3.11.1.tar.gz)
+  # INSTALL cmake (Tested with 3.12.0 - https://cmake.org/files/v3.12/cmake-3.12.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -271,7 +271,7 @@ function cmake_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    cmake_address_default="https://cmake.org/files/v3.11/cmake-3.11.1.tar.gz"
+    cmake_address_default="https://cmake.org/files/v3.12/cmake-3.12.0.tar.gz"
     cmake_address="$(askOption "Enter the download address for cmake (tar.gz): " $cmake_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -416,7 +416,7 @@ function zlib_install() {
 function lz4_install() {
   #####################################################################################################################
   #
-  # INSTALL LZ4 (Tested with v1.8.1.2 - https://github.com/lz4/lz4/archive/v1.8.1.2.tar.gz)
+  # INSTALL LZ4 (Tested with v1.8.2 - https://github.com/lz4/lz4/archive/v1.8.2.tar.gz)
   #
   #####################################################################################################################
 
@@ -427,7 +427,7 @@ function lz4_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    lz4_address_default="https://github.com/lz4/lz4/archive/v1.8.1.2.tar.gz"
+    lz4_address_default="https://github.com/lz4/lz4/archive/v1.8.2.tar.gz"
     lz4_address="$(askOption "Enter the download address for lz4 (tar.gz): " $lz4_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -522,7 +522,7 @@ function nghttp2_install() {
   #####################################################################################################################
   #
   # INSTALL Nghttp2: HTTP/2 C Library
-  # (Tested with v1.31.1 - https://github.com/nghttp2/nghttp2/releases/download/v1.31.1/nghttp2-1.31.1.tar.gz)
+  # (Tested with v1.32.0 - https://github.com/nghttp2/nghttp2/releases/download/v1.32.0/nghttp2-1.32.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -533,7 +533,7 @@ function nghttp2_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.31.1/nghttp2-1.31.1.tar.gz"
+    nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.32.0/nghttp2-1.32.0.tar.gz"
     nghttp2_address="$(askOption "Enter the download address for Nghttp2 (tar.gz): " $nghttp2_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -556,7 +556,7 @@ function nghttp2_install() {
 function curl_install() {
   #####################################################################################################################
   #
-  # INSTALL curl (Tested with 7.59.0 - https://curl.haxx.se/download/curl-7.59.0.tar.gz)
+  # INSTALL curl (Tested with 7.61.0 - https://curl.haxx.se/download/curl-7.61.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -567,7 +567,7 @@ function curl_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    curl_address_default="https://curl.haxx.se/download/curl-7.59.0.tar.gz"
+    curl_address_default="https://curl.haxx.se/download/curl-7.61.0.tar.gz"
     curl_address="$(askOption "Enter the download address for CURL (tar.gz) ? [Y/n]: " $curl_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -719,7 +719,7 @@ function libxslt_install() {
 function jemalloc_install() {
   #####################################################################################################################
   #
-  # INSTALL jemalloc 5.0.1 - https://github.com/jemalloc/jemalloc/archive/5.0.1.tar.gz
+  # INSTALL jemalloc 5.1.0 - https://github.com/jemalloc/jemalloc/archive/5.1.0.tar.gz
   #
   #####################################################################################################################
 
@@ -917,7 +917,7 @@ function mariadb_install() {
 function php_install() {
   #####################################################################################################################
   #
-  # INSTALL PHP (Tested with 7.2.4 - https://github.com/php/php-src/archive/php-7.2.4.tar.gz)
+  # INSTALL PHP (Tested with 7.2.8 - https://github.com/php/php-src/archive/php-7.2.8.tar.gz)
   # use config file from: https://github.com/kasparsd/php-7-debian/
   #
   #####################################################################################################################
@@ -931,7 +931,7 @@ function php_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    php_address_default="https://github.com/php/php-src/archive/php-7.2.4.tar.gz"
+    php_address_default="https://github.com/php/php-src/archive/php-7.2.8.tar.gz"
     php_address="$(askOption "Enter the download address for PHP 7 (tar.gz): " $php_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -1053,7 +1053,7 @@ function php_install() {
 function nginx_install() {
   #####################################################################################################################
   #
-  # INSTALL nginx (Tested with 1.14.0 - https://nginx.org/download/nginx-1.14.0.tar.gz)
+  # INSTALL nginx (Tested with 1.15.2 - https://nginx.org/download/nginx-1.15.2.tar.gz)
   #
   #####################################################################################################################
 

@@ -21,17 +21,17 @@ List of installed programs:
 | zlib          | 1.2.11     |
 | lz4           | 1.8.1.2    |
 | libssh2       | 1.8.0      |
-| nghttp2       | 1.31.1     |
-| curl          | 7.59.0     |
-| cmake         | 3.11.1     |
+| nghttp2       | 1.32.0     |
+| curl          | 7.61.0     |
+| cmake         | 3.12.0     |
 | libzip        | 1.5.1      |
 | libcrack2     | 2.9.6      |
 | libxml2       | 2.9.8      |
 | libxslt       | 1.1.33-rc1 |
-| jemalloc      | 5.0.1      |
+| jemalloc      | 5.1.0      |
 | mariadb       | 10.2.14    |
-| php           | 7.2.4      |
-| nginx         | 1.14.0     |
+| php           | 7.2.8      |
+| nginx         | 1.15.2     |
 | letsencrypt   | last       |
 | blackfire     | last       |
 
