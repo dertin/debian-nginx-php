@@ -343,7 +343,7 @@ function python2_install() {
 
   #####################################################################################################################
   #
-  # INSTALL Python (Tested with 2.7.14 - https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tar.xz)
+  # INSTALL Python (Tested with 2.7.15 - https://www.python.org/ftp/python/2.7.15/Python-2.7.15.tar.xz)
   #
   #####################################################################################################################
 
@@ -353,7 +353,7 @@ function python2_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    python_address_default="https://www.python.org/ftp/python/2.7.14/Python-2.7.14.tar.xz"
+    python_address_default="https://www.python.org/ftp/python/2.7.15/Python-2.7.15.tar.xz"
     python_address="$(askOption "Enter the download address for Python2 (tar.gz): " $python_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)

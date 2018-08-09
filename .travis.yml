@@ -18,6 +18,10 @@ before_install:
 # Test
 script:
   - docker exec -t container_test /bin/bash -c "/usr/bin/openssl version"
+  - docker exec -t container_test /bin/bash -c "/usr/local/bin/cmake --version"
+  - docker exec -t container_test /bin/bash -c "/usr/local/bin/curl -V"
+  - docker exec -t container_test /bin/bash -c "/usr/bin/python2.7 --version"
+  - docker exec -t container_test /bin/bash -c "/usr/local/bin/pip -V"
   - docker exec -t container_test /bin/bash -c "/usr/local/php7/bin/php -v"
   - docker exec -t container_test /bin/bash -c "/usr/sbin/nginx -v"
   - docker exec -t container_test /bin/bash -c "service php7-fpm start"

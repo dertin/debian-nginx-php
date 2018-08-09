@@ -17,7 +17,7 @@ List of installed programs:
 | Program       | Version    |
 | ------------- |:----------:|
 | openssl       | 1.1.0h     |
-| python2       | 2.7.14     |
+| python2       | 2.7.15     |
 | zlib          | 1.2.11     |
 | lz4           | 1.8.1.2    |
 | libssh2       | 1.8.0      |
