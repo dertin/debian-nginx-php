@@ -580,7 +580,7 @@ function curl_install() {
 
     ./buildconf
 
-    ./configure --enable-versioned-symbols --enable-threaded-resolver --with-ssl=/usr/include/openssl --with-libssl-prefix=/usr/local --with-zlib --with-nghttp2 --with-libssh2
+    ./configure --enable-versioned-symbols --enable-threaded-resolver --with-libssl-prefix=/usr/local --with-ca-path=/etc/ssl/certs --with-ssl --with-zlib --with-nghttp2 --with-libssh2
 
     make
     make install
