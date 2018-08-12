@@ -23,6 +23,7 @@ script:
   - docker exec -t container_test /bin/bash -c "/usr/bin/python2.7 --version"
   - docker exec -t container_test /bin/bash -c "/usr/local/bin/pip -V"
   - docker exec -t container_test /bin/bash -c "/usr/local/php7/bin/php -v"
+  - docker exec -t container_test /bin/bash -c "/usr/local/php7/bin/php -i | grep 'Client API version'"
   - docker exec -t container_test /bin/bash -c "/usr/sbin/nginx -v"
   - docker exec -t container_test /bin/bash -c "service php7-fpm start"
   - docker exec -t container_test /bin/bash -c "service nginx start"
