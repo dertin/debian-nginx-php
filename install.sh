@@ -767,7 +767,7 @@ function mariadb_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_mariadb="$(askOption "Install MariaDB ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_mariadb="$(askOption "Install MariaDB Client? [Y/n]: " "Y" $AutoDebug)"
 
   if [ $input_install_mariadb == "Y" ] || [ $input_install_mariadb == "y" ]
   then
@@ -786,13 +786,14 @@ function mariadb_install() {
     # useradd -c "MySQL Server" -g mysql -s /bin/false mysql
     adduser --system --no-create-home --disabled-login --disabled-password --group mysql
 
-    cmake . -DBUILD_CONFIG=mysql_release \
+    cmake . -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_C_FLAGS="-I/usr/local/include -I/usr/include/i386-linux-gnu" \
     -DWITH_INNODB_LZ4=ON -DWITH_INNODB_LZMA=OFF -DWITH_INNODB_LZO=OFF -DWITH_INNODB_BZIP2=OFF \
     -DWITH_ZLIB=system -DWITH_SSL=system -DWITH_JEMALLOC=system \
     -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_spanish_ci \
-    -DWITH_DEBUG=0 -DWITH_VALGRIND=0 -DPLUGIN_EXAMPLE=NO
-
+    -DWITH_DEBUG=0 -DWITH_VALGRIND=0 -DPLUGIN_EXAMPLE=NO \
+    -DWITHOUT_SERVER=ON -DMYSQL_UNIX_ADDR=/var/run/mysqld/mysqld.sock
+    
     make
     make install
 
@@ -835,81 +836,81 @@ function mariadb_install() {
     chown -R mysql:mysql /var/run/mysqld/
 
     # datadir
-    mkdir -p /usr/local/mysql/data
+    #mkdir -p /usr/local/mysql/data
 
-    ./scripts/mysql_install_db --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --socket=/var/run/mysqld/mysqld.sock --verbose
+    #./scripts/mysql_install_db --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --socket=/var/run/mysqld/mysqld.sock --verbose
 
     # datadir own
-    chown -R mysql:mysql /usr/local/mysql/data
+    #chown -R mysql:mysql /usr/local/mysql/data
 
-    cp ./support-files/mysql.server /etc/init.d/mysql
-    chmod +x /etc/init.d/mysql
-    update-rc.d mysql defaults
+    #cp ./support-files/mysql.server /etc/init.d/mysql
+    #chmod +x /etc/init.d/mysql
+    #update-rc.d mysql defaults
 
     ldconfig
 
-    service mysql start
+    #service mysql start
 
-    if [ "$AutoDebug" != "Y" ]
-    then
-      ./bin/mysql_secure_installation --socket=/var/run/mysqld/mysqld.sock
-      ./bin/mysqladmin -u root -p password
-    else
-      apt -y install expect
-      SECURE_MYSQL=$(expect -c "
-      set timeout 10
-      spawn mysql_secure_installation
-      expect \"Enter current password for root (enter for none):\"
-      send \"root\r\"
-      expect \"Change the root password?\"
-      send \"n\r\"
-      expect \"Remove anonymous users?\"
-      send \"y\r\"
-      expect \"Disallow root login remotely?\"
-      send \"y\r\"
-      expect \"Remove test database and access to it?\"
-      send \"y\r\"
-      expect \"Reload privilege tables now?\"
-      send \"y\r\"
-      expect eof
-      ")
-      echo "$SECURE_MYSQL"
-      apt -y purge expect
-    fi
+    #if [ "$AutoDebug" != "Y" ]
+    #then
+      #./bin/mysql_secure_installation --socket=/var/run/mysqld/mysqld.sock
+      #./bin/mysqladmin -u root -p password
+    #else
+      #apt -y install expect
+      #SECURE_MYSQL=$(expect -c "
+      #set timeout 10
+      #spawn mysql_secure_installation
+      #expect \"Enter current password for root (enter for none):\"
+      #send \"root\r\"
+      #expect \"Change the root password?\"
+      #send \"n\r\"
+      #expect \"Remove anonymous users?\"
+      #send \"y\r\"
+      #expect \"Disallow root login remotely?\"
+      #send \"y\r\"
+      #expect \"Remove test database and access to it?\"
+      #send \"y\r\"
+      #expect \"Reload privilege tables now?\"
+      #send \"y\r\"
+      #expect eof
+      #")
+      #echo "$SECURE_MYSQL"
+      #apt -y purge expect
+    #fi
 
-    service mysql restart
+    #service mysql restart
 
-    service mysql status
+    #service mysql status
 
-    pauseToContinue
+    #pauseToContinue
 
     # http://www.askapache.com/linux/mariadb-lz4-compression-howto-centos/
-    mysql -p -Ntbe 'set global innodb_compression_algorithm=lz4;set global innodb_compression_level=3'
-    mysql -p -Ntbe 'SHOW VARIABLES WHERE Variable_name LIKE "have_%" OR Variable_name LIKE "%_compression_%"'
+    #mysql -p -Ntbe 'set global innodb_compression_algorithm=lz4;set global innodb_compression_level=3'
+    #mysql -p -Ntbe 'SHOW VARIABLES WHERE Variable_name LIKE "have_%" OR Variable_name LIKE "%_compression_%"'
 
-    pauseToContinue
+    #pauseToContinue
 
-    wget http://mysqltuner.pl/ -O /usr/local/mysql/mysql-test/mysqltuner.pl
-    wget https://raw.githubusercontent.com/major/MySQLTuner-perl/master/basic_passwords.txt -O /usr/local/mysql/mysql-test/basic_passwords.txt
-    wget https://raw.githubusercontent.com/major/MySQLTuner-perl/master/vulnerabilities.csv -O /usr/local/mysql/mysql-test/vulnerabilities.csv
-
-    # Func askOption (question, defaultOption, skipQuestion)
-    input_install_mariadb_test_tuner="$(askOption "Run Test Tuner MariaDB ? [Y/n]: " "Y" $AutoDebug)"
-
-    if [ $input_install_mariadb_test_tuner == "Y" ] || [ $input_install_mariadb_test_tuner == "y" ]
-    then
-       perl /usr/local/mysql/mysql-test/mysqltuner.pl --cvefile=/usr/local/mysql/mysql-test/vulnerabilities.csv
-    fi
-
-    cd ./mysql-test || exit 1
+    #wget http://mysqltuner.pl/ -O /usr/local/mysql/mysql-test/mysqltuner.pl
+    #wget https://raw.githubusercontent.com/major/MySQLTuner-perl/master/basic_passwords.txt -O /usr/local/mysql/mysql-test/basic_passwords.txt
+    #wget https://raw.githubusercontent.com/major/MySQLTuner-perl/master/vulnerabilities.csv -O /usr/local/mysql/mysql-test/vulnerabilities.csv
 
     # Func askOption (question, defaultOption, skipQuestion)
-    input_install_mariadb_test="$(askOption "Run Test MariaDB ? [y/N]: " "N" $AutoDebug)"
+    #input_install_mariadb_test_tuner="$(askOption "Run Test Tuner MariaDB ? [Y/n]: " "Y" $AutoDebug)"
 
-    if [ $input_install_mariadb_test == "Y" ] || [ $input_install_mariadb_test == "y" ]
-    then
-      perl ./mysql-test-run.pl
-    fi
+    #if [ $input_install_mariadb_test_tuner == "Y" ] || [ $input_install_mariadb_test_tuner == "y" ]
+    #then
+    #   perl /usr/local/mysql/mysql-test/mysqltuner.pl --cvefile=/usr/local/mysql/mysql-test/vulnerabilities.csv
+    #fi
+
+    #cd ./mysql-test || exit 1
+
+    # Func askOption (question, defaultOption, skipQuestion)
+    #input_install_mariadb_test="$(askOption "Run Test MariaDB ? [y/N]: " "N" $AutoDebug)"
+
+    #if [ $input_install_mariadb_test == "Y" ] || [ $input_install_mariadb_test == "y" ]
+    #then
+    #  perl ./mysql-test-run.pl
+    #fi
 
     pauseToContinue
 
