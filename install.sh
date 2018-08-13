@@ -762,7 +762,7 @@ function mariadb_install() {
   #
   #####################################################################################################################
   #
-  # INSTALL MariaDB 10.2.14 - https://mariadb.com/kb/en/mariadb/generic-build-instructions/
+  # INSTALL MariaDB 10.3 - http://espejito.fder.edu.uy/mariadb/repo/10.3/debian stretch main
   #
   #####################################################################################################################
 
@@ -772,145 +772,11 @@ function mariadb_install() {
   if [ $input_install_mariadb == "Y" ] || [ $input_install_mariadb == "y" ]
   then
 
-    # Func askOption (question, defaultOption, skipQuestion)
-    mariadb_address_default="https://downloads.mariadb.org/f/mariadb-10.2.14/source/mariadb-10.2.14.tar.gz?serve"
-    mariadb_address="$(askOption "Enter the download address for MariaDB (tar.gz): " $mariadb_address_default $AutoDebug)"
-
-    # Func askOption (question, defaultOption, skipQuestion)
-    mariadb_install_tmp_dir="$(askOption "Enter temporary directory for MariaDB compilation: " "/var/tmp/mariadb_build" $AutoDebug)"
-
-    # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
-    wgetAndDecompress $mariadb_install_tmp_dir "mariadb_src" $mariadb_address
-
-    groupadd mysql
-    # useradd -c "MySQL Server" -g mysql -s /bin/false mysql
-    adduser --system --no-create-home --disabled-login --disabled-password --group mysql
-
-    cmake . -DCMAKE_BUILD_TYPE=Release \
-    -DCMAKE_C_FLAGS="-I/usr/local/include -I/usr/include/i386-linux-gnu" \
-    -DWITH_INNODB_LZ4=ON -DWITH_INNODB_LZMA=OFF -DWITH_INNODB_LZO=OFF -DWITH_INNODB_BZIP2=OFF \
-    -DWITH_ZLIB=system -DWITH_SSL=system -DWITH_JEMALLOC=system \
-    -DDEFAULT_CHARSET=utf8 -DDEFAULT_COLLATION=utf8_spanish_ci \
-    -DWITH_DEBUG=0 -DWITH_VALGRIND=0 -DPLUGIN_EXAMPLE=NO \
-    -DWITHOUT_SERVER=ON -DMYSQL_UNIX_ADDR=/var/run/mysqld/mysqld.sock
-    
-    make
-    make install
-
-    export PATH=$PATH:/usr/local/mysql/bin
-    echo "export PATH=$PATH:/usr/local/mysql/bin" >> /etc/profile
-    source /etc/profile
-
-    cd /usr/local/mysql || exit 1
-
-    chown -R root .
-    chown -R mysql mysql
-
-    cp ./support-files/my-medium.cnf /etc/my.cnf
-    cp /etc/mysql/my.cnf /etc/mysql/my.cnf.back
-
-    # setting /etc/mysql/my.cnf
-    sed -i 's#lc-messages-dir.*=.*/usr/share/mysql#lc-messages-dir  = /usr/local/mysql/share#g' /etc/mysql/my.cnf
-    sed -i 's#basedir.*=.*/usr#basedir  = /usr/local/mysql#g' /etc/mysql/my.cnf
-    sed -i 's#datadir.*=.*/var/lib/mysql#datadir  = /usr/local/mysql/data#g' /etc/mysql/my.cnf
-    # Evaluate: Modify query_cache_size (=0)
-    # Evaluate: Modify query_cache_type (=0)
-    # Evaluate: Modify query_cache_limit (> 1M, or use smaller result sets)
-
-    # setting /etc/my.cnf
-    sed -i 's#socket.*=.*/tmp/mysql.sock#socket  = /var/run/mysqld/mysqld.sock#g' /etc/my.cnf
-    ## setting [mysqld] section
-    perl -i -pe "BEGIN{undef $/;} s/^\[mysqld\]$/[mysqld]\n\nperformance_schema = ON\n/sgm" /etc/my.cnf
-
-    my_print_defaults --mysqld
-
-    pauseToContinue
-
-    # log dir
-    mkdir -p /var/log/mysql/
-    touch /var/log/mysql/error.log
-    chown -R mysql:mysql /var/log/mysql/
-
-    # socket
-    mkdir -p /var/run/mysqld/
-    chown -R mysql:mysql /var/run/mysqld/
-
-    # datadir
-    #mkdir -p /usr/local/mysql/data
-
-    #./scripts/mysql_install_db --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --socket=/var/run/mysqld/mysqld.sock --verbose
-
-    # datadir own
-    #chown -R mysql:mysql /usr/local/mysql/data
-
-    #cp ./support-files/mysql.server /etc/init.d/mysql
-    #chmod +x /etc/init.d/mysql
-    #update-rc.d mysql defaults
-
-    ldconfig
-
-    #service mysql start
-
-    #if [ "$AutoDebug" != "Y" ]
-    #then
-      #./bin/mysql_secure_installation --socket=/var/run/mysqld/mysqld.sock
-      #./bin/mysqladmin -u root -p password
-    #else
-      #apt -y install expect
-      #SECURE_MYSQL=$(expect -c "
-      #set timeout 10
-      #spawn mysql_secure_installation
-      #expect \"Enter current password for root (enter for none):\"
-      #send \"root\r\"
-      #expect \"Change the root password?\"
-      #send \"n\r\"
-      #expect \"Remove anonymous users?\"
-      #send \"y\r\"
-      #expect \"Disallow root login remotely?\"
-      #send \"y\r\"
-      #expect \"Remove test database and access to it?\"
-      #send \"y\r\"
-      #expect \"Reload privilege tables now?\"
-      #send \"y\r\"
-      #expect eof
-      #")
-      #echo "$SECURE_MYSQL"
-      #apt -y purge expect
-    #fi
-
-    #service mysql restart
-
-    #service mysql status
-
-    #pauseToContinue
-
-    # http://www.askapache.com/linux/mariadb-lz4-compression-howto-centos/
-    #mysql -p -Ntbe 'set global innodb_compression_algorithm=lz4;set global innodb_compression_level=3'
-    #mysql -p -Ntbe 'SHOW VARIABLES WHERE Variable_name LIKE "have_%" OR Variable_name LIKE "%_compression_%"'
-
-    #pauseToContinue
-
-    #wget http://mysqltuner.pl/ -O /usr/local/mysql/mysql-test/mysqltuner.pl
-    #wget https://raw.githubusercontent.com/major/MySQLTuner-perl/master/basic_passwords.txt -O /usr/local/mysql/mysql-test/basic_passwords.txt
-    #wget https://raw.githubusercontent.com/major/MySQLTuner-perl/master/vulnerabilities.csv -O /usr/local/mysql/mysql-test/vulnerabilities.csv
-
-    # Func askOption (question, defaultOption, skipQuestion)
-    #input_install_mariadb_test_tuner="$(askOption "Run Test Tuner MariaDB ? [Y/n]: " "Y" $AutoDebug)"
-
-    #if [ $input_install_mariadb_test_tuner == "Y" ] || [ $input_install_mariadb_test_tuner == "y" ]
-    #then
-    #   perl /usr/local/mysql/mysql-test/mysqltuner.pl --cvefile=/usr/local/mysql/mysql-test/vulnerabilities.csv
-    #fi
-
-    #cd ./mysql-test || exit 1
-
-    # Func askOption (question, defaultOption, skipQuestion)
-    #input_install_mariadb_test="$(askOption "Run Test MariaDB ? [y/N]: " "N" $AutoDebug)"
-
-    #if [ $input_install_mariadb_test == "Y" ] || [ $input_install_mariadb_test == "y" ]
-    #then
-    #  perl ./mysql-test-run.pl
-    #fi
+    apt-get install software-properties-common dirmngr
+    apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xF1656F24C74CD1D8
+    add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://espejito.fder.edu.uy/mariadb/repo/10.3/debian stretch main'
+    apt-get update
+    apt-get install mariadb-client
 
     pauseToContinue
 
