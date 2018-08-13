@@ -830,8 +830,8 @@ function php_install() {
     --enable-mbstring \
     --with-libzip \
     --with-mhash \
-    --with-mysqli=mysqlnd \
-    --with-pdo-mysql=mysqlnd \
+    --with-mysqli \
+    --with-pdo-mysql \
     --with-mysql-sock=/var/run/mysqld/mysqld.sock \
     --with-openssl \
     --enable-pcntl \
@@ -852,7 +852,15 @@ function php_install() {
     --enable-xmlwriter \
     --enable-fpm \
     --with-fpm-user=www-data \
-    --with-fpm-group=www-data"
+    --with-fpm-group=www-data \
+    --with-libxml-dir=/usr/local \
+    --with-mcrypt \
+    --disable-rpath \
+    --enable-inline-optimization \
+    --enable-mbregex \
+    --enable-gd-native-ttf \
+    --with-xsl \
+    --enable-opcache"
 
     ./configure $CONFIGURE_STRING
 
