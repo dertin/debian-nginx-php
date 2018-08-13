@@ -831,9 +831,9 @@ function php_install() {
     --enable-mbstring \
     --with-libzip \
     --with-mhash \
-    --enable-mysqlnd \
-    --with-mysqli \
-    --with-pdo-mysql \
+    --enable-mysqlnd=shared \
+    --with-mysqli=shared,mysqlnd \
+    --with-pdo-mysql=shared,mysqlnd \
     --with-mysql-sock=/var/run/mysqld/mysqld.sock \
     --with-openssl \
     --enable-pcntl \
