@@ -772,11 +772,11 @@ function mariadb_install() {
   if [ $input_install_mariadb == "Y" ] || [ $input_install_mariadb == "y" ]
   then
 
-    apt-get install software-properties-common dirmngr
+    apt-get -y install software-properties-common dirmngr
     apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xF1656F24C74CD1D8
     add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://espejito.fder.edu.uy/mariadb/repo/10.3/debian stretch main'
-    apt-get update
-    apt-get install mariadb-client
+    apt-get -y update
+    apt-get -y install mariadb-client
 
     pauseToContinue
 
