@@ -777,6 +777,7 @@ function mariadb_install() {
     add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://espejito.fder.edu.uy/mariadb/repo/10.3/debian stretch main'
     apt-get -y update
     apt-get -y install libmariadb-dev mariadb-client
+    ln -s /usr/bin/mariadb_config /usr/bin/mysql_config
 
     pauseToContinue
 
