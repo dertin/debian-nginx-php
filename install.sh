@@ -776,7 +776,7 @@ function mariadb_install() {
     apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xF1656F24C74CD1D8
     add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://espejito.fder.edu.uy/mariadb/repo/10.3/debian stretch main'
     apt-get -y update
-    apt-get -y install mariadb-client
+    apt-get -y install libmariadb-dev mariadb-client
 
     pauseToContinue
 
@@ -830,6 +830,7 @@ function php_install() {
     --enable-mbstring \
     --with-libzip \
     --with-mhash \
+    --enable-mysqlnd \
     --with-mysqli \
     --with-pdo-mysql \
     --with-mysql-sock=/var/run/mysqld/mysqld.sock \
@@ -854,11 +855,9 @@ function php_install() {
     --with-fpm-user=www-data \
     --with-fpm-group=www-data \
     --with-libxml-dir=/usr/local \
-    --with-mcrypt \
     --disable-rpath \
     --enable-inline-optimization \
     --enable-mbregex \
-    --enable-gd-native-ttf \
     --with-xsl \
     --enable-opcache"
 
