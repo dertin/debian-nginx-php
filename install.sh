@@ -938,9 +938,10 @@ function nginx_install() {
 
   if [ $input_install_nginx == "Y" ] || [ $input_install_nginx == "y" ]
   then
-
+  
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
-
+    usermod -a -G www-data admin
+    
     # Func askOption (question, defaultOption, skipQuestion)
     nginx_address_default="https://nginx.org/download/nginx-1.14.0.tar.gz"
     nginx_address="$(askOption "Enter the download address for nginx (tar.gz): " $nginx_address_default $AutoDebug)"
@@ -983,7 +984,10 @@ function nginx_install() {
     then
       openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
     fi
-
+    
+    mkdir -p /var/www/${global_domain}/htdocs
+    chgrp www-data /var/www/${global_domain}/htdocs
+    
     # FILE: /etc/nginx/nginx.conf
     rm /etc/nginx/nginx.conf
     cp ${BASEDIR}/files/nginx/nginx.conf /etc/nginx/nginx.conf
