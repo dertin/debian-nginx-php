@@ -61,6 +61,9 @@ do_check()
 #
 do_start()
 {
+	# folder for sock
+	mkdir -p /run/php/
+	
 	# Return
 	#   0 if daemon has been started
 	#   1 if daemon was already running
