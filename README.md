@@ -7,7 +7,7 @@ The basic usage is
 git clone https://github.com/dertin/lemp-stack-debian.git
 cd lemp-stack-debian/
 chmod +x install.sh
-sudo ./install.sh all
+sudo ./install.sh all N
 ```
 
 You must have a domain address before executing the script, so that your https certificate is correctly configured automatically. If you do not have a domain now, enter the domain you are going to buy later, and then manually configure your https certificate.
@@ -16,7 +16,7 @@ List of installed programs:
 
 | Program       | Version    |
 | ------------- |:----------:|
-| openssl       | 1.1.0h     |
+| openssl       | 1.1.0i     |
 | python2       | 2.7.15     |
 | zlib          | 1.2.11     |
 | lz4           | 1.8.1.2    |
