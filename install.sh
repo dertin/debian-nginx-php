@@ -299,7 +299,7 @@ function cmake_install() {
 function openssl_install() {
   #####################################################################################################################
   #
-  # INSTALL OpenSSL (Tested with 1.1.0h - https://www.openssl.org/source/openssl-1.1.0h.tar.gz)
+  # INSTALL OpenSSL (Tested with 1.1.0i - https://www.openssl.org/source/openssl-1.1.0i.tar.gz)
   # config file: /usr/local/ssl/openssl.cnf
   #
   #####################################################################################################################
@@ -311,7 +311,7 @@ function openssl_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    openssl_address_default="https://www.openssl.org/source/openssl-1.1.0h.tar.gz"
+    openssl_address_default="https://www.openssl.org/source/openssl-1.1.0i.tar.gz"
     openssl_address="$(askOption "Enter the download address for OpenSSL (tar.gz): " $openssl_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -787,7 +787,7 @@ function mariadb_install() {
 function php_install() {
   #####################################################################################################################
   #
-  # INSTALL PHP (Tested with 7.2.8 - https://github.com/php/php-src/archive/php-7.2.8.tar.gz)
+  # INSTALL PHP (Tested with 7.2.9 - https://github.com/php/php-src/archive/php-7.2.9.tar.gz)
   # use config file from: https://github.com/kasparsd/php-7-debian/
   #
   #####################################################################################################################
