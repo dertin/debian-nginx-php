@@ -894,6 +894,8 @@ function php_install() {
     echo -e 'extension=pdo_mysql.so\n' >> /usr/local/php7/lib/php.ini
     echo -e 'openssl.cafile=/etc/ssl/certs/ca-certificates.crt\n' >> /usr/local/php7/lib/php.ini
     echo -e 'curl.cainfo=/etc/ssl/certs/ca-certificates.crt\n' >> /usr/local/php7/lib/php.ini
+    # It is important that we prevent Nginx from passing requests to the PHP-FPM backend if the file does not exists
+    sed -ie 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /usr/local/php7/lib/php.ini
 
     cp ${BASEDIR}/files/php7/etc/php-fpm.d/www.conf /usr/local/php7/etc/php-fpm.d/www.conf
 
@@ -938,10 +940,10 @@ function nginx_install() {
 
   if [ $input_install_nginx == "Y" ] || [ $input_install_nginx == "y" ]
   then
-  
+
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
     usermod -a -G www-data admin
-    
+
     # Func askOption (question, defaultOption, skipQuestion)
     nginx_address_default="https://nginx.org/download/nginx-1.14.0.tar.gz"
     nginx_address="$(askOption "Enter the download address for nginx (tar.gz): " $nginx_address_default $AutoDebug)"
@@ -984,10 +986,10 @@ function nginx_install() {
     then
       openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
     fi
-    
+
     mkdir -p /var/www/${global_domain}/htdocs
     chgrp www-data /var/www/${global_domain}/htdocs
-    
+
     # FILE: /etc/nginx/nginx.conf
     rm /etc/nginx/nginx.conf
     cp ${BASEDIR}/files/nginx/nginx.conf /etc/nginx/nginx.conf
