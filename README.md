@@ -22,7 +22,7 @@ List of installed programs:
 | lz4           | 1.8.1.2    |
 | libssh2       | 1.8.0      |
 | nghttp2       | 1.32.0     |
-| curl          | 7.61.0     |
+| curl          | 7.61.1     |
 | cmake         | 3.12.0     |
 | libzip        | 1.5.1      |
 | libcrack2     | 2.9.6      |

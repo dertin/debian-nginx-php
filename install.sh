@@ -558,7 +558,7 @@ function nghttp2_install() {
 function curl_install() {
   #####################################################################################################################
   #
-  # INSTALL curl (Tested with 7.61.0 - https://curl.haxx.se/download/curl-7.61.0.tar.gz)
+  # INSTALL curl (Tested with 7.61.1 - https://curl.haxx.se/download/curl-7.61.1.tar.gz)
   #
   #####################################################################################################################
 
@@ -569,7 +569,7 @@ function curl_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    curl_address_default="https://curl.haxx.se/download/curl-7.61.0.tar.gz"
+    curl_address_default="https://curl.haxx.se/download/curl-7.61.1.tar.gz"
     curl_address="$(askOption "Enter the download address for CURL (tar.gz) ? [Y/n]: " $curl_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
