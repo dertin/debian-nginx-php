@@ -30,7 +30,7 @@ List of installed programs:
 | libxslt       | 1.1.33-rc1 |
 | jemalloc      | 5.1.0      |
 | mariadb       | 10.2.14    |
-| php           | 7.2.9      |
+| php           | 7.2.10     |
 | nginx         | 1.15.2     |
 | letsencrypt   | last       |
 | blackfire     | last       |
