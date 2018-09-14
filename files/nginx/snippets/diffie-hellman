@@ -12,9 +12,6 @@ ssl_dhparam /etc/nginx/ssl/dhparam.pem;
 
 ssl_trusted_certificate /etc/letsencrypt/live/XXDOMAINXX/fullchain.pem;
 
-resolver 1.1.1.1 1.0.0.1 valid=300s;
-resolver_timeout 5s;
-
 # add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
 add_header X-Frame-Options DENY;
 add_header X-Content-Type-Options nosniff;
