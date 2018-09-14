@@ -262,7 +262,7 @@ function essential_install() {
 function cmake_install() {
   #####################################################################################################################
   #
-  # INSTALL cmake (Tested with 3.12.0 - https://cmake.org/files/v3.12/cmake-3.12.0.tar.gz)
+  # INSTALL cmake (Tested with 3.12.2 - https://cmake.org/files/v3.12/cmake-3.12.2.tar.gz)
   #
   #####################################################################################################################
 
@@ -273,7 +273,7 @@ function cmake_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    cmake_address_default="https://cmake.org/files/v3.12/cmake-3.12.0.tar.gz"
+    cmake_address_default="https://cmake.org/files/v3.12/cmake-3.12.2.tar.gz"
     cmake_address="$(askOption "Enter the download address for cmake (tar.gz): " $cmake_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -299,7 +299,7 @@ function cmake_install() {
 function openssl_install() {
   #####################################################################################################################
   #
-  # INSTALL OpenSSL (Tested with 1.1.0i - https://www.openssl.org/source/openssl-1.1.0i.tar.gz)
+  # INSTALL OpenSSL (Tested with 1.1.1 - https://www.openssl.org/source/openssl-1.1.1.tar.gz)
   # config file: /usr/local/ssl/openssl.cnf
   #
   #####################################################################################################################
@@ -311,7 +311,7 @@ function openssl_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    openssl_address_default="https://www.openssl.org/source/openssl-1.1.0i.tar.gz"
+    openssl_address_default="https://www.openssl.org/source/openssl-1.1.1.tar.gz"
     openssl_address="$(askOption "Enter the download address for OpenSSL (tar.gz): " $openssl_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -418,7 +418,7 @@ function zlib_install() {
 function lz4_install() {
   #####################################################################################################################
   #
-  # INSTALL LZ4 (Tested with v1.8.2 - https://github.com/lz4/lz4/archive/v1.8.2.tar.gz)
+  # INSTALL LZ4 (Tested with v1.8.3 - https://github.com/lz4/lz4/archive/v1.8.3.tar.gz)
   #
   #####################################################################################################################
 
@@ -429,7 +429,7 @@ function lz4_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    lz4_address_default="https://github.com/lz4/lz4/archive/v1.8.2.tar.gz"
+    lz4_address_default="https://github.com/lz4/lz4/archive/v1.8.3.tar.gz"
     lz4_address="$(askOption "Enter the download address for lz4 (tar.gz): " $lz4_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -524,7 +524,7 @@ function nghttp2_install() {
   #####################################################################################################################
   #
   # INSTALL Nghttp2: HTTP/2 C Library
-  # (Tested with v1.32.0 - https://github.com/nghttp2/nghttp2/releases/download/v1.32.0/nghttp2-1.32.0.tar.gz)
+  # (Tested with v1.33.0 - https://github.com/nghttp2/nghttp2/releases/download/v1.33.0/nghttp2-1.33.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -535,7 +535,7 @@ function nghttp2_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.32.0/nghttp2-1.32.0.tar.gz"
+    nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.33.0/nghttp2-1.33.0.tar.gz"
     nghttp2_address="$(askOption "Enter the download address for Nghttp2 (tar.gz): " $nghttp2_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -931,7 +931,7 @@ function php_install() {
 function nginx_install() {
   #####################################################################################################################
   #
-  # INSTALL nginx (Tested with 1.15.2 - https://nginx.org/download/nginx-1.15.2.tar.gz)
+  # INSTALL nginx (Tested with 1.15.3 - https://nginx.org/download/nginx-1.15.3.tar.gz)
   #
   #####################################################################################################################
 
@@ -946,7 +946,7 @@ function nginx_install() {
     usermod -a -G www-data admin
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nginx_address_default="https://nginx.org/download/nginx-1.14.0.tar.gz"
+    nginx_address_default="https://nginx.org/download/nginx-1.15.3.tar.gz"
     nginx_address="$(askOption "Enter the download address for nginx (tar.gz): " $nginx_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
