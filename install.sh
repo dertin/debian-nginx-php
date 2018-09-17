@@ -319,8 +319,7 @@ function openssl_install() {
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $openssl_install_tmp_dir "openssl_src" $openssl_address
-    # enable-tls1_3
-    ./config -Wl,--enable-new-dtags,-rpath,'$(LIBRPATH)' no-comp no-zlib no-zlib-dynamic shared
+    ./config -Wl,--enable-new-dtags,-rpath,'$(LIBRPATH)' no-comp no-zlib no-zlib-dynamic enable-tls1_3 shared
 
     make
     make test
