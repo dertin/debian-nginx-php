@@ -26,9 +26,9 @@ if [ "$MACHINE_TYPE" == "x86_64" ]; then
     export CPPFLAGS="-I/usr/local/include -I/usr/include/x86_64-linux-gnu"
 fi
 
-export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib,-ljemalloc"
+export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -ljemalloc -lm -ldl -lstdc++ -lpthread"
 export LDCONFIG=-L/usr/local/lib
-export LIBS="-ldl" # for curl / openssl
+export LIBS="-lm -ldl -lstdc++ -lpthread"
 
 source /etc/profile
 
@@ -138,12 +138,12 @@ function clear_compile() {
     automake m4 bison build-essential g++ pkg-config \
     autotools-dev libtool expect \
     libcunit1-dev x11proto-core-dev file \
-    libenchant-dev libjemalloc-dev gnu-standards \
+    libenchant-dev gnu-standards \
     autoconf-archive g++-multilib gcc-multilib \
     libstdc++-6-dev gcc-6-locales \
     g++-6-multilib valgrind valgrind-mpi \
     valkyrie gcj-jdk flex tk-dev
-
+    # libjemalloc-dev
     apt-get -y autoremove
     apt-get clean
 
@@ -1144,6 +1144,9 @@ case "$1" in
         "essential")
             essential_install
             ;;
+        "jemalloc")
+            jemalloc_install
+            ;;
         "openssl")
             openssl_install
             ;;
@@ -1180,9 +1183,6 @@ case "$1" in
         "libxslt")
             libxslt_install
             ;;
-        "jemalloc")
-            jemalloc_install
-            ;;
         "mariadb")
             mariadb_install
             ;;
@@ -1201,6 +1201,7 @@ case "$1" in
         "all")
             service_stop
             essential_install
+            jemalloc_install
             openssl_install
             python2_install
             zlib_install
@@ -1213,7 +1214,6 @@ case "$1" in
             libcrack2_install
             libxml2_install
             libxslt_install
-            jemalloc_install
             mariadb_install
             php_install
             nginx_install
@@ -1225,6 +1225,10 @@ case "$1" in
 
             travis_fold_start essential
               essential_install 2>&1 > /dev/null
+            travis_fold_end
+
+            travis_fold_start jemalloc
+              jemalloc_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start openssl
@@ -1273,10 +1277,6 @@ case "$1" in
 
             travis_fold_start libxslt
               libxslt_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start jemalloc
-              jemalloc_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start mariadb
