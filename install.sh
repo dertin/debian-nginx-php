@@ -26,7 +26,7 @@ if [ "$MACHINE_TYPE" == "x86_64" ]; then
     export CPPFLAGS="-I/usr/local/include -I/usr/include/x86_64-linux-gnu"
 fi
 
-export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib"
+export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib,-ljemalloc"
 export LDCONFIG=-L/usr/local/lib
 export LIBS="-ldl" # for curl / openssl
 
@@ -174,6 +174,7 @@ function essential_install() {
   then
 
     # Build Essential
+    sed -i '/^#\sdeb-src /s/^#//' "/etc/apt/sources.list"
 
     apt-get -y update
 
@@ -319,7 +320,7 @@ function openssl_install() {
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $openssl_install_tmp_dir "openssl_src" $openssl_address
-    ./config -Wl,--enable-new-dtags,-rpath,'$(LIBRPATH)' no-comp no-zlib no-zlib-dynamic enable-tls1_3 shared
+    ./config -Wl,--enable-new-dtags,-rpath,'$(LIBRPATH)' no-comp no-zlib no-zlib-dynamic enable-ec_nistp_64_gcc_128 enable-tls1_3 shared
 
     make
     make test
@@ -859,7 +860,8 @@ function php_install() {
     --enable-inline-optimization \
     --enable-mbregex \
     --with-xsl \
-    --enable-opcache"
+    --enable-opcache \
+    --enable-static"
 
     ./configure $CONFIGURE_STRING
 
@@ -974,7 +976,9 @@ function nginx_install() {
       --with-http_stub_status_module \
       --with-http_gzip_static_module \
       --with-http_v2_module \
-      --with-ipv6
+      --with-ipv6 \
+      --with-openssl \
+      --with-openssl-opt='no-comp no-zlib no-zlib-dynamic enable-ec_nistp_64_gcc_128 enable-tls1_3 shared'
 
     make
     make install
