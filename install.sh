@@ -1286,7 +1286,7 @@ case "$1" in
             # travis_fold_end
 
             travis_fold_start nginx
-              nginx_install 2>&1 > /dev/null
+              nginx_install
             travis_fold_end
 
             # letsencrypt_install
