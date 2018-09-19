@@ -26,9 +26,9 @@ if [ "$MACHINE_TYPE" == "x86_64" ]; then
     export CPPFLAGS="-I/usr/local/include -I/usr/include/x86_64-linux-gnu"
 fi
 
-export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -ljemalloc -lm -ldl -lstdc++ -lpthread"
+export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -ljemalloc -lm -ldl -lpthread"
 export LDCONFIG=-L/usr/local/lib
-export LIBS="-lm -ldl -lstdc++ -lpthread"
+export LIBS="-lm -ldl -lpthread"
 
 source /etc/profile
 
