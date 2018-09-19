@@ -26,9 +26,9 @@ if [ "$MACHINE_TYPE" == "x86_64" ]; then
     export CPPFLAGS="-I/usr/local/include -I/usr/include/x86_64-linux-gnu"
 fi
 
-export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -ljemalloc -lm -ldl -lpthread"
+export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib"
 export LDCONFIG=-L/usr/local/lib
-export LIBS="-lm -ldl -lpthread"
+export LIBS="-ldl"
 
 source /etc/profile
 
@@ -196,12 +196,13 @@ function essential_install() {
     automake m4 bison build-essential g++ pkg-config \
     autotools-dev libtool expect \
     libcunit1-dev x11proto-core-dev file \
-    libenchant-dev libjemalloc-dev gnu-standards \
+    libenchant-dev gnu-standards \
     autoconf-archive g++-multilib gcc-multilib \
     libstdc++-6-dev gcc-6-locales \
     g++-6-multilib valgrind valgrind-mpi \
     valkyrie gcj-jdk flex tk-dev
-
+    # libjemalloc-dev
+    
     # TODO: check this: Important packages that must be installed.
     apt-get -y install coreutils binutils uuid-dev wget \
     mcrypt cython perl libpcre3 bzip2 xsltproc \
@@ -256,6 +257,46 @@ function essential_install() {
       reboot
       exit 0
     fi
+
+  fi
+}
+
+function jemalloc_install() {
+  #####################################################################################################################
+  #
+  # INSTALL jemalloc 5.1.0 - https://github.com/jemalloc/jemalloc/archive/5.1.0.tar.gz
+  #
+  #####################################################################################################################
+
+  # Func askOption (question, defaultOption, skipQuestion)
+  input_install_jemalloc="$(askOption "Install jemalloc ? [Y/n]: " "Y" $AutoDebug)"
+
+  if [ $input_install_jemalloc == "Y" ] || [ $input_install_jemalloc == "y" ]
+  then
+
+    # Func askOption (question, defaultOption, skipQuestion)
+    jemalloc_address_default="https://github.com/jemalloc/jemalloc/archive/5.0.1.tar.gz"
+    jemalloc_address="$(askOption "Enter the download address for jemalloc (tar.gz): " $jemalloc_address_default $AutoDebug)"
+
+    # Func askOption (question, defaultOption, skipQuestion)
+    jemalloc_install_tmp_dir="$(askOption "Enter temporary directory for jemalloc compilation: " "/var/tmp/jemalloc_build" $AutoDebug)"
+
+    # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
+    wgetAndDecompress $jemalloc_install_tmp_dir jemalloc_src $jemalloc_address
+
+    ./autogen.sh
+
+    ./configure --prefix=/usr/local --with-xslroot=/usr/share/xml/docbook/stylesheet/docbook-xsl/
+
+    make
+    make dist
+    make install
+
+    echo '/usr/local/lib' > /etc/ld.so.conf.d/local.conf
+
+    ldconfig
+
+    pauseToContinue
 
   fi
 }
@@ -718,44 +759,6 @@ function libxslt_install() {
   fi
 }
 
-function jemalloc_install() {
-  #####################################################################################################################
-  #
-  # INSTALL jemalloc 5.1.0 - https://github.com/jemalloc/jemalloc/archive/5.1.0.tar.gz
-  #
-  #####################################################################################################################
-
-  # Func askOption (question, defaultOption, skipQuestion)
-  input_install_jemalloc="$(askOption "Install jemalloc ? [Y/n]: " "Y" $AutoDebug)"
-
-  if [ $input_install_jemalloc == "Y" ] || [ $input_install_jemalloc == "y" ]
-  then
-
-    # Func askOption (question, defaultOption, skipQuestion)
-    jemalloc_address_default="https://github.com/jemalloc/jemalloc/archive/5.0.1.tar.gz"
-    jemalloc_address="$(askOption "Enter the download address for jemalloc (tar.gz): " $jemalloc_address_default $AutoDebug)"
-
-    # Func askOption (question, defaultOption, skipQuestion)
-    jemalloc_install_tmp_dir="$(askOption "Enter temporary directory for jemalloc compilation: " "/var/tmp/jemalloc_build" $AutoDebug)"
-
-    # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
-    wgetAndDecompress $jemalloc_install_tmp_dir jemalloc_src $jemalloc_address
-
-    ./autogen.sh
-
-    ./configure --prefix=/usr/local --with-xslroot=/usr/share/xml/docbook/stylesheet/docbook-xsl/
-
-    make
-    make dist
-    make install
-
-    ldconfig
-
-    pauseToContinue
-
-  fi
-}
-
 function mariadb_install() {
   #
   # -- This function is little tested by the main developer. --
@@ -867,12 +870,6 @@ function php_install() {
 
     make
 
-    # is discarded for rapid tests
-    if [ $AutoDebug != "Y" ]
-    then
-      make test
-    fi
-
     make install
 
     # Socket
@@ -977,6 +974,7 @@ function nginx_install() {
       --with-http_gzip_static_module \
       --with-http_v2_module \
       --with-ipv6 \
+      --with-ld-opt="-ljemalloc" \
       --with-openssl \
       --with-openssl-opt='no-comp no-zlib no-zlib-dynamic enable-ec_nistp_64_gcc_128 enable-tls1_3 shared'
 
