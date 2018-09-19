@@ -202,7 +202,7 @@ function essential_install() {
     g++-6-multilib valgrind valgrind-mpi \
     valkyrie gcj-jdk flex tk-dev
     # libjemalloc-dev
-    
+
     # TODO: check this: Important packages that must be installed.
     apt-get -y install coreutils binutils uuid-dev wget \
     mcrypt cython perl libpcre3 bzip2 xsltproc \
@@ -974,7 +974,7 @@ function nginx_install() {
       --with-http_gzip_static_module \
       --with-http_v2_module \
       --with-ipv6 \
-      --with-ld-opt="-ljemalloc" \
+      --with-ld-opt="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -ljemalloc" \
       --with-openssl \
       --with-openssl-opt='no-comp no-zlib no-zlib-dynamic enable-ec_nistp_64_gcc_128 enable-tls1_3 shared'
 
