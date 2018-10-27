@@ -304,7 +304,7 @@ function jemalloc_install() {
 function cmake_install() {
   #####################################################################################################################
   #
-  # INSTALL cmake (Tested with 3.12.2 - https://cmake.org/files/v3.12/cmake-3.12.2.tar.gz)
+  # INSTALL cmake (Tested with 3.12.3 - https://cmake.org/files/v3.12/cmake-3.12.3.tar.gz)
   #
   #####################################################################################################################
 
@@ -315,7 +315,7 @@ function cmake_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    cmake_address_default="https://cmake.org/files/v3.12/cmake-3.12.2.tar.gz"
+    cmake_address_default="https://cmake.org/files/v3.12/cmake-3.12.3.tar.gz"
     cmake_address="$(askOption "Enter the download address for cmake (tar.gz): " $cmake_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -565,7 +565,7 @@ function nghttp2_install() {
   #####################################################################################################################
   #
   # INSTALL Nghttp2: HTTP/2 C Library
-  # (Tested with v1.33.0 - https://github.com/nghttp2/nghttp2/releases/download/v1.33.0/nghttp2-1.33.0.tar.gz)
+  # (Tested with v1.34.0 - https://github.com/nghttp2/nghttp2/releases/download/v1.34.0/nghttp2-1.34.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -576,7 +576,7 @@ function nghttp2_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.33.0/nghttp2-1.33.0.tar.gz"
+    nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.34.0/nghttp2-1.34.0.tar.gz"
     nghttp2_address="$(askOption "Enter the download address for Nghttp2 (tar.gz): " $nghttp2_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -790,7 +790,7 @@ function mariadb_install() {
 function php_install() {
   #####################################################################################################################
   #
-  # INSTALL PHP (Tested with 7.2.10 - https://github.com/php/php-src/archive/php-7.2.10.tar.gz)
+  # INSTALL PHP (Tested with 7.2.11 - https://github.com/php/php-src/archive/php-7.2.11.tar.gz)
   # use config file from: https://github.com/kasparsd/php-7-debian/
   #
   #####################################################################################################################
@@ -804,7 +804,7 @@ function php_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    php_address_default="https://github.com/php/php-src/archive/php-7.2.10.tar.gz"
+    php_address_default="https://github.com/php/php-src/archive/php-7.2.11.tar.gz"
     php_address="$(askOption "Enter the download address for PHP 7 (tar.gz): " $php_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -929,7 +929,7 @@ function php_install() {
 function nginx_install() {
   #####################################################################################################################
   #
-  # INSTALL nginx (Tested with 1.15.3 - https://nginx.org/download/nginx-1.15.3.tar.gz)
+  # INSTALL nginx (Tested with 1.15.5 - https://nginx.org/download/nginx-1.15.5.tar.gz)
   #
   #####################################################################################################################
 
@@ -944,7 +944,7 @@ function nginx_install() {
     usermod -a -G www-data admin
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nginx_address_default="https://nginx.org/download/nginx-1.15.3.tar.gz"
+    nginx_address_default="https://nginx.org/download/nginx-1.15.5.tar.gz"
     nginx_address="$(askOption "Enter the download address for nginx (tar.gz): " $nginx_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
