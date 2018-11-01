@@ -954,10 +954,19 @@ function nginx_install() {
     # Func askOption (question, defaultOption, skipQuestion)
     nginx_install_tmp_dir="$(askOption "Enter temporary directory for nginx compilation: " "/var/tmp/nginx_build" $AutoDebug)"
 
-    # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
-    pagespeed_address="https://github.com/apache/incubator-pagespeed-ngx/archive/latest-stable.tar.gz"
-    wgetAndDecompress $nginx_install_tmp_dir "pagespeed_src" $nginx_address
     wgetAndDecompress $nginx_install_tmp_dir "nginx_src" $nginx_address
+
+    NPS_VERSION=1.13.35.2-stable
+    wget https://github.com/apache/incubator-pagespeed-ngx/archive/v${NPS_VERSION}.zip
+    unzip v${NPS_VERSION}.zip
+    nps_dir=$(find . -name "*pagespeed-ngx-${NPS_VERSION}" -type d)
+    cd "$nps_dir"
+    NPS_RELEASE_NUMBER=${NPS_VERSION/beta/}
+    NPS_RELEASE_NUMBER=${NPS_VERSION/stable/}
+    psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_RELEASE_NUMBER}.tar.gz
+    [ -e scripts/format_binary_url.sh ] && psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL)
+    wget ${psol_url}
+    tar -xzvf $(basename ${psol_url})
 
     ./configure \
       --prefix=/usr/share/nginx \
@@ -980,8 +989,12 @@ function nginx_install() {
       --with-http_gzip_static_module \
       --with-http_v2_module \
       --with-ipv6 \
+      --with-openssl \
+      --with-file-aio \
+      --with-http_realip_module \
+      --with-http_sub_module \
       --with-ld-opt="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -ljemalloc" \
-      --add-module="${nginx_install_tmp_dir}/pagespeed_src/"
+      --add-module="${nginx_install_tmp_dir}/nginx_src/${nps_dir}"
 
     make
     make install
