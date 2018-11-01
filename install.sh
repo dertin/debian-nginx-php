@@ -224,7 +224,7 @@ function essential_install() {
     libaspell-dev libpspell-dev \
     libc6-dev libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
     liblinear-dev libssl-dev libboost-dev libboost-thread-dev \
-    python-dev python3-dev
+    python-dev python3-dev unzip
 
     apt-get -y upgrade
     apt-get -y autoremove
