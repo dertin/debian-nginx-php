@@ -942,6 +942,10 @@ function nginx_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
     usermod -a -G www-data root
     usermod -a -G www-data admin
+    mkdir -p /var/ngx_pagespeed_cache
+    chown -R www-data:www-data /var/ngx_pagespeed_cache
+
+    # download ngx_pagespeed:
 
     # Func askOption (question, defaultOption, skipQuestion)
     nginx_address_default="https://nginx.org/download/nginx-1.15.5.tar.gz"
@@ -951,6 +955,8 @@ function nginx_install() {
     nginx_install_tmp_dir="$(askOption "Enter temporary directory for nginx compilation: " "/var/tmp/nginx_build" $AutoDebug)"
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
+    pagespeed_address="https://github.com/apache/incubator-pagespeed-ngx/archive/latest-stable.tar.gz"
+    wgetAndDecompress $nginx_install_tmp_dir "pagespeed_src" $nginx_address
     wgetAndDecompress $nginx_install_tmp_dir "nginx_src" $nginx_address
 
     ./configure \
@@ -974,7 +980,8 @@ function nginx_install() {
       --with-http_gzip_static_module \
       --with-http_v2_module \
       --with-ipv6 \
-      --with-ld-opt="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -ljemalloc"
+      --with-ld-opt="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -ljemalloc" \
+      --add-module="${nginx_install_tmp_dir}/pagespeed_src/"
 
     make
     make install
