@@ -969,8 +969,6 @@ function nginx_install() {
     tar -xzvf $(basename ${psol_url})
 
     cd ..
-    pwd
-    ls
 
     ./configure \
       --prefix=/usr/share/nginx \
@@ -993,7 +991,6 @@ function nginx_install() {
       --with-http_gzip_static_module \
       --with-http_v2_module \
       --with-ipv6 \
-      --with-openssl \
       --with-file-aio \
       --with-http_realip_module \
       --with-http_sub_module \
