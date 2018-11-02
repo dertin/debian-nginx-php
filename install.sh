@@ -1021,7 +1021,7 @@ function nginx_install() {
 
     # FILE: /etc/nginx/snippets/*
     mkdir -p /etc/nginx/snippets/
-    cp ${BASEDIR}/files/nginx/snippets/* /etc/nginx/snippets/*
+    cp -r ${BASEDIR}/files/nginx/snippets/ /etc/nginx/snippets/
     # Modify file
     sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/nginx/snippets/diffie-hellman
 
