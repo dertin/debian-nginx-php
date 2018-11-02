@@ -968,6 +968,8 @@ function nginx_install() {
     wget ${psol_url}
     tar -xzvf $(basename ${psol_url})
 
+    cd ..
+    
     ./configure \
       --prefix=/usr/share/nginx \
       --sbin-path=/usr/sbin/nginx \
