@@ -975,8 +975,6 @@ function nginx_install() {
     wget https://github.com/nbs-system/naxsi/archive/master.zip
     unzip master.zip
 
-    ls
-
     ./configure \
       --prefix=/usr/share/nginx \
       --sbin-path=/usr/sbin/nginx \
@@ -1001,7 +999,7 @@ function nginx_install() {
       --with-file-aio \
       --with-http_realip_module \
       --with-http_sub_module \
-      --with-ld-opt='-ljemalloc -Wl,-z,relro -Wl,-rpath,/usr/local/lib' \
+      --with-ld-opt="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -ljemalloc" \
       --with-cc-opt='-m64 -march=native -DTCP_FASTOPEN=23 -g -O3 -fstack-protector-strong -fuse-ld=gold --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -gsplit-dwarf' \
       --add-module="${nginx_install_tmp_dir}/nginx_src/${nps_dir}" \
       --add-module="${nginx_install_tmp_dir}/naxsi-master/naxsi_src/"
