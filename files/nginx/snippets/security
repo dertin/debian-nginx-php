@@ -12,3 +12,7 @@ if ($request_method !~ ^(GET|HEAD|POST)$ ) {
 location  /. {
   deny  all;
 }
+
+location /RequestDenied {
+  return 403;
+}
