@@ -1,14 +1,14 @@
-## Only requests to our Host are allowed
-#      if ($host !~ ^($server_name)$ ) {
-#         return 444;
-#      }
+add_header X-Frame-Options SAMEORIGIN;
+add_header X-Content-Type-Options nosniff;
+add_header X-XSS-Protection "1; mode=block";
+# TODO: https://www.cspisawesome.com/
 
-## Only allow these request methods ##
-## Do not accept DELETE, SEARCH and other methods ##
+# Only allow these request methods
 if ($request_method !~ ^(GET|HEAD|POST)$ ) {
    return 444;
 }
 
-location ~ /\.ht {
+# Disable .htaccess and other hidden files
+location  /. {
   deny  all;
 }
