@@ -975,6 +975,8 @@ function nginx_install() {
     wget https://github.com/nbs-system/naxsi/archive/master.zip
     unzip master.zip
 
+    ls
+
     ./configure \
       --prefix=/usr/share/nginx \
       --sbin-path=/usr/sbin/nginx \
@@ -1248,77 +1250,77 @@ case "$1" in
             travis_fold_start essential
               essential_install 2>&1 > /dev/null
             travis_fold_end
-
-            travis_fold_start jemalloc
-              jemalloc_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start openssl
-              openssl_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start python2
-              python2_install  2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start zlib
-              zlib_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start lz4
-              lz4_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start libssh2
-              libssh2_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start nghttp2
-              nghttp2_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start curl
-              curl_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start cmake
-              cmake_install
-            travis_fold_end
-
-            travis_fold_start libzip
-              libzip_install
-            travis_fold_end
-
-            travis_fold_start libcrack2
-              libcrack2_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start libxml2
-              libxml2_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start libxslt
-              libxslt_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start mariadb
-             mariadb_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start php
-              php_install 2>&1 > /dev/null
-            travis_fold_end
+            #
+            # travis_fold_start jemalloc
+            #   jemalloc_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start openssl
+            #   openssl_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start python2
+            #   python2_install  2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start zlib
+            #   zlib_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start lz4
+            #   lz4_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start libssh2
+            #   libssh2_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start nghttp2
+            #   nghttp2_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start curl
+            #   curl_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start cmake
+            #   cmake_install
+            # travis_fold_end
+            #
+            # travis_fold_start libzip
+            #   libzip_install
+            # travis_fold_end
+            #
+            # travis_fold_start libcrack2
+            #   libcrack2_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start libxml2
+            #   libxml2_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start libxslt
+            #   libxslt_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start mariadb
+            #  mariadb_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start php
+            #   php_install 2>&1 > /dev/null
+            # travis_fold_end
 
             travis_fold_start nginx
-              nginx_install 2>&1 > /dev/null
+              nginx_install
             travis_fold_end
 
             # letsencrypt_install
             # blackfire_install
 
-            travis_fold_start clear_compile
-              clear_compile 2>&1 > /dev/null
-            travis_fold_end
+            # travis_fold_start clear_compile
+            #   clear_compile 2>&1 > /dev/null
+            # travis_fold_end
 
             ;;
         *)
