@@ -1249,9 +1249,9 @@ case "$1" in
               essential_install 2>&1 > /dev/null
             travis_fold_end
             #
-            # travis_fold_start jemalloc
-            #   jemalloc_install 2>&1 > /dev/null
-            # travis_fold_end
+            travis_fold_start jemalloc
+              jemalloc_install 2>&1 > /dev/null
+            travis_fold_end
             #
             # travis_fold_start openssl
             #   openssl_install 2>&1 > /dev/null
