@@ -1002,7 +1002,7 @@ function nginx_install() {
       --with-ld-opt="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -ljemalloc" \
       --with-cc-opt='-m64 -march=native -DTCP_FASTOPEN=23 -g -O3 -fstack-protector-strong -fuse-ld=gold --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -gsplit-dwarf' \
       --add-module="${nginx_install_tmp_dir}/nginx_src/${nps_dir}" \
-      --add-module="${nginx_install_tmp_dir}/naxsi-master/naxsi_src/"
+      --add-module="${nginx_install_tmp_dir}/naxsi-master/naxsi_src"
 
     make
     make install
