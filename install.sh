@@ -304,7 +304,7 @@ function jemalloc_install() {
 function cmake_install() {
   #####################################################################################################################
   #
-  # INSTALL cmake (Tested with 3.12.3 - https://cmake.org/files/v3.12/cmake-3.12.3.tar.gz)
+  # INSTALL cmake (Tested with 3.12.4 - https://cmake.org/files/v3.12/cmake-3.12.4.tar.gz)
   #
   #####################################################################################################################
 
@@ -315,7 +315,7 @@ function cmake_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    cmake_address_default="https://cmake.org/files/v3.12/cmake-3.12.3.tar.gz"
+    cmake_address_default="https://cmake.org/files/v3.12/cmake-3.12.4.tar.gz"
     cmake_address="$(askOption "Enter the download address for cmake (tar.gz): " $cmake_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -599,7 +599,7 @@ function nghttp2_install() {
 function curl_install() {
   #####################################################################################################################
   #
-  # INSTALL curl (Tested with 7.61.1 - https://curl.haxx.se/download/curl-7.61.1.tar.gz)
+  # INSTALL curl (Tested with 7.62.0 - https://curl.haxx.se/download/curl-7.62.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -610,7 +610,7 @@ function curl_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    curl_address_default="https://curl.haxx.se/download/curl-7.61.1.tar.gz"
+    curl_address_default="https://curl.haxx.se/download/curl-7.62.0.tar.gz"
     curl_address="$(askOption "Enter the download address for CURL (tar.gz) ? [Y/n]: " $curl_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
