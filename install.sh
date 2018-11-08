@@ -241,6 +241,8 @@ function essential_install() {
 
     apt-get clean
 
+    curl -sS https://getcomposer.org/installer -o composer-setup.php
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
     if [ "$AutoDebug" != "Y" ]
     then
@@ -957,7 +959,6 @@ function nginx_install() {
     wgetAndDecompress $nginx_install_tmp_dir "nginx_src" $nginx_address
 
     # Module pagespeed
-
     NPS_VERSION=1.13.35.2-stable
     wget https://github.com/apache/incubator-pagespeed-ngx/archive/v${NPS_VERSION}.zip
     unzip v${NPS_VERSION}.zip
@@ -969,13 +970,13 @@ function nginx_install() {
     [ -e scripts/format_binary_url.sh ] && psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL)
     wget ${psol_url}
     tar -xzvf $(basename ${psol_url})
+
     cd ..
 
     # Module Naxsi
-    wget https://github.com/nbs-system/naxsi/archive/master.zip
-    unzip master.zip
-    pwd
-    ls
+    # wget https://github.com/nbs-system/naxsi/archive/master.zip
+    # unzip master.zip
+
     ./configure \
       --prefix=/usr/share/nginx \
       --sbin-path=/usr/sbin/nginx \
@@ -1001,8 +1002,8 @@ function nginx_install() {
       --with-http_sub_module \
       --with-ld-opt="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -ljemalloc" \
       --with-cc-opt="-m64 -march=native -DTCP_FASTOPEN=23 -g -O3 -fstack-protector-strong -fuse-ld=gold --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -gsplit-dwarf" \
-      --add-module="${nginx_install_tmp_dir}/nginx_src/${nps_dir}" \
-      --add-module="${nginx_install_tmp_dir}/nginx_src/naxsi-master/naxsi_src"
+      --add-module="${nginx_install_tmp_dir}/nginx_src/${nps_dir}"
+      # --add-module="${nginx_install_tmp_dir}/nginx_src/naxsi-master/naxsi_src"
 
     make
     make install
