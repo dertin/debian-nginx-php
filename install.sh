@@ -915,7 +915,7 @@ function php_install() {
 
     sed 's/"//g; s?\(Defaults.*\)?\1:/usr/local/php7/bin?' /etc/sudoers
 
-    wget https://getcomposer.org/installer -o composer-setup.php
+    /usr/local/php7/bin/php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     /usr/local/php7/bin/php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
     ldconfig
