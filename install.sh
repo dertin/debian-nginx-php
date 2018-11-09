@@ -241,9 +241,6 @@ function essential_install() {
 
     apt-get clean
 
-    curl -sS https://getcomposer.org/installer -o composer-setup.php
-    php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-
     if [ "$AutoDebug" != "Y" ]
     then
       tzselect
@@ -915,7 +912,10 @@ function php_install() {
     chmod 666 /etc/environment
     echo -e "PATH=$PATH\n" >> /etc/environment
     chmod 644 /etc/environment
-
+    
+    wget https://getcomposer.org/installer -o composer-setup.php
+    /usr/local/php7/bin/php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+    
     ldconfig
 
     service php7-fpm start
