@@ -789,7 +789,7 @@ function mariadb_install() {
 function php_install() {
   #####################################################################################################################
   #
-  # INSTALL PHP (Tested with 7.2.11 - https://github.com/php/php-src/archive/php-7.2.11.tar.gz)
+  # INSTALL PHP (Tested with 7.2.12 - https://github.com/php/php-src/archive/php-7.2.12.tar.gz)
   # use config file from: https://github.com/kasparsd/php-7-debian/
   #
   #####################################################################################################################
@@ -803,7 +803,7 @@ function php_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    php_address_default="https://github.com/php/php-src/archive/php-7.2.11.tar.gz"
+    php_address_default="https://github.com/php/php-src/archive/php-7.2.12.tar.gz"
     php_address="$(askOption "Enter the download address for PHP 7 (tar.gz): " $php_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -931,7 +931,7 @@ function php_install() {
 function nginx_install() {
   #####################################################################################################################
   #
-  # INSTALL nginx (Tested with 1.15.5 - https://nginx.org/download/nginx-1.15.5.tar.gz)
+  # INSTALL nginx (Tested with 1.15.6 - https://nginx.org/download/nginx-1.15.6.tar.gz)
   #
   #####################################################################################################################
 
@@ -950,7 +950,7 @@ function nginx_install() {
     # download ngx_pagespeed:
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nginx_address_default="https://nginx.org/download/nginx-1.15.5.tar.gz"
+    nginx_address_default="https://nginx.org/download/nginx-1.15.6.tar.gz"
     nginx_address="$(askOption "Enter the download address for nginx (tar.gz): " $nginx_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
