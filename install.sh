@@ -244,6 +244,7 @@ function essential_install() {
     if [ "$AutoDebug" != "Y" ]
     then
       tzselect
+      dpkg-reconfigure tzdata
     fi
 
     pauseToContinue
