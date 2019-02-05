@@ -304,7 +304,7 @@ function jemalloc_install() {
 function cmake_install() {
   #####################################################################################################################
   #
-  # INSTALL cmake (Tested with 3.12.4 - https://cmake.org/files/v3.12/cmake-3.12.4.tar.gz)
+  # INSTALL cmake (Tested with 3.13.4 - https://cmake.org/files/v3.13/cmake-3.13.4.tar.gz)
   #
   #####################################################################################################################
 
@@ -315,7 +315,7 @@ function cmake_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    cmake_address_default="https://cmake.org/files/v3.12/cmake-3.12.4.tar.gz"
+    cmake_address_default="https://cmake.org/files/v3.13/cmake-3.13.4.tar.gz"
     cmake_address="$(askOption "Enter the download address for cmake (tar.gz): " $cmake_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -341,7 +341,7 @@ function cmake_install() {
 function openssl_install() {
   #####################################################################################################################
   #
-  # INSTALL OpenSSL (Tested with 1.1.1 - https://www.openssl.org/source/openssl-1.1.1.tar.gz)
+  # INSTALL OpenSSL (Tested with 1.1.1a - https://www.openssl.org/source/openssl-1.1.1a.tar.gz)
   # config file: /usr/local/ssl/openssl.cnf
   #
   #####################################################################################################################
@@ -353,7 +353,7 @@ function openssl_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    openssl_address_default="https://www.openssl.org/source/openssl-1.1.1.tar.gz"
+    openssl_address_default="https://www.openssl.org/source/openssl-1.1.1a.tar.gz"
     openssl_address="$(askOption "Enter the download address for OpenSSL (tar.gz): " $openssl_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -565,7 +565,7 @@ function nghttp2_install() {
   #####################################################################################################################
   #
   # INSTALL Nghttp2: HTTP/2 C Library
-  # (Tested with v1.34.0 - https://github.com/nghttp2/nghttp2/releases/download/v1.34.0/nghttp2-1.34.0.tar.gz)
+  # (Tested with v1.36.0 - https://github.com/nghttp2/nghttp2/releases/download/v1.36.0/nghttp2-1.36.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -576,7 +576,7 @@ function nghttp2_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.34.0/nghttp2-1.34.0.tar.gz"
+    nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.36.0/nghttp2-1.36.0.tar.gz"
     nghttp2_address="$(askOption "Enter the download address for Nghttp2 (tar.gz): " $nghttp2_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -599,7 +599,7 @@ function nghttp2_install() {
 function curl_install() {
   #####################################################################################################################
   #
-  # INSTALL curl (Tested with 7.62.0 - https://curl.haxx.se/download/curl-7.62.0.tar.gz)
+  # INSTALL curl (Tested with 7.63.0 - https://curl.haxx.se/download/curl-7.63.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -610,7 +610,7 @@ function curl_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    curl_address_default="https://curl.haxx.se/download/curl-7.62.0.tar.gz"
+    curl_address_default="https://curl.haxx.se/download/curl-7.63.0.tar.gz"
     curl_address="$(askOption "Enter the download address for CURL (tar.gz) ? [Y/n]: " $curl_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -694,7 +694,7 @@ function libcrack2_install() {
 function libxml2_install() {
   #####################################################################################################################
   #
-  # INSTALL LibXML2  (Tested with 2.9.8 - http://xmlsoft.org/sources/libxml2-2.9.8.tar.gz)
+  # INSTALL LibXML2  (Tested with 2.9.9 - http://xmlsoft.org/sources/libxml2-2.9.9.tar.gz)
   #
   #####################################################################################################################
 
@@ -705,7 +705,7 @@ function libxml2_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libXML2_address_default="http://xmlsoft.org/sources/libxml2-2.9.8.tar.gz"
+    libXML2_address_default="http://xmlsoft.org/sources/libxml2-2.9.9.tar.gz"
     libXML2_address="$(askOption "Enter the download address for LibXML2 (tar.gz): " $libXML2_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -728,7 +728,7 @@ function libxml2_install() {
 function libxslt_install() {
   #####################################################################################################################
   #
-  # INSTALL libxslt  (Tested with 1.1.33-rc1 - http://xmlsoft.org/sources/libxslt-1.1.33-rc1.tar.gz)
+  # INSTALL libxslt  (Tested with 1.1.33 - http://xmlsoft.org/sources/libxslt-1.1.33.tar.gz)
   #
   #####################################################################################################################
 
@@ -739,7 +739,7 @@ function libxslt_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libxslt_address_default="http://xmlsoft.org/sources/libxslt-1.1.33-rc1.tar.gz"
+    libxslt_address_default="http://xmlsoft.org/sources/libxslt-1.1.33.tar.gz"
     libxslt_address="$(askOption "Enter the download address for libxslt (tar.gz): " $libxslt_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -765,7 +765,7 @@ function mariadb_install() {
   #
   #####################################################################################################################
   #
-  # INSTALL MariaDB 10.3 - http://espejito.fder.edu.uy/mariadb/repo/10.3/debian stretch main
+  # INSTALL MariaDB 10.4 - http://espejito.fder.edu.uy/mariadb/repo/10.4/debian stretch main
   #
   #####################################################################################################################
 
@@ -777,7 +777,7 @@ function mariadb_install() {
 
     apt-get -y install software-properties-common dirmngr
     apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xF1656F24C74CD1D8
-    add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://espejito.fder.edu.uy/mariadb/repo/10.3/debian stretch main'
+    add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://espejito.fder.edu.uy/mariadb/repo/10.4/debian stretch main'
     apt-get -y update
     apt-get -y install libmariadb-dev mariadb-client
     ln -s /usr/bin/mariadb_config /usr/bin/mysql_config
@@ -790,7 +790,7 @@ function mariadb_install() {
 function php_install() {
   #####################################################################################################################
   #
-  # INSTALL PHP (Tested with 7.2.12 - https://github.com/php/php-src/archive/php-7.2.12.tar.gz)
+  # INSTALL PHP (Tested with 7.3.1 - https://github.com/php/php-src/archive/php-7.3.1.tar.gz)
   # use config file from: https://github.com/kasparsd/php-7-debian/
   #
   #####################################################################################################################
@@ -804,7 +804,7 @@ function php_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    php_address_default="https://github.com/php/php-src/archive/php-7.2.12.tar.gz"
+    php_address_default="https://github.com/php/php-src/archive/php-7.3.1.tar.gz"
     php_address="$(askOption "Enter the download address for PHP 7 (tar.gz): " $php_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -934,7 +934,7 @@ function php_install() {
 function nginx_install() {
   #####################################################################################################################
   #
-  # INSTALL nginx (Tested with 1.15.6 - https://nginx.org/download/nginx-1.15.6.tar.gz)
+  # INSTALL nginx (Tested with 1.15.8 - https://nginx.org/download/nginx-1.15.8.tar.gz)
   #
   #####################################################################################################################
 
@@ -953,7 +953,7 @@ function nginx_install() {
     # download ngx_pagespeed:
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nginx_address_default="https://nginx.org/download/nginx-1.15.6.tar.gz"
+    nginx_address_default="https://nginx.org/download/nginx-1.15.8.tar.gz"
     nginx_address="$(askOption "Enter the download address for nginx (tar.gz): " $nginx_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -967,9 +967,7 @@ function nginx_install() {
     unzip v${NPS_VERSION}.zip
     nps_dir=$(find . -name "*pagespeed-ngx-${NPS_VERSION}" -type d)
     cd "$nps_dir"
-    NPS_RELEASE_NUMBER=${NPS_VERSION/beta/}
-    NPS_RELEASE_NUMBER=${NPS_VERSION/stable/}
-    psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_RELEASE_NUMBER}.tar.gz
+    psol_url=https://www.modpagespeed.com/release_archive/1.13.35.2/psol-1.13.35.2-x64.tar.gz
     [ -e scripts/format_binary_url.sh ] && psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL)
     wget ${psol_url}
     tar -xzvf $(basename ${psol_url})

@@ -16,22 +16,23 @@ List of installed programs:
 
 | Program       | Version    |
 | ------------- |:----------:|
-| openssl       | 1.1.1      |
+| openssl       | 1.1.1a     |
 | python2       | 2.7.15     |
 | zlib          | 1.2.11     |
 | lz4           | 1.8.3      |
 | libssh2       | 1.8.0      |
-| nghttp2       | 1.34.0     |
-| curl          | 7.62.0     |
-| cmake         | 3.12.4     |
+| nghttp2       | 1.36.0     |
+| curl          | 7.63.0     |
+| cmake         | 3.13.4     |
 | libzip        | 1.5.1      |
 | libcrack2     | 2.9.6      |
-| libxml2       | 2.9.8      |
-| libxslt       | 1.1.33-rc1 |
+| libxml2       | 2.9.9      |
+| libxslt       | 1.1.33     |
 | jemalloc      | 5.1.0      |
-| mariadb       | 10.3       |
-| php           | 7.2.12     |
-| nginx         | 1.15.6     |
+| mariadb       | 10.4       |
+| php           | 7.3.1      |
+| nginx         | 1.15.8     |
+| modpagespeed  | 1.13.35.2  |
 | letsencrypt   | last       |
 | blackfire     | last       |
 
