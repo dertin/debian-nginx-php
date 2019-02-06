@@ -1,7 +1,12 @@
-add_header X-Frame-Options SAMEORIGIN;
-add_header X-Content-Type-Options nosniff;
-add_header X-XSS-Protection "1; mode=block";
-# TODO: https://www.cspisawesome.com/
+# Verify if this is added by another nginx module, before activating it.
+# add_header X-Frame-Options SAMEORIGIN;
+# add_header X-Content-Type-Options nosniff;
+# add_header X-XSS-Protection "1; mode=block";
+# https://www.cspisawesome.com/
+
+location /RequestDenied {
+  return 403;
+}
 
 # Only allow these request methods
 if ($request_method !~ ^(GET|HEAD|POST)$ ) {
@@ -13,6 +18,11 @@ location  /. {
   deny  all;
 }
 
-location /RequestDenied {
-  return 403;
+# Block file extensions that should not be accessed from the browser
+location ~* \.(ini|log|conf|sql|bak|tpl|md|sh)$ {
+    deny all;
 }
+
+# Hide some headers for security.
+fastcgi_hide_header X-Powered-By;
+fastcgi_hide_header x-page-speed;

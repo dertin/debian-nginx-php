@@ -5,23 +5,23 @@ location ~* \.(?:manifest|appcache|html?|xml|json)$ {
   add_header Cache-Control "max-age=0";
 }
 
-# Feed
-location ~* \.(?:rss|atom)$ {
-  add_header Cache-Control "max-age=3600";
-}
-
-# Media: images, icons, video, audio, HTC
-location ~* \.(?:jpg|jpeg|gif|png|ico|cur|gz|svg|mp4|ogg|ogv|webm|htc)$ {
-  add_header Cache-Control "max-age=2592000";
-}
-
 # Media: svgz files are already compressed.
 location ~* \.svgz$ {
   gzip off;
   add_header Cache-Control "max-age=2592000";
 }
 
+# Feed
+#location ~* \.(?:rss|atom)$ {
+#  add_header Cache-Control "max-age=3600";
+#}
+
+# Media: images, icons, video, audio, HTC
+#location ~* \.(?:jpg|jpeg|gif|png|ico|cur|gz|svg|mp4|ogg|ogv|webm|htc)$ {
+#  add_header Cache-Control "max-age=2592000";
+#}
+
 # CSS and Javascript
-location ~* \.(?:css|js)$ {
-  add_header Cache-Control "max-age=31536000";
-}
+#location ~* \.(?:css|js)$ {
+#  add_header Cache-Control "max-age=31536000";
+#}

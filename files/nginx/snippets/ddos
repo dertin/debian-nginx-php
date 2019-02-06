@@ -23,7 +23,7 @@
   # request body is written into a temporary file
   client_body_buffer_size  128k;
 
-  # headerbuffer size for the request header from client -- for testing environment
+  # headerbuffer size for the request header from client
   client_header_buffer_size 1k;
 
   # maximum number and size of buffers for large headers to read from client request
@@ -31,20 +31,20 @@
 
   client_max_body_size 8m;
 
-  # read timeout for the request body from client -- for testing environment
-  client_body_timeout 12;
+  # read timeout for the request body from client
+  client_body_timeout 3m;
 
-  # how long to wait for the client to send a request header -- for testing environment
-  client_header_timeout 12;
+  # how long to wait for the client to send a request header
+  client_header_timeout 3m;
 
   # allow the server to close connection on non responding client, this will free up memory
   reset_timedout_connection on;
 
-  # if client stop responding, free up memory -- default 60
-  send_timeout 10;
+  # if client stop responding, free up memory
+  send_timeout 3m;
 
   # server will close connection after this time -- default 75
-  keepalive_timeout 30;
+  keepalive_timeout 65;
 
-  # number of requests client can make over keep-alive -- for testing environment
-  keepalive_requests 100000;
+  # number of requests client can make over keep-alive
+  keepalive_requests 1000;

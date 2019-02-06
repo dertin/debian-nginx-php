@@ -118,7 +118,6 @@ function service_stop() {
 
     service nginx stop
     service php7-fpm stop
-    service mysql start
 
   fi
 }
@@ -1098,8 +1097,10 @@ function letsencrypt_install() {
     # FILE: /etc/letsencrypt/crontab/
     mkdir -p /etc/letsencrypt/crontab/
     cp ${BASEDIR}/files/letsencrypt/crontab/renewLetsEncrypt.sh /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh
+
     # Modify file
-    sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh
+    # sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh
+
     # Permission for execution
     chmod +x /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh
     # Add crontab renew‑letsencrypt

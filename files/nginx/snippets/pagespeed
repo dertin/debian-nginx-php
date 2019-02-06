@@ -1,10 +1,44 @@
 # Pagespeed main settings
 pagespeed on;
+
+pagespeed XHeaderValue "Powered By Dertin";
+
+# Custom Attribute
+# pagespeed UrlValuedAttribute img src image;
+# pagespeed UrlValuedAttribute img data-src image;
+# pagespeed UrlValuedAttribute div data-src image;
+# pagespeed UrlValuedAttribute a data-src image;
+
+# Configuring PageSpeed Filters
+pagespeed RewriteLevel PassThrough;
+
+# Configuring Caching
 pagespeed FileCachePath /var/ngx_pagespeed_cache;
+# pagespeed MemcachedServers "127.0.0.1:11211";
 
-# Ensure requests for pagespeed optimized resources go to the pagespeed
-# handler and no extraneous headers get set.
+# CSS Minification
+pagespeed EnableFilters combine_css,rewrite_css;
 
+# JS Minification
+pagespeed EnableFilters combine_javascript,rewrite_javascript;
+
+# Images Optimization
+pagespeed EnableFilters rewrite_images;
+
+# Cache
+pagespeed EnableFilters extend_cache;
+
+# Honoring Content-Security-Policy Headers
+pagespeed HonorCsp on;
+
+# TEST: Prioritize Critical CSS
+# pagespeed EnableFilters prioritize_critical_css;
+
+# TEST: Hint Resource Preloading
+# pagespeed EnableFilters hint_preload_subresources;
+
+# Ensure requests for pagespeed optimized resources go to the pagespeed handler
+# and no extraneous headers get set.
 location ~ "\.pagespeed\.([a-z]\.)?[a-z]{2}\.[^.]{10}\.[^.]+" { add_header "" ""; }
-location ~ "^/ngx_pagespeed_static/" { }
-location ~ "^/ngx_pagespeed_beacon" { }
+location ~ "^/pagespeed_static/" { }
+location ~ "^/ngx_pagespeed_beacon$" { }
