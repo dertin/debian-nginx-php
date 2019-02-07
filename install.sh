@@ -420,8 +420,7 @@ function python2_install() {
     chmod +x get-pip.py
     python get-pip.py
 
-    pip install -U pip setuptools
-    pip install pyopenssl
+    pip install --upgrade pip setuptools pyopenssl
 
     python --version
     pip -V
@@ -465,10 +464,9 @@ function python3_install() {
 
     wget https://bootstrap.pypa.io/get-pip.py
     chmod +x get-pip.py
-    ython3.7 get-pip.py
+    python3.7 get-pip.py
 
-    pip3 install -U pip setuptools
-    pip3 install pyopenssl
+    pip3 install --upgrade pip setuptools pyopenssl
 
     python3.7 --version
     pip3 -V
