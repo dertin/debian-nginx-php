@@ -366,6 +366,10 @@ function openssl_install() {
     make test
     make MANSUFFIX=ssl install
 
+    echo "export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt" >> /etc/profile
+    echo "export SSL_CERT_DIR=/etc/ssl/certs/" >> /etc/profile
+    source /etc/profile
+
     ldconfig
     ldconfig -p | grep libcrypto
 
@@ -402,7 +406,13 @@ function python2_install() {
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $python_install_tmp_dir "python_src" $python_address
 
-    ./configure --prefix=/usr/local --enable-shared
+    if [ $AutoDebug != "Y" ]
+    then
+      ./configure --prefix=/usr/local --enable-shared --enable-optimizations
+    else
+      ./configure --prefix=/usr/local --enable-shared
+    fi
+
     make
     make install
 
@@ -419,6 +429,54 @@ function python2_install() {
   fi
 
 }
+
+function python3_install() {
+
+  #####################################################################################################################
+  #
+  # INSTALL Python (Tested with 3.7.2 - https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz)
+  #
+  #####################################################################################################################
+
+  input_install_python="$(askOption "Install Python3 ? [Y/n]: " "Y" $AutoDebug)"
+
+  if [ $input_install_python == "Y" ] || [ $input_install_python == "y" ]
+  then
+
+    # Func askOption (question, defaultOption, skipQuestion)
+    python_address_default="https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz"
+    python_address="$(askOption "Enter the download address for Python3 (tar.gz): " $python_address_default $AutoDebug)"
+
+    # Func askOption (question, defaultOption, skipQuestion)
+    python_install_tmp_dir="$(askOption "Enter temporary directory for Python3 compilation: " "/var/tmp/python3_build" $AutoDebug)"
+
+    # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
+    wgetAndDecompress $python_install_tmp_dir "python3_src" $python_address
+
+    if [ $AutoDebug != "Y" ]
+    then
+      ./configure --prefix=/usr/local --enable-shared --enable-optimizations
+    else
+      ./configure --prefix=/usr/local --enable-shared
+    fi
+
+    make
+    make altinstall
+
+    wget https://bootstrap.pypa.io/get-pip.py
+    chmod +x get-pip.py
+    ython3.7 get-pip.py
+
+    pip3 install -U pip setuptools
+    pip3 install pyopenssl
+
+    python3.7 --version
+    pip3 -V
+
+  fi
+
+}
+
 
 function zlib_install() {
   #####################################################################################################################
@@ -1178,6 +1236,9 @@ case "$1" in
         "python")
             python2_install
             ;;
+        "python3")
+            python3_install
+            ;;
         "zlib")
             zlib_install
             ;;
@@ -1229,6 +1290,7 @@ case "$1" in
             jemalloc_install
             openssl_install
             python2_install
+            python3_install
             zlib_install
             lz4_install
             libssh2_install
@@ -1262,6 +1324,10 @@ case "$1" in
 
             travis_fold_start python2
               python2_install  2>&1 > /dev/null
+            travis_fold_end
+
+            travis_fold_start python3
+              python3_install  2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start zlib
