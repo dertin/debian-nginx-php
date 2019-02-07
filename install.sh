@@ -217,13 +217,13 @@ function essential_install() {
     libgmp-dev libev-dev libevent-dev \
     libsqlite3-dev libgdbm-dev libdb-dev \
     libsystemd-dev libspdylay-dev \
-    libaio-dev libncurses5-dev libboost-all-dev \
+    libaio-dev libncurses5-dev libncursesw5-dev libboost-all-dev \
     libunistring-dev libunbound-dev libqt4-dev \
     libicu-dev libltdl-dev libreadline-dev \
     libaspell-dev libpspell-dev \
     libc6-dev libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
     liblinear-dev libssl-dev libboost-dev libboost-thread-dev \
-    python-dev python3-dev unzip
+    python-dev python3-dev libffi-dev unzip
 
     apt-get -y upgrade
     apt-get -y autoremove
@@ -1289,15 +1289,15 @@ case "$1" in
             essential_install
             jemalloc_install
             openssl_install
-            python2_install
-            python3_install
             zlib_install
             lz4_install
+            libzip_install
+            cmake_install
+            python2_install
+            python3_install
             libssh2_install
             nghttp2_install
             curl_install
-            cmake_install
-            libzip_install
             libcrack2_install
             libxml2_install
             libxslt_install
@@ -1317,17 +1317,9 @@ case "$1" in
             travis_fold_start jemalloc
               jemalloc_install 2>&1 > /dev/null
             travis_fold_end
-
+            
             travis_fold_start openssl
               openssl_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start python2
-              python2_install  2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start python3
-              python3_install  2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start zlib
@@ -1336,6 +1328,22 @@ case "$1" in
 
             travis_fold_start lz4
               lz4_install 2>&1 > /dev/null
+            travis_fold_end
+            
+            travis_fold_start libzip
+              libzip_install 2>&1 > /dev/null
+            travis_fold_end
+            
+            travis_fold_start cmake
+              cmake_install
+            travis_fold_end
+            
+            travis_fold_start python2
+              python2_install  2>&1 > /dev/null
+            travis_fold_end
+
+            travis_fold_start python3
+              python3_install  2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start libssh2
@@ -1348,14 +1356,6 @@ case "$1" in
 
             travis_fold_start curl
               curl_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start cmake
-              cmake_install
-            travis_fold_end
-
-            travis_fold_start libzip
-              libzip_install
             travis_fold_end
 
             travis_fold_start libcrack2
