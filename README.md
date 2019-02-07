@@ -11,11 +11,10 @@ sudo ./install.sh all N
 ```
 ## Important:
 
-- You must have a domain address before executing the script, so that your https certificate is correctly configured automatically. If you do not have a domain now, enter the domain you are going to buy later, and then manually configure your https certificate.
+- You must have a domain address pointing to your server before running the script, so that your HTTPS certificate is configured correctly automatically. If you do not have a domain now, enter the domain you are going to configure later and then manually configure your HTTPS certificate.
 
 - It is recommended to restart the system when the script requests it.
-After the system starts, it will rerun the script and skip the steps it has already installed before restarting the system, to continue.
-
+After the system starts, you will manually rerun the script `sudo ./install.sh all N` and skip the steps that have already been installed before restarting the system to continue.
 
 
 List of installed programs:
