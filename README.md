@@ -9,8 +9,14 @@ cd lemp-stack-debian/
 chmod +x install.sh
 sudo ./install.sh all N
 ```
+## Important:
 
-You must have a domain address before executing the script, so that your https certificate is correctly configured automatically. If you do not have a domain now, enter the domain you are going to buy later, and then manually configure your https certificate.
+- You must have a domain address before executing the script, so that your https certificate is correctly configured automatically. If you do not have a domain now, enter the domain you are going to buy later, and then manually configure your https certificate.
+
+- It is recommended to restart the system when the script requests it.
+After the system starts, it will rerun the script and skip the steps it has already installed before restarting the system, to continue.
+
+
 
 List of installed programs:
 
