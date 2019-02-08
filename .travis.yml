@@ -22,6 +22,8 @@ script:
   - docker exec -t container_test /bin/bash -c "/usr/local/bin/curl -V"
   - docker exec -t container_test /bin/bash -c "/usr/local/bin/python --version"
   - docker exec -t container_test /bin/bash -c "/usr/local/bin/pip -V"
+  - docker exec -t container_test /bin/bash -c "/usr/local/bin/python3.7 --version"
+  - docker exec -t container_test /bin/bash -c "/usr/local/bin/python3.7 -m pip -V"
   - docker exec -t container_test /bin/bash -c "/usr/local/php7/bin/php -v"
   - docker exec -t container_test /bin/bash -c "/usr/local/php7/bin/php -i | grep 'Client API version'"
   - docker exec -t container_test /bin/bash -c "/usr/sbin/nginx -v"
