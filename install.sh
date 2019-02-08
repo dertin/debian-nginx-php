@@ -418,9 +418,9 @@ function python2_install() {
 
     wget https://bootstrap.pypa.io/get-pip.py
     chmod +x get-pip.py
-    python get-pip.py
+    python get-pip.py --user
 
-    pip install --upgrade pip setuptools pyopenssl
+    pip install --upgrade setuptools wheel pyopenssl
 
     python --version
     pip -V
@@ -462,15 +462,13 @@ function python3_install() {
     make
     make altinstall
 
-    wget https://bootstrap.pypa.io/get-pip.py
-    chmod +x get-pip.py
-    python3.7 get-pip.py
-
-    pip3 install --upgrade pip setuptools pyopenssl
-
-    python3.7 --version
-    pip3 -V
-
+    alias python=python3.7
+    
+    python --version
+    python -m pip install --upgrade setuptools wheel pyopenssl
+    python -m pip -V
+    
+    unalias python
   fi
 
 }
@@ -1289,8 +1287,8 @@ case "$1" in
             openssl_install
             zlib_install
             lz4_install
-            libzip_install
             cmake_install
+            libzip_install
             python2_install
             python3_install
             libssh2_install
@@ -1328,12 +1326,12 @@ case "$1" in
               lz4_install 2>&1 > /dev/null
             travis_fold_end
             
-            travis_fold_start libzip
-              libzip_install 2>&1 > /dev/null
-            travis_fold_end
-            
             travis_fold_start cmake
               cmake_install
+            travis_fold_end
+            
+            travis_fold_start libzip
+              libzip_install 2>&1 > /dev/null
             travis_fold_end
             
             travis_fold_start python2
