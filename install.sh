@@ -1125,6 +1125,7 @@ function letsencrypt_install(){
     if [ $input_install_letEncrypt == "Y" ] || [ $input_install_letEncrypt == "y" ]
     then
 
+        mkdir -p /opt/letsencrypt/
         git clone https://github.com/certbot/certbot /opt/letsencrypt
         chmod a+x /opt/letsencrypt/certbot-auto
 
