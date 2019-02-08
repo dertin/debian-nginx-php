@@ -418,11 +418,10 @@ function python2_install() {
 
     wget https://bootstrap.pypa.io/get-pip.py
     chmod +x get-pip.py
-    python get-pip.py --user
-
-    pip install --upgrade setuptools wheel pyopenssl
-
+    python get-pip.py
+    
     python --version
+    pip install --upgrade setuptools wheel pyopenssl
     pip -V
 
   fi
@@ -462,13 +461,10 @@ function python3_install() {
     make
     make altinstall
 
-    alias python=python3.7
-    
-    python --version
-    python -m pip install --upgrade setuptools wheel pyopenssl
-    python -m pip -V
-    
-    unalias python
+    python3.7 --version
+    python3.7 -m pip install --upgrade setuptools wheel pyopenssl
+    python3.7 -m pip -V
+
   fi
 
 }
