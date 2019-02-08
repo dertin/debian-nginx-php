@@ -240,7 +240,7 @@ function essential_install() {
 
     apt-get clean
 
-    if [ "$AutoDebug" != "Y" ]
+    if [ "$ProgramName" != "travis" ]
     then
       tzselect
       dpkg-reconfigure tzdata
@@ -406,7 +406,7 @@ function python2_install() {
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $python_install_tmp_dir "python_src" $python_address
 
-    if [ $AutoDebug != "Y" ]
+    if [ "$ProgramName" != "travis" ]
     then
       ./configure --prefix=/usr/local --enable-shared --enable-optimizations
     else
@@ -419,9 +419,9 @@ function python2_install() {
     wget https://bootstrap.pypa.io/get-pip.py
     chmod +x get-pip.py
     python get-pip.py
-    
+
     python --version
-    pip install --upgrade setuptools wheel pyopenssl
+    pip install --upgrade pip virtualenv setuptools wheel pyopenssl
     pip -V
 
   fi
@@ -451,7 +451,7 @@ function python3_install() {
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $python_install_tmp_dir "python3_src" $python_address
 
-    if [ $AutoDebug != "Y" ]
+    if [ "$ProgramName" != "travis" ]
     then
       ./configure --prefix=/usr/local --enable-shared --enable-optimizations
     else
@@ -462,7 +462,7 @@ function python3_install() {
     make altinstall
 
     python3.7 --version
-    python3.7 -m pip install --upgrade setuptools wheel pyopenssl
+    python3.7 -m pip install --upgrade pip virtualenv setuptools wheel pyopenssl
     python3.7 -m pip -V
 
   fi
@@ -1061,7 +1061,7 @@ function nginx_install() {
     mkdir -p /etc/nginx/ssl/
 
     # is discarded for rapid tests
-    if [ $AutoDebug != "Y" ]
+    if [ "$ProgramName" != "travis" ]
     then
       openssl dhparam -out /etc/nginx/ssl/dhparam.pem 2048
     fi
@@ -1112,8 +1112,33 @@ function nginx_install() {
 
   fi
 }
+function letsencrypt_install(){
+    #####################################################################################################################
+    #
+    # Let’s Encrypt with NGINX (https://github.com/certbot/certbot)
+    #
+    #####################################################################################################################
 
-function letsencrypt_install() {
+    # Func askOption (question, defaultOption, skipQuestion)
+    input_install_letEncrypt="$(askOption "Install Let’s Encrypt ? [Y/n]: " "Y" $AutoDebug)"
+
+    if [ $input_install_letEncrypt == "Y" ] || [ $input_install_letEncrypt == "y" ]
+    then
+
+        git clone https://github.com/certbot/certbot /opt/letsencrypt
+        chmod a+x /opt/letsencrypt/certbot-auto
+
+        cd /opt/letsencrypt/ || exit 1
+
+        if [ "$ProgramName" != "travis" ]
+        then
+          letsencrypt_config
+        fi
+
+    fi
+}
+
+function letsencrypt_config() {
   #####################################################################################################################
   #
   # Let’s Encrypt with NGINX (https://github.com/certbot/certbot)
@@ -1121,13 +1146,10 @@ function letsencrypt_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_letEncrypt="$(askOption "Install Let’s Encrypt ? [Y/n]: " "Y" $AutoDebug)"
+  input_config_letEncrypt="$(askOption "Configure Let’s Encrypt ? [Y/n]: " "Y" $AutoDebug)"
 
-  if [ $input_install_letEncrypt == "Y" ] || [ $input_install_letEncrypt == "y" ]
+  if [ $input_config_letEncrypt == "Y" ] || [ $input_config_letEncrypt == "y" ]
   then
-
-  	git clone https://github.com/certbot/certbot /opt/letsencrypt
-    chmod a+x /opt/letsencrypt/certbot-auto
 
     mkdir -p /var/www/${global_domain}/letsencrypt
     chgrp www-data /var/www/${global_domain}/letsencrypt
@@ -1156,8 +1178,8 @@ function letsencrypt_install() {
     # Add crontab renew‑letsencrypt
     crontab -l | { cat; echo "0 0 1 JAN,MAR,MAY,JUL,SEP,NOV * /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh"; } | crontab -
 
-    input_install_letEncrypt_isOK="$(askOption "Install Let’s Encrypt is OK ? [Y/n]: " "Y" $AutoDebug)"
-    if [ $input_install_letEncrypt_isOK == "Y" ] || [ $input_install_letEncrypt_isOK == "y" ]
+    input_config_letEncrypt_isOK="$(askOption "Let’s Encrypt configuration is correct? ? [Y/n]: " "Y" $AutoDebug)"
+    if [ $input_config_letEncrypt_isOK == "Y" ] || [ $input_config_letEncrypt_isOK == "y" ]
     then
       # Enabled certificates in configuration file
       sed -i "s/#REMOVE_AFTER_CONFIGURING_LE#//g" /etc/nginx/sites-enabled/${global_domain}.conf
@@ -1207,6 +1229,7 @@ function blackfire_install() {
 #
 #####################################################################################################################
 
+ProgramName="$1"
 AutoDebug="$2" # If the value is "Y" the script works in automatic mode with the default options for debug
 
 # Func askOption (question, defaultOption, skipQuestion)
@@ -1215,7 +1238,7 @@ global_domain="$(askOption "Enter the domian: " "domian.com" $AutoDebug)"
 global_emailSupport="$(askOption "Enter email support: " "email@email.com" $AutoDebug)"
 
 # installation options
-case "$1" in
+case "$ProgramName" in
         "essential")
             essential_install
             ;;
@@ -1309,7 +1332,7 @@ case "$1" in
             travis_fold_start jemalloc
               jemalloc_install 2>&1 > /dev/null
             travis_fold_end
-            
+
             travis_fold_start openssl
               openssl_install 2>&1 > /dev/null
             travis_fold_end
@@ -1321,15 +1344,15 @@ case "$1" in
             travis_fold_start lz4
               lz4_install 2>&1 > /dev/null
             travis_fold_end
-            
+
             travis_fold_start cmake
               cmake_install
             travis_fold_end
-            
+
             travis_fold_start libzip
               libzip_install 2>&1 > /dev/null
             travis_fold_end
-            
+
             travis_fold_start python2
               python2_install  2>&1 > /dev/null
             travis_fold_end
@@ -1374,7 +1397,10 @@ case "$1" in
               nginx_install 2>&1 > /dev/null
             travis_fold_end
 
-            # letsencrypt_install
+            travis_fold_start letsencrypt
+              letsencrypt_install
+            travis_fold_end
+
             # blackfire_install
 
             travis_fold_start clear_compile
