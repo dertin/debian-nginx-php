@@ -1126,10 +1126,15 @@ function letsencrypt_install(){
     then
 
         mkdir -p /opt/letsencrypt/
-        git clone https://github.com/certbot/certbot /opt/letsencrypt
+        cd /opt/letsencrypt/ || exit 1
+
+        wget https://dl.eff.org/certbot-auto -P /opt/letsencrypt/
         chmod a+x /opt/letsencrypt/certbot-auto
 
-        cd /opt/letsencrypt/ || exit 1
+        # [TESTING] patches
+        cp -r ${BASEDIR}files/letsencrypt/patches/* /opt/letsencrypt/
+        patch /opt/letsencrypt/certbot-auto -i /opt/letsencrypt/certbot-auto.patch -o /opt/letsencrypt/certbot-auto-patched
+        chmod a+x /opt/letsencrypt/certbot-auto-patched
 
         if [ "$ProgramName" != "travis" ]
         then
