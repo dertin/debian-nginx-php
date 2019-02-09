@@ -839,7 +839,7 @@ function mariadb_install() {
 function php_install() {
   #####################################################################################################################
   #
-  # INSTALL PHP (Tested with 7.3.1 - https://github.com/php/php-src/archive/php-7.3.1.tar.gz)
+  # INSTALL PHP (Tested with 7.3.2 - https://github.com/php/php-src/archive/php-7.3.2.tar.gz)
   # use config file from: https://github.com/kasparsd/php-7-debian/
   #
   #####################################################################################################################
@@ -853,7 +853,7 @@ function php_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    php_address_default="https://github.com/php/php-src/archive/php-7.3.1.tar.gz"
+    php_address_default="https://github.com/php/php-src/archive/php-7.3.2.tar.gz"
     php_address="$(askOption "Enter the download address for PHP 7 (tar.gz): " $php_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)

@@ -35,7 +35,7 @@ List of installed programs:
 | libxslt       | 1.1.33     |
 | jemalloc      | 5.1.0      |
 | mariadb       | 10.4       |
-| php           | 7.3.1      |
+| php           | 7.3.2      |
 | nginx         | 1.15.8     |
 | modpagespeed  | 1.13.35.2  |
 | letsencrypt   | last       |
