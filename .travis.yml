@@ -1,4 +1,7 @@
+os: linux
+dist: xenial
 sudo: required
+language: bash
 
 branches:
   only:
@@ -7,9 +10,17 @@ branches:
 services:
   - docker
 
-language: bash
-
 before_install:
+  - sudo systemctl stop apt-daily.service &&
+    sudo systemctl kill --kill-who=all apt-daily.service &&
+    while ! (systemctl list-units --all apt-daily.service | fgrep -q dead) ; do
+      sleep 1
+    done
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+  - docker --version
   - docker build -t dertin/debian:lemp -f Dockerfile.debug .
   - docker run -t --name container_test dertin/debian:lemp /bin/bash -c "/root/workspace/install.sh travis Y"
   - docker start container_test
@@ -29,10 +40,10 @@ script:
   - docker exec -t container_test /bin/bash -c "/usr/sbin/nginx -v"
   - docker exec -t container_test /bin/bash -c "service php7-fpm start"
   - docker exec -t container_test /bin/bash -c "service nginx start"
-  - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto-patched --version --quiet"
-  - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto-patched --debug --os-packages-only --quiet"
-  #- docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto --version --quiet"
-  #- docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto --debug --os-packages-only --quiet"
+  - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto-patched --version --non-interactive --verbose"
+  - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto-patched --debug --os-packages-only --non-interactive --verbose"
+  - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto --version --non-interactive --verbose"
+  - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto --debug --os-packages-only --non-interactive --verbose"
 
 
 #after_success:
