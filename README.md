@@ -23,6 +23,7 @@ List of installed programs:
 | ------------- |:----------:|
 | openssl       | 1.1.1a     |
 | python2       | 2.7.15     |
+| python3       | 3.7.2      |
 | zlib          | 1.2.11     |
 | lz4           | 1.8.3      |
 | libssh2       | 1.8.0      |

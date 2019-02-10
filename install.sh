@@ -1132,7 +1132,7 @@ function letsencrypt_install(){
         chmod a+x /opt/letsencrypt/certbot-auto
 
         # [TESTING] patches
-        cp -r ${BASEDIR}files/letsencrypt/patches/* /opt/letsencrypt/
+        cp -r ${BASEDIR}/files/letsencrypt/patches/* /opt/letsencrypt/
         patch /opt/letsencrypt/certbot-auto -i /opt/letsencrypt/certbot-auto.patch -o /opt/letsencrypt/certbot-auto-patched
         chmod a+x /opt/letsencrypt/certbot-auto-patched
 
