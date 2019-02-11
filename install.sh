@@ -1330,6 +1330,7 @@ case "$ProgramName" in
             clear_compile
             ;;
         "travis")
+            export DEBIAN_FRONTEND=noninteractive
 
             travis_fold_start essential
               essential_install 2>&1 > /dev/null

@@ -16,8 +16,7 @@ before_install:
   # Disable apt-daily.service for Travis CI
   - sudo systemctl stop apt-daily.service apt-daily.timer apt-daily-upgrade.service apt-daily-upgrade.timer
   - sudo systemctl kill --kill-who=all apt-daily.service apt-daily-upgrade.service
-  - while !(systemctl list-units --all apt-daily.service | grep -q dead); do sleep 1; done
-  - while !(systemctl list-units --all apt-daily-upgrade.service | grep -q dead); do sleep 1; done
+  - bash ./.travis/wait_for_apt.sh
   # Upgrade Docker CE
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
   - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
@@ -49,8 +48,9 @@ script:
   - docker exec -t container_test /bin/bash -c "/usr/sbin/nginx -v"
   - docker exec -t container_test /bin/bash -c "service php7-fpm start"
   - docker exec -t container_test /bin/bash -c "service nginx start"
-  - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto-patched --version --non-interactive --verbose"
-  - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto-patched --debug --os-packages-only --non-interactive --verbose"
+  - ps ax | grep apt
+  - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto-patched --version --quiet --verbose"
+  - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto-patched --debug --os-packages-only --quiet --verbose"
   - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto --version --non-interactive --verbose"
   - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto --debug --os-packages-only --non-interactive --verbose"
 
