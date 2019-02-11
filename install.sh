@@ -1334,9 +1334,6 @@ case "$ProgramName" in
 
             travis_fold_start essential
               essential_install 2>&1 > /dev/null
-              # Wait for apt
-              chmod +x ${BASEDIR}/.travis/wait_for_apt.sh
-              ${BASEDIR}/.travis/wait_for_apt.sh
             travis_fold_end
 
             travis_fold_start jemalloc
@@ -1415,8 +1412,10 @@ case "$ProgramName" in
 
             travis_fold_start clear_compile
               clear_compile 2>&1 > /dev/null
+              # Wait for apt
+              chmod +x ${BASEDIR}/.travis/wait_for_apt.sh
+              ${BASEDIR}/.travis/wait_for_apt.sh
             travis_fold_end
-
             ;;
         *)
             echo $"Usage: sudo $0 {all|program_name} {N|Y}(Automatic mode)"

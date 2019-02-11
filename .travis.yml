@@ -45,12 +45,11 @@ script:
   - docker exec -t container_test /bin/bash -c "/usr/local/php7/bin/php -i | grep 'Client API version'"
   - docker exec -t container_test /bin/bash -c "/usr/sbin/nginx -v"
   - docker exec -t container_test /bin/bash -c "service php7-fpm start"
-  - docker exec -t container_test /bin/bash -c "service nginx start"
-  - ps ax | grep apt
-  - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto-patched --version --quiet --verbose"
+  - docker exec -t container_test /bin/bash -c "service nginx start"  
+  - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto-patched --version --quiet"
   - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto-patched --debug --os-packages-only --quiet --verbose"
   - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto --version --non-interactive --verbose"
-  - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto --debug --os-packages-only --non-interactive --verbose"
+  - docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto --debug --os-packages-only --non-interactive"
 
 #after_success:
 #after_failure:
