@@ -23,7 +23,7 @@ before_install:
   - docker --version
   # Docker Run
   - docker build -t dertin/debian:lemp -f Dockerfile.debug .
-  - docker run -t --name container_test dertin/debian:lemp /bin/bash -c "/root/workspace/install.sh travis Y"
+  - docker run -t --privileged=true --name container_test dertin/debian:lemp /bin/bash -c "/root/workspace/install.sh travis Y"
   - docker start container_test
   - docker ps -a
 
