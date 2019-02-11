@@ -1332,6 +1332,10 @@ case "$ProgramName" in
         "travis")
             export DEBIAN_FRONTEND=noninteractive
 
+            # Wait for apt
+            chmod +x ${BASEDIR}/.travis/wait_for_apt.sh
+            ${BASEDIR}/.travis/wait_for_apt.sh
+
             travis_fold_start essential
               essential_install 2>&1 > /dev/null
             travis_fold_end

@@ -14,8 +14,6 @@ branches:
 # Prepare environment
 before_install:
   # Disable apt-daily.service for Travis CI
-  - sudo systemctl stop apt-daily.service apt-daily.timer apt-daily-upgrade.service apt-daily-upgrade.timer
-  - sudo systemctl kill --kill-who=all apt-daily.service apt-daily-upgrade.service
   - bash ./.travis/wait_for_apt.sh
   # Upgrade Docker CE
   - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
