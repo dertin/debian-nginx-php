@@ -18,6 +18,11 @@ BASEDIR="$PWD"
 MACHINE_TYPE=`uname -m`
 TRAVISFOLDNAME=/tmp/.travis_fold_name
 
+NUMCPUS=`nproc`
+NUMJOBS=`expr $NUMCPUS + 1`
+
+alias make="make -j${NUMJOBS}"
+
 if [ "$MACHINE_TYPE" == "i386" ]; then
     export CPPFLAGS="-I/usr/local/include -I/usr/include/i386-linux-gnu"
 fi
@@ -26,6 +31,8 @@ if [ "$MACHINE_TYPE" == "x86_64" ]; then
     export CPPFLAGS="-I/usr/local/include -I/usr/include/x86_64-linux-gnu"
 fi
 
+export CFLAGS="-march=native -O2 -ftree-vectorize -pipe"
+export CXXFLAGS="${CFLAGS}"
 export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib"
 export LDCONFIG=-L/usr/local/lib
 export LIBS="-ldl"
@@ -145,6 +152,7 @@ function clear_compile() {
     # libjemalloc-dev
     apt-get -y autoremove
     apt-get clean
+    ccache -C
 
   fi
 
@@ -203,7 +211,7 @@ function essential_install() {
     # libjemalloc-dev
 
     # TODO: check this: Important packages that must be installed.
-    apt-get -y install coreutils binutils uuid-dev wget \
+    apt-get -y install coreutils binutils ccache uuid-dev wget \
     mcrypt cython perl libpcre3 bzip2 xsltproc \
     trousers libidn2-0 libtiffxx5 libexpat1-dev \
     libc-dbg gettext debian-keyring liblinear-tools \
@@ -224,6 +232,12 @@ function essential_install() {
     libc6-dev libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
     liblinear-dev libssl-dev libboost-dev libboost-thread-dev \
     python-dev python3-dev libffi-dev unzip git
+
+    if [ -f /usr/lib/ccache ]; then
+        export PATH=/usr/lib/ccache:$PATH
+        echo "export PATH=$PATH" >> /etc/profile
+        source /etc/profile
+    fi
 
     apt-get -y upgrade
     apt-get -y autoremove
@@ -1412,9 +1426,6 @@ case "$ProgramName" in
 
             travis_fold_start clear_compile
               clear_compile 2>&1 > /dev/null
-              # Wait for apt
-              chmod +x ${BASEDIR}/.travis/wait_for_apt.sh
-              ${BASEDIR}/.travis/wait_for_apt.sh
             travis_fold_end
             ;;
         *)

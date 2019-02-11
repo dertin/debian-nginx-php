@@ -9,22 +9,3 @@
 +
  # Note: you can set XDG_DATA_HOME or VENV_PATH before running this script,
  # if you want to change where the virtual environment will be installed
-
-@@ -1276,7 +1276,7 @@ from os.path import join
- from pipes import quote
- from shutil import rmtree
- try:
--    from subprocess import check_output
-+    from subprocess import check_call, check_output
- except ImportError:
-     from subprocess import CalledProcessError, PIPE, Popen
-
-@@ -1406,7 +1406,7 @@ def main():
-                                      temp,
-                                      digest)
-                      for path, digest in PACKAGES]
--        check_output('pip install --no-index --no-deps -U ' +
-+        check_call('pip install --no-index --no-deps -U ' +
-                      # Disable cache since we're not using it and it otherwise
-                      # sometimes throws permission warnings:
-                      ('--no-cache-dir ' if has_pip_cache else '') +

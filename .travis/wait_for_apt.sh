@@ -6,7 +6,6 @@ if (( $EUID != 0 )); then
 fi
 
 $SUDO systemctl list-unit-files | grep apt
-
 $SUDO systemctl stop apt-daily.timer
 $SUDO systemctl disable apt-daily.timer
 $SUDO systemctl stop apt-daily-upgrade.timer
@@ -24,7 +23,3 @@ while sleep 1; do
         echo "apt process has not done yet"
     fi
 done
-
-$SUDO ps ax | grep apt
-$SUDO killall apt apt-get
-$SUDO ps ax | grep apt
