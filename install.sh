@@ -1,8 +1,29 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Tested on Debian 9 32bit / 64bit
 # Use at your own risk
 
+#####################################################################################################################
+#
+# Default software source list
+#
+#####################################################################################################################
+jemalloc_address_default="https://github.com/jemalloc/jemalloc/archive/5.0.1.tar.gz"
+cmake_address_default="https://cmake.org/files/v3.13/cmake-3.13.4.tar.gz"
+openssl_address_default="https://www.openssl.org/source/openssl-1.1.1a.tar.gz"
+python_address_default="https://www.python.org/ftp/python/2.7.15/Python-2.7.15.tar.xz"
+python3_address_default="https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz"
+zlib_address_default="http://www.zlib.net/zlib-1.2.11.tar.gz"
+lz4_address_default="https://github.com/lz4/lz4/archive/v1.8.3.tar.gz"
+libzip_address_default="https://libzip.org/download/libzip-1.5.1.tar.gz"
+libssh2_address_default="https://libssh2.org/download/libssh2-1.8.0.tar.gz"
+nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.36.0/nghttp2-1.36.0.tar.gz"
+curl_address_default="https://curl.haxx.se/download/curl-7.63.0.tar.gz"
+libcrack2_address_default="https://github.com/cracklib/cracklib/archive/cracklib-2.9.6.tar.gz"
+libXML2_address_default="http://xmlsoft.org/sources/libxml2-2.9.9.tar.gz"
+libxslt_address_default="http://xmlsoft.org/sources/libxslt-1.1.33.tar.gz"
+php_address_default="https://github.com/php/php-src/archive/php-7.3.2.tar.gz"
+nginx_address_default="https://nginx.org/download/nginx-1.15.8.tar.gz"
 #####################################################################################################################
 #
 # Environment Variables
@@ -288,7 +309,6 @@ function jemalloc_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    jemalloc_address_default="https://github.com/jemalloc/jemalloc/archive/5.0.1.tar.gz"
     jemalloc_address="$(askOption "Enter the download address for jemalloc (tar.gz): " $jemalloc_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -328,7 +348,6 @@ function cmake_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    cmake_address_default="https://cmake.org/files/v3.13/cmake-3.13.4.tar.gz"
     cmake_address="$(askOption "Enter the download address for cmake (tar.gz): " $cmake_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -366,7 +385,6 @@ function openssl_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    openssl_address_default="https://www.openssl.org/source/openssl-1.1.1a.tar.gz"
     openssl_address="$(askOption "Enter the download address for OpenSSL (tar.gz): " $openssl_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -411,7 +429,6 @@ function python2_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    python_address_default="https://www.python.org/ftp/python/2.7.15/Python-2.7.15.tar.xz"
     python_address="$(askOption "Enter the download address for Python2 (tar.gz): " $python_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -456,8 +473,7 @@ function python3_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    python_address_default="https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz"
-    python_address="$(askOption "Enter the download address for Python3 (tar.gz): " $python_address_default $AutoDebug)"
+    python_address="$(askOption "Enter the download address for Python3 (tar.gz): " $python3_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
     python_install_tmp_dir="$(askOption "Enter temporary directory for Python3 compilation: " "/var/tmp/python3_build" $AutoDebug)"
@@ -483,7 +499,6 @@ function python3_install() {
 
 }
 
-
 function zlib_install() {
   #####################################################################################################################
   #
@@ -498,7 +513,6 @@ function zlib_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    zlib_address_default="http://www.zlib.net/zlib-1.2.11.tar.gz"
     zlib_address="$(askOption "Enter the download address for zlib (tar.gz): " $zlib_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -533,7 +547,6 @@ function lz4_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    lz4_address_default="https://github.com/lz4/lz4/archive/v1.8.3.tar.gz"
     lz4_address="$(askOption "Enter the download address for lz4 (tar.gz): " $lz4_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -567,7 +580,6 @@ function libzip_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libzip_address_default="https://libzip.org/download/libzip-1.5.1.tar.gz"
     libzip_address="$(askOption "Enter the download address for libzip (tar.gz): " $libzip_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -604,7 +616,6 @@ function libssh2_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libssh2_address_default="https://libssh2.org/download/libssh2-1.8.0.tar.gz"
     libssh2_address="$(askOption "Enter the download address for libssh2 (tar.gz): " $libssh2_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -639,7 +650,6 @@ function nghttp2_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.36.0/nghttp2-1.36.0.tar.gz"
     nghttp2_address="$(askOption "Enter the download address for Nghttp2 (tar.gz): " $nghttp2_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -673,7 +683,6 @@ function curl_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    curl_address_default="https://curl.haxx.se/download/curl-7.63.0.tar.gz"
     curl_address="$(askOption "Enter the download address for CURL (tar.gz) ? [Y/n]: " $curl_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -712,7 +721,6 @@ function libcrack2_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libcrack2_address_default="https://github.com/cracklib/cracklib/archive/cracklib-2.9.6.tar.gz"
     libcrack2_address="$(askOption "Enter the download address for libcrack2 (tar.gz): " $libcrack2_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -768,7 +776,6 @@ function libxml2_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libXML2_address_default="http://xmlsoft.org/sources/libxml2-2.9.9.tar.gz"
     libXML2_address="$(askOption "Enter the download address for LibXML2 (tar.gz): " $libXML2_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -802,7 +809,6 @@ function libxslt_install() {
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libxslt_address_default="http://xmlsoft.org/sources/libxslt-1.1.33.tar.gz"
     libxslt_address="$(askOption "Enter the download address for libxslt (tar.gz): " $libxslt_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -867,7 +873,6 @@ function php_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    php_address_default="https://github.com/php/php-src/archive/php-7.3.2.tar.gz"
     php_address="$(askOption "Enter the download address for PHP 7 (tar.gz): " $php_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -977,7 +982,7 @@ function php_install() {
     echo -e "PATH=$PATH\n" >> /etc/environment
     chmod 644 /etc/environment
 
-    sed 's/"//g; s?\(Defaults.*\)?\1:/usr/local/php7/bin?' /etc/sudoers
+    ln -s /usr/local/php7/bin/php /usr/sbin/php
 
     /usr/local/php7/bin/php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
     /usr/local/php7/bin/php composer-setup.php --install-dir=/usr/local/bin --filename=composer
@@ -1016,7 +1021,6 @@ function nginx_install() {
     # download ngx_pagespeed:
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nginx_address_default="https://nginx.org/download/nginx-1.15.8.tar.gz"
     nginx_address="$(askOption "Enter the download address for nginx (tar.gz): " $nginx_address_default $AutoDebug)"
 
     # Func askOption (question, defaultOption, skipQuestion)
@@ -1126,6 +1130,7 @@ function nginx_install() {
 
   fi
 }
+
 function letsencrypt_install(){
     #####################################################################################################################
     #
@@ -1196,7 +1201,7 @@ function letsencrypt_config() {
     # Permission for execution
     chmod +x /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh
     # Add crontab renew‑letsencrypt
-    crontab -l | { cat; echo "0 0 1 JAN,MAR,MAY,JUL,SEP,NOV * /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh"; } | crontab -
+    crontab -l | { cat; echo "0 0 * * * /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh"; } | crontab -
 
     input_config_letEncrypt_isOK="$(askOption "Let’s Encrypt configuration is correct? ? [Y/n]: " "Y" $AutoDebug)"
     if [ $input_config_letEncrypt_isOK == "Y" ] || [ $input_config_letEncrypt_isOK == "y" ]
