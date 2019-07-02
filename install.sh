@@ -8,22 +8,23 @@
 # Default software source list
 #
 #####################################################################################################################
-jemalloc_address_default="https://github.com/jemalloc/jemalloc/archive/5.0.1.tar.gz"
-cmake_address_default="https://cmake.org/files/v3.13/cmake-3.13.4.tar.gz"
-openssl_address_default="https://www.openssl.org/source/openssl-1.1.1a.tar.gz"
-python_address_default="https://www.python.org/ftp/python/2.7.15/Python-2.7.15.tar.xz"
-python3_address_default="https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz"
+jemalloc_address_default="https://github.com/jemalloc/jemalloc/archive/5.2.0.tar.gz"
+cmake_address_default="https://github.com/Kitware/CMake/releases/download/v3.14.5/cmake-3.14.5.tar.gz"
+openssl_address_default="https://www.openssl.org/source/openssl-1.1.1c.tar.gz"
+python_address_default="https://www.python.org/ftp/python/2.7.16/Python-2.7.16.tgz"
+python3_address_default="https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tgz"
 zlib_address_default="http://www.zlib.net/zlib-1.2.11.tar.gz"
-lz4_address_default="https://github.com/lz4/lz4/archive/v1.8.3.tar.gz"
-libzip_address_default="https://libzip.org/download/libzip-1.5.1.tar.gz"
-libssh2_address_default="https://libssh2.org/download/libssh2-1.8.0.tar.gz"
-nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.36.0/nghttp2-1.36.0.tar.gz"
-curl_address_default="https://curl.haxx.se/download/curl-7.63.0.tar.gz"
-libcrack2_address_default="https://github.com/cracklib/cracklib/archive/cracklib-2.9.6.tar.gz"
+lz4_address_default="https://github.com/lz4/lz4/archive/v1.9.1.tar.gz"
+libzip_address_default="https://libzip.org/download/libzip-1.5.2.tar.gz"
+libssh2_address_default="https://www.libssh2.org/download/libssh2-1.9.0.tar.gz"
+nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.39.1/nghttp2-1.39.1.tar.gz"
+curl_address_default="https://curl.haxx.se/download/curl-7.65.1.tar.gz"
+libcrack2_address_default="https://github.com/cracklib/cracklib/archive/v2.9.7.tar.gz"
 libXML2_address_default="http://xmlsoft.org/sources/libxml2-2.9.9.tar.gz"
 libxslt_address_default="http://xmlsoft.org/sources/libxslt-1.1.33.tar.gz"
-php_address_default="https://github.com/php/php-src/archive/php-7.3.2.tar.gz"
-nginx_address_default="https://nginx.org/download/nginx-1.15.8.tar.gz"
+php_address_default="https://github.com/php/php-src/archive/php-7.3.7.tar.gz"
+nginx_address_default="https://nginx.org/download/nginx-1.16.0.tar.gz"
+psol_url="https://www.modpagespeed.com/release_archive/1.13.35.2/psol-1.13.35.2-x64.tar.gz"
 #####################################################################################################################
 #
 # Environment Variables
@@ -1034,7 +1035,6 @@ function nginx_install() {
     unzip v${NPS_VERSION}.zip
     nps_dir=$(find . -name "*pagespeed-ngx-${NPS_VERSION}" -type d)
     cd "$nps_dir"
-    psol_url=https://www.modpagespeed.com/release_archive/1.13.35.2/psol-1.13.35.2-x64.tar.gz
     [ -e scripts/format_binary_url.sh ] && psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL)
     wget ${psol_url}
     tar -xzvf $(basename ${psol_url})

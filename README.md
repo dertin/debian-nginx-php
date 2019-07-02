@@ -21,23 +21,23 @@ List of installed programs:
 
 | Program       | Version    |
 | ------------- |:----------:|
-| openssl       | 1.1.1a     |
-| python2       | 2.7.15     |
-| python3       | 3.7.2      |
+| openssl       | 1.1.1c     |
+| python2       | 2.7.16     |
+| python3       | 3.7.3      |
 | zlib          | 1.2.11     |
-| lz4           | 1.8.3      |
-| libssh2       | 1.8.0      |
-| nghttp2       | 1.36.0     |
-| curl          | 7.63.0     |
-| cmake         | 3.13.4     |
-| libzip        | 1.5.1      |
-| libcrack2     | 2.9.6      |
+| lz4           | 1.9.1      |
+| libssh2       | 1.9.0      |
+| nghttp2       | 1.39.1     |
+| curl          | 7.65.1     |
+| cmake         | 3.14.5     |
+| libzip        | 1.5.2      |
+| libcrack2     | 2.9.7      |
 | libxml2       | 2.9.9      |
 | libxslt       | 1.1.33     |
-| jemalloc      | 5.1.0      |
+| jemalloc      | 5.2.0      |
 | mariadb       | 10.4       |
-| php           | 7.3.2      |
-| nginx         | 1.15.8     |
+| php           | 7.3.7      |
+| nginx         | 1.16.0     |
 | modpagespeed  | 1.13.35.2  |
 | letsencrypt   | last       |
 | blackfire     | last       |
