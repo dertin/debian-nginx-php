@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Tested on Debian 9 32bit / 64bit
+# Tested on Debian 9.9 32bit / 64bit
 # Use at your own risk
 
 #####################################################################################################################

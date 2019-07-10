@@ -1,4 +1,4 @@
-FROM debian:stable
+FROM debian:stretch
 
 ENV APP_PATH=/root/workspace/
 ENV DEBIAN_FRONTEND noninteractive
