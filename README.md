@@ -1,4 +1,4 @@
-# LEMP stack on a Debian server
+# LEMP Stack on Debian
 
 The latest stable versions of software for a LEMP stack on a Debian server are compiled with an optimized configuration for the best performance, speed of response and security.
 
