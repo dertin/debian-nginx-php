@@ -253,7 +253,7 @@ function essential_install() {
     libaspell-dev libpspell-dev \
     libc6-dev libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
     liblinear-dev libssl-dev libboost-dev libboost-thread-dev \
-    python-dev python3-dev libffi-dev unzip git
+    python-dev python3.8-dev libffi-dev unzip git libonig-dev
 
     if [ -f /usr/lib/ccache ]; then
         export PATH=/usr/lib/ccache:$PATH
@@ -492,9 +492,9 @@ function python3_install() {
     make
     make altinstall
 
-    python3.7 --version
-    python3.7 -m pip install --upgrade pip virtualenv setuptools wheel pyopenssl
-    python3.7 -m pip -V
+    python3.8 --version
+    python3.8 -m pip install --upgrade pip virtualenv setuptools wheel pyopenssl
+    python3.8 -m pip -V
 
   fi
 
