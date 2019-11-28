@@ -898,10 +898,9 @@ function php_install() {
     --enable-dba \
     --enable-ftp \
     --with-gettext \
-    --with-gd \
-    --with-jpeg-dir \
+    --enable-gd \
+    --with-jpeg \
     --enable-mbstring \
-    --with-libzip \
     --with-mhash \
     --enable-mysqlnd=shared \
     --with-mysqli=shared,mysqlnd \
@@ -916,7 +915,6 @@ function php_install() {
     --enable-sysvmsg \
     --enable-sysvsem \
     --enable-sysvshm \
-    --enable-wddx \
     --with-zlib \
     --enable-zip \
     --with-readline \
@@ -927,7 +925,8 @@ function php_install() {
     --enable-fpm \
     --with-fpm-user=www-data \
     --with-fpm-group=www-data \
-    --with-libxml-dir=/usr/local \
+    --with-libxml=/usr/local \
+    --enable-wddx \
     --disable-rpath \
     --enable-inline-optimization \
     --enable-mbregex \
@@ -1416,7 +1415,7 @@ case "$ProgramName" in
             travis_fold_end
 
             travis_fold_start php
-              php_install 2>&1 > /dev/null
+              php_install
             travis_fold_end
 
             travis_fold_start nginx
