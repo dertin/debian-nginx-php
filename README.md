@@ -17,7 +17,7 @@ sudo ./install.sh all N
 After the system starts, you will manually rerun the script `sudo ./install.sh all N` and skip the steps that have already been installed before restarting the system to continue.
 
 
-List of installed programs:
+## List of installed programs:
 
 | Program       | Version    |
 | ------------- |:----------:|
