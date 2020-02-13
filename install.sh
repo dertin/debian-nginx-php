@@ -492,9 +492,11 @@ function python3_install() {
     make
     make altinstall
 
-    python3.8 --version
-    python3.8 -m pip install --upgrade pip virtualenv setuptools wheel pyopenssl
-    python3.8 -m pip -V
+    alias python3=python3.8
+
+    python3 --version
+    python3 -m pip install --upgrade pip virtualenv setuptools wheel pyopenssl
+    python3 -m pip -V
 
   fi
 
