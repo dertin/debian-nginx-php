@@ -492,6 +492,8 @@ function python3_install() {
     make
     make altinstall
 
+    sudo ln -s /usr/local/bin/python3.8 /usr/bin/python3
+
     alias python3=python3.8
 
     python3 --version
