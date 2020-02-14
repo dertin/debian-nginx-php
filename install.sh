@@ -238,7 +238,7 @@ function essential_install() {
     trousers libidn2-0 libtiffxx5 libexpat1-dev \
     libc-dbg gettext debian-keyring liblinear-tools \
     libdbi-perl rsync net-tools libdbd-mysql-perl \
-    re2c qt4-qmake golang python-setuptools \
+    re2c qt4-qmake golang \
     libc-ares-dev libpcre3-dev libxml2-dev libxslt1-dev \
     libfreetype6-dev libfontconfig1-dev \
     libjpeg62-turbo-dev libjpeg-dev libpng-dev \
@@ -253,7 +253,7 @@ function essential_install() {
     libaspell-dev libpspell-dev \
     libc6-dev libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
     liblinear-dev libssl-dev libboost-dev libboost-thread-dev \
-    python-dev python3-dev libffi-dev unzip git libonig-dev
+    libffi-dev unzip git libonig-dev
 
     if [ -f /usr/lib/ccache ]; then
         export PATH=/usr/lib/ccache:$PATH
@@ -266,10 +266,12 @@ function essential_install() {
 
     apt-get -y remove --purge --auto-remove curl
     apt-get -y remove --purge --auto-remove cmake*
+    apt-get -y remove --purge --auto-remove python*
 
     apt-get -y build-dep curl
     apt-get -y build-dep zlib
     apt-get -y build-dep openssl
+    apt-get -y build-dep python3.7
 
     apt-get -y upgrade
     apt-get -y autoremove
