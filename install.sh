@@ -494,9 +494,9 @@ function python3_install() {
     fi
 
     make
-    make altinstall
+    make install
 
-    alias python3=python3.8
+    #alias python3=python3.8
 
     python3 --version
 
