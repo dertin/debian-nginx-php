@@ -1432,9 +1432,9 @@ case "$ProgramName" in
             #   nginx_install 2>&1 > /dev/null
             # travis_fold_end
             #
-            # travis_fold_start letsencrypt
-            #   letsencrypt_install
-            # travis_fold_end
+            travis_fold_start letsencrypt
+              letsencrypt_install
+            travis_fold_end
 
             travis_fold_start clear_compile
               clear_compile 2>&1 > /dev/null
