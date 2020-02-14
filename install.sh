@@ -242,7 +242,7 @@ function essential_install() {
     libc-ares-dev libpcre3-dev libxml2-dev libxslt1-dev \
     libfreetype6-dev libfontconfig1-dev \
     libjpeg62-turbo-dev libjpeg-dev libpng-dev \
-    libbz2-dev zlib1g-dev libzip-dev \
+    libbz2-dev zlib1g-dev libzip-dev liblzma-dev \
     libjansson-dev libmcrypt-dev \
     libgmp-dev libev-dev libevent-dev \
     libsqlite3-dev libgdbm-dev libdb-dev \
@@ -404,6 +404,8 @@ function openssl_install() {
     echo "export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt" >> /etc/profile
     echo "export SSL_CERT_DIR=/etc/ssl/certs/" >> /etc/profile
     source /etc/profile
+
+    update-ca-certificates
 
     ldconfig
     ldconfig -p | grep libcrypto

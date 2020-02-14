@@ -45,7 +45,7 @@ script:
   - docker exec -t container_test /bin/bash -c "/usr/sbin/nginx -v"
   - docker exec -t container_test /bin/bash -c "service php7-fpm start"
   - docker exec -t container_test /bin/bash -c "service nginx start"
-  #- docker exec -t container_test /bin/bash -c "/opt/letsencrypt/certbot-auto-patched --version --no-self-upgrade --non-interactive --no-bootstrap"
+  - docker exec -t container_test /bin/bash -c "USE_PYTHON_3=1 /opt/letsencrypt/certbot-auto-patched --version --no-self-upgrade --non-interactive --no-bootstrap"
   - docker exec -t container_test /bin/bash -c "USE_PYTHON_3=1 /opt/letsencrypt/certbot-auto --version --non-interactive --no-self-upgrade --no-bootstrap"
 
 #after_success:
