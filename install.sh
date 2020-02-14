@@ -492,7 +492,7 @@ function python3_install() {
     make
     make altinstall
 
-    sudo ln -s /usr/local/bin/python3.8 /usr/bin/python3
+    ln -s /usr/local/bin/python3.8 /usr/bin/python3
 
     alias python3=python3.8
 
@@ -1233,7 +1233,7 @@ function blackfire_install() {
   if [ $input_install_blackfire == "Y" ] || [ $input_install_blackfire == "y" ]
   then
 
-  	wget -O - https://packagecloud.io/gpg.key | sudo apt-key add -
+  	wget -O - https://packagecloud.io/gpg.key | apt-key add -
   	echo "deb http://packages.blackfire.io/debian any main" | tee /etc/apt/sources.list.d/blackfire.list
   	apt-get update
 
