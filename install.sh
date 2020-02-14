@@ -448,12 +448,14 @@ function python2_install() {
     make
     make install
 
+    python --version
+
     wget https://bootstrap.pypa.io/get-pip.py
     chmod +x get-pip.py
     python get-pip.py
 
-    python --version
-    pip install --upgrade pip virtualenv setuptools wheel pyopenssl
+    pip install --upgrade pip
+    pip install --upgrade setuptools wheel virtualenv pyopenssl
     pip -V
 
   fi
@@ -492,13 +494,17 @@ function python3_install() {
     make
     make altinstall
 
-    ln -s /usr/local/bin/python3.8 /usr/bin/python3
-
     alias python3=python3.8
 
     python3 --version
-    python3 -m pip install --upgrade pip virtualenv setuptools wheel pyopenssl
-    python3 -m pip -V
+
+    wget https://bootstrap.pypa.io/get-pip.py
+    chmod +x get-pip.py
+    python3 get-pip.py
+
+    pip3 install --upgrade pip
+    pip3 install --upgrade setuptools wheel virtualenv pyopenssl
+    pip3 -V
 
   fi
 
@@ -1358,29 +1364,29 @@ case "$ProgramName" in
               essential_install 2>&1 > /dev/null
             travis_fold_end
 
-            travis_fold_start jemalloc
-              jemalloc_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start openssl
-              openssl_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start zlib
-              zlib_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start lz4
-              lz4_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start cmake
-              cmake_install
-            travis_fold_end
-
-            travis_fold_start libzip
-              libzip_install 2>&1 > /dev/null
-            travis_fold_end
+            # travis_fold_start jemalloc
+            #   jemalloc_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start openssl
+            #   openssl_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start zlib
+            #   zlib_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start lz4
+            #   lz4_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start cmake
+            #   cmake_install
+            # travis_fold_end
+            #
+            # travis_fold_start libzip
+            #   libzip_install 2>&1 > /dev/null
+            # travis_fold_end
 
             travis_fold_start python2
               python2_install  2>&1 > /dev/null
@@ -1390,47 +1396,45 @@ case "$ProgramName" in
               python3_install  2>&1 > /dev/null
             travis_fold_end
 
-            travis_fold_start libssh2
-              libssh2_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start nghttp2
-              nghttp2_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start curl
-              curl_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start libcrack2
-              libcrack2_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start libxml2
-              libxml2_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start libxslt
-              libxslt_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start mariadb
-             mariadb_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start php
-              php_install
-            travis_fold_end
-
-            travis_fold_start nginx
-              nginx_install 2>&1 > /dev/null
-            travis_fold_end
-
-            travis_fold_start letsencrypt
-              letsencrypt_install
-            travis_fold_end
-
-            # blackfire_install
+            # travis_fold_start libssh2
+            #   libssh2_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start nghttp2
+            #   nghttp2_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start curl
+            #   curl_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start libcrack2
+            #   libcrack2_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start libxml2
+            #   libxml2_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start libxslt
+            #   libxslt_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start mariadb
+            #  mariadb_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start php
+            #   php_install
+            # travis_fold_end
+            #
+            # travis_fold_start nginx
+            #   nginx_install 2>&1 > /dev/null
+            # travis_fold_end
+            #
+            # travis_fold_start letsencrypt
+            #   letsencrypt_install
+            # travis_fold_end
 
             travis_fold_start clear_compile
               clear_compile 2>&1 > /dev/null
