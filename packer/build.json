@@ -20,7 +20,7 @@
     "type": "shell",
     "inline": [
       "chmod +x /root/workspace/*.sh",
-      "/root/workspace/install.sh travis Y"
+      "/root/workspace/install.sh packer Y"
     ]
   }]
 }

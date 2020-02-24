@@ -113,7 +113,7 @@ function wgetAndDecompress() {
 }
 
 function pauseToContinue() {
-  if [ "$AutoDebug" != "Y" ]
+  if [ "$DefaultOption" != "Y" ]
   then
     read -n 1 -s -p "Press any key to continue" && echo -e "\n"
   fi
@@ -140,7 +140,7 @@ function askOption() {
 
 function service_stop() {
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_service_stop="$(askOption "Stop All Services? [Y/n]: " "Y" $AutoDebug)"
+  input_install_service_stop="$(askOption "Stop All Services? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_service_stop == "Y" ] || [ $input_install_service_stop == "y" ]
   then
@@ -154,7 +154,7 @@ function service_stop() {
 function clear_compile() {
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_clear_compile="$(askOption "Clear Compile ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_clear_compile="$(askOption "Clear Compile ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_clear_compile == "Y" ] || [ $input_install_clear_compile == "y" ]
   then
@@ -189,7 +189,7 @@ function essential_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_delete_build="$(askOption "Delete building directories ? [Y/n]: " "Y" $AutoDebug)"
+  input_delete_build="$(askOption "Delete building directories ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_delete_build == "Y" ] || [ $input_delete_build == "y" ]
   then
@@ -197,7 +197,7 @@ function essential_install() {
   fi
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_essential="$(askOption "Install Essential ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_essential="$(askOption "Install Essential ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_essential == "Y" ] || [ $input_install_essential == "y" ]
   then
@@ -206,6 +206,7 @@ function essential_install() {
     sed -i '/^#\sdeb-src /s/^#//' "/etc/apt/sources.list"
 
     apt-get -y update
+    apt-get install -y --no-install-recommends apt-utils
 
     chmod 666 /etc/environment
     truncate -s 0 /etc/environment
@@ -214,7 +215,7 @@ function essential_install() {
     echo -e "LANG=en_US.UTF-8\n" >> /etc/environment
     chmod 644 /etc/environment
     apt-get -y install locales
-    locale-gen en_US.UTF-8
+    sed -i 's/^# *\(en_US.UTF-8\)/\1/' /etc/locale.gen && locale-gen
 
     apt-get -y upgrade
     apt-get -y dist-upgrade
@@ -278,7 +279,7 @@ function essential_install() {
 
     apt-get clean
 
-    if [ "$ProgramName" != "travis" ]
+    if [ "$ProgramName" != "travis" ] && [ "$ProgramName" != "packer" ]
     then
       tzselect
       dpkg-reconfigure tzdata
@@ -287,7 +288,7 @@ function essential_install() {
     pauseToContinue
 
     # Func askOption (question, defaultOption, skipQuestion)
-    input_install_reboot="$(askOption "Reboot ? [y/N]: " "N" $AutoDebug)"
+    input_install_reboot="$(askOption "Reboot ? [y/N]: " "N" $DefaultOption)"
 
     if [ $input_install_reboot == "Y" ] || [ $input_install_reboot == "y" ]
     then
@@ -306,16 +307,16 @@ function jemalloc_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_jemalloc="$(askOption "Install jemalloc ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_jemalloc="$(askOption "Install jemalloc ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_jemalloc == "Y" ] || [ $input_install_jemalloc == "y" ]
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    jemalloc_address="$(askOption "Enter the download address for jemalloc (tar.gz): " $jemalloc_address_default $AutoDebug)"
+    jemalloc_address="$(askOption "Enter the download address for jemalloc (tar.gz): " $jemalloc_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    jemalloc_install_tmp_dir="$(askOption "Enter temporary directory for jemalloc compilation: " "/var/tmp/jemalloc_build" $AutoDebug)"
+    jemalloc_install_tmp_dir="$(askOption "Enter temporary directory for jemalloc compilation: " "/var/tmp/jemalloc_build" $DefaultOption)"
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $jemalloc_install_tmp_dir jemalloc_src $jemalloc_address
@@ -345,16 +346,16 @@ function cmake_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_cmake="$(askOption "Install cmake ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_cmake="$(askOption "Install cmake ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_cmake == "Y" ] || [ $input_install_cmake == "y" ]
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    cmake_address="$(askOption "Enter the download address for cmake (tar.gz): " $cmake_address_default $AutoDebug)"
+    cmake_address="$(askOption "Enter the download address for cmake (tar.gz): " $cmake_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    cmake_install_tmp_dir="$(askOption "Enter temporary directory for cmake compilation: " "/var/tmp/cmake_build" $AutoDebug)"
+    cmake_install_tmp_dir="$(askOption "Enter temporary directory for cmake compilation: " "/var/tmp/cmake_build" $DefaultOption)"
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $cmake_install_tmp_dir "cmake_src" $cmake_address
@@ -382,16 +383,16 @@ function openssl_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_openssl="$(askOption "Install OpenSSL ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_openssl="$(askOption "Install OpenSSL ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_openssl == "Y" ] || [ $input_install_openssl == "y" ]
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    openssl_address="$(askOption "Enter the download address for OpenSSL (tar.gz): " $openssl_address_default $AutoDebug)"
+    openssl_address="$(askOption "Enter the download address for OpenSSL (tar.gz): " $openssl_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    openssl_install_tmp_dir="$(askOption "Enter temporary directory for OpenSSL compilation: " "/var/tmp/openssl_build" $AutoDebug)"
+    openssl_install_tmp_dir="$(askOption "Enter temporary directory for OpenSSL compilation: " "/var/tmp/openssl_build" $DefaultOption)"
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $openssl_install_tmp_dir "openssl_src" $openssl_address
@@ -428,16 +429,16 @@ function python2_install() {
   #
   #####################################################################################################################
 
-  input_install_python="$(askOption "Install Python2 ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_python="$(askOption "Install Python2 ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_python == "Y" ] || [ $input_install_python == "y" ]
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    python_address="$(askOption "Enter the download address for Python2 (tar.gz): " $python_address_default $AutoDebug)"
+    python_address="$(askOption "Enter the download address for Python2 (tar.gz): " $python_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    python_install_tmp_dir="$(askOption "Enter temporary directory for Python2 compilation: " "/var/tmp/python_build" $AutoDebug)"
+    python_install_tmp_dir="$(askOption "Enter temporary directory for Python2 compilation: " "/var/tmp/python_build" $DefaultOption)"
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $python_install_tmp_dir "python_src" $python_address
@@ -474,16 +475,16 @@ function python3_install() {
   #
   #####################################################################################################################
 
-  input_install_python="$(askOption "Install Python3 ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_python="$(askOption "Install Python3 ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_python == "Y" ] || [ $input_install_python == "y" ]
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    python_address="$(askOption "Enter the download address for Python3 (tar.gz): " $python3_address_default $AutoDebug)"
+    python_address="$(askOption "Enter the download address for Python3 (tar.gz): " $python3_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    python_install_tmp_dir="$(askOption "Enter temporary directory for Python3 compilation: " "/var/tmp/python3_build" $AutoDebug)"
+    python_install_tmp_dir="$(askOption "Enter temporary directory for Python3 compilation: " "/var/tmp/python3_build" $DefaultOption)"
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $python_install_tmp_dir "python3_src" $python_address
@@ -520,16 +521,16 @@ function zlib_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_zlib="$(askOption "Install zlib ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_zlib="$(askOption "Install zlib ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_zlib == "Y" ] || [ $input_install_zlib == "y" ]
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    zlib_address="$(askOption "Enter the download address for zlib (tar.gz): " $zlib_address_default $AutoDebug)"
+    zlib_address="$(askOption "Enter the download address for zlib (tar.gz): " $zlib_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    zlib_install_tmp_dir="$(askOption "Enter temporary directory for zlib compilation: " "/var/tmp/zlib_build" $AutoDebug)"
+    zlib_install_tmp_dir="$(askOption "Enter temporary directory for zlib compilation: " "/var/tmp/zlib_build" $DefaultOption)"
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $zlib_install_tmp_dir "zlib_src" $zlib_address
@@ -554,16 +555,16 @@ function lz4_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_lz4="$(askOption "Install lz4 ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_lz4="$(askOption "Install lz4 ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_lz4 == "Y" ] || [ $input_install_lz4 == "y" ]
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    lz4_address="$(askOption "Enter the download address for lz4 (tar.gz): " $lz4_address_default $AutoDebug)"
+    lz4_address="$(askOption "Enter the download address for lz4 (tar.gz): " $lz4_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    lz4_install_tmp_dir="$(askOption "Enter temporary directory for lz4 compilation: " "/var/tmp/lz4_build" $AutoDebug)"
+    lz4_install_tmp_dir="$(askOption "Enter temporary directory for lz4 compilation: " "/var/tmp/lz4_build" $DefaultOption)"
 
     wgetAndDecompress $lz4_install_tmp_dir "lz4_src" $lz4_address
 
@@ -587,16 +588,16 @@ function libzip_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_libzip="$(askOption "Install libzip ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_libzip="$(askOption "Install libzip ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_libzip == "Y" ] || [ $input_install_libzip == "y" ]
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libzip_address="$(askOption "Enter the download address for libzip (tar.gz): " $libzip_address_default $AutoDebug)"
+    libzip_address="$(askOption "Enter the download address for libzip (tar.gz): " $libzip_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libzip_install_tmp_dir="$(askOption "Enter temporary directory for libzip compilation: " "/var/tmp/libzip_build" $AutoDebug)"
+    libzip_install_tmp_dir="$(askOption "Enter temporary directory for libzip compilation: " "/var/tmp/libzip_build" $DefaultOption)"
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $libzip_install_tmp_dir "libzip_src" $libzip_address
@@ -623,16 +624,16 @@ function libssh2_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_libssh2="$(askOption "Install libssh2 ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_libssh2="$(askOption "Install libssh2 ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_libssh2 == "Y" ] || [ $input_install_libssh2 == "y" ]
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libssh2_address="$(askOption "Enter the download address for libssh2 (tar.gz): " $libssh2_address_default $AutoDebug)"
+    libssh2_address="$(askOption "Enter the download address for libssh2 (tar.gz): " $libssh2_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libssh2_install_tmp_dir="$(askOption "Enter temporary directory for libssh2 compilation: " "/var/tmp/libssh2_build" $AutoDebug)"
+    libssh2_install_tmp_dir="$(askOption "Enter temporary directory for libssh2 compilation: " "/var/tmp/libssh2_build" $DefaultOption)"
 
     wgetAndDecompress $libssh2_install_tmp_dir "libssh2_src" $libssh2_address
 
@@ -657,16 +658,16 @@ function nghttp2_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_nghttp2="$(askOption "Install Nghttp2 ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_nghttp2="$(askOption "Install Nghttp2 ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_nghttp2 == "Y" ] || [ $input_install_nghttp2 == "y" ]
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nghttp2_address="$(askOption "Enter the download address for Nghttp2 (tar.gz): " $nghttp2_address_default $AutoDebug)"
+    nghttp2_address="$(askOption "Enter the download address for Nghttp2 (tar.gz): " $nghttp2_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nghttp2_install_tmp_dir="$(askOption "Enter temporary directory for Nghttp2 compilation: " "/var/tmp/nghttp2_build" $AutoDebug)"
+    nghttp2_install_tmp_dir="$(askOption "Enter temporary directory for Nghttp2 compilation: " "/var/tmp/nghttp2_build" $DefaultOption)"
 
     wgetAndDecompress $nghttp2_install_tmp_dir "nghttp2_src" $nghttp2_address
 
@@ -690,16 +691,16 @@ function curl_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_curl="$(askOption "Install curl ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_curl="$(askOption "Install curl ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_curl == "Y" ] || [ $input_install_curl == "y" ]
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    curl_address="$(askOption "Enter the download address for CURL (tar.gz) ? [Y/n]: " $curl_address_default $AutoDebug)"
+    curl_address="$(askOption "Enter the download address for CURL (tar.gz) ? [Y/n]: " $curl_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    curl_install_tmp_dir="$(askOption "Enter temporary directory for CURL compilation: " "/var/tmp/curl_build" $AutoDebug)"
+    curl_install_tmp_dir="$(askOption "Enter temporary directory for CURL compilation: " "/var/tmp/curl_build" $DefaultOption)"
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $curl_install_tmp_dir "curl_src" $curl_address
@@ -728,16 +729,16 @@ function libcrack2_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_libcrack2="$(askOption "Install libcrack2 ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_libcrack2="$(askOption "Install libcrack2 ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_libcrack2 == "Y" ] || [ $input_install_libcrack2 == "y" ]
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libcrack2_address="$(askOption "Enter the download address for libcrack2 (tar.gz): " $libcrack2_address_default $AutoDebug)"
+    libcrack2_address="$(askOption "Enter the download address for libcrack2 (tar.gz): " $libcrack2_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libcrack2_install_tmp_dir="$(askOption "Enter temporary directory for libcrack2 compilation: " "/var/tmp/libcrack2_build" $AutoDebug)"
+    libcrack2_install_tmp_dir="$(askOption "Enter temporary directory for libcrack2 compilation: " "/var/tmp/libcrack2_build" $DefaultOption)"
 
     wgetAndDecompress $libcrack2_install_tmp_dir "libcrack2_src" $libcrack2_address
 
@@ -783,16 +784,16 @@ function libxml2_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_libXML2="$(askOption "Install LibXML2 ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_libXML2="$(askOption "Install LibXML2 ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_libXML2 == "Y" ] || [ $input_install_libXML2 == "y" ]
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libXML2_address="$(askOption "Enter the download address for LibXML2 (tar.gz): " $libXML2_address_default $AutoDebug)"
+    libXML2_address="$(askOption "Enter the download address for LibXML2 (tar.gz): " $libXML2_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libXML2_install_tmp_dir="$(askOption "Enter temporary directory for LibXML2 compilation: " "/var/tmp/libXML2_build" $AutoDebug)"
+    libXML2_install_tmp_dir="$(askOption "Enter temporary directory for LibXML2 compilation: " "/var/tmp/libXML2_build" $DefaultOption)"
 
     wgetAndDecompress $libXML2_install_tmp_dir "libXML2_src" $libXML2_address
 
@@ -816,16 +817,16 @@ function libxslt_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_libxslt="$(askOption "Install libxslt ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_libxslt="$(askOption "Install libxslt ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_libxslt == "Y" ] || [ $input_install_libxslt == "y" ]
   then
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libxslt_address="$(askOption "Enter the download address for libxslt (tar.gz): " $libxslt_address_default $AutoDebug)"
+    libxslt_address="$(askOption "Enter the download address for libxslt (tar.gz): " $libxslt_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    libxslt_install_tmp_dir="$(askOption "Enter temporary directory for libxslt compilation: " "/var/tmp/libxslt_build" $AutoDebug)"
+    libxslt_install_tmp_dir="$(askOption "Enter temporary directory for libxslt compilation: " "/var/tmp/libxslt_build" $DefaultOption)"
 
     wgetAndDecompress $libxslt_install_tmp_dir "libxslt_src" $libxslt_address
 
@@ -852,7 +853,7 @@ function mariadb_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_mariadb="$(askOption "Install MariaDB Client? [Y/n]: " "Y" $AutoDebug)"
+  input_install_mariadb="$(askOption "Install MariaDB Client? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_mariadb == "Y" ] || [ $input_install_mariadb == "y" ]
   then
@@ -878,7 +879,7 @@ function php_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_php="$(askOption "Install PHP ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_php="$(askOption "Install PHP ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_php == "Y" ] || [ $input_install_php == "y" ]
   then
@@ -886,10 +887,10 @@ function php_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    php_address="$(askOption "Enter the download address for PHP 7 (tar.gz): " $php_address_default $AutoDebug)"
+    php_address="$(askOption "Enter the download address for PHP 7 (tar.gz): " $php_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    php_install_tmp_dir="$(askOption "Enter temporary directory for php compilation: " "/var/tmp/php_build" $AutoDebug)"
+    php_install_tmp_dir="$(askOption "Enter temporary directory for php compilation: " "/var/tmp/php_build" $DefaultOption)"
 
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $php_install_tmp_dir "php_src" $php_address
@@ -1019,7 +1020,7 @@ function nginx_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_nginx="$(askOption "Install nginx ? [Y/n]: " "Y" $AutoDebug)"
+  input_install_nginx="$(askOption "Install nginx ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_install_nginx == "Y" ] || [ $input_install_nginx == "y" ]
   then
@@ -1033,10 +1034,10 @@ function nginx_install() {
     # download ngx_pagespeed:
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nginx_address="$(askOption "Enter the download address for nginx (tar.gz): " $nginx_address_default $AutoDebug)"
+    nginx_address="$(askOption "Enter the download address for nginx (tar.gz): " $nginx_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
-    nginx_install_tmp_dir="$(askOption "Enter temporary directory for nginx compilation: " "/var/tmp/nginx_build" $AutoDebug)"
+    nginx_install_tmp_dir="$(askOption "Enter temporary directory for nginx compilation: " "/var/tmp/nginx_build" $DefaultOption)"
 
     wgetAndDecompress $nginx_install_tmp_dir "nginx_src" $nginx_address
 
@@ -1150,7 +1151,7 @@ function letsencrypt_install(){
     #####################################################################################################################
 
     # Func askOption (question, defaultOption, skipQuestion)
-    input_install_letEncrypt="$(askOption "Install Let’s Encrypt ? [Y/n]: " "Y" $AutoDebug)"
+    input_install_letEncrypt="$(askOption "Install Let’s Encrypt ? [Y/n]: " "Y" $DefaultOption)"
 
     if [ $input_install_letEncrypt == "Y" ] || [ $input_install_letEncrypt == "y" ]
     then
@@ -1166,7 +1167,7 @@ function letsencrypt_install(){
         patch /opt/letsencrypt/certbot-auto -i /opt/letsencrypt/certbot-auto.patch -o /opt/letsencrypt/certbot-auto-patched
         chmod a+x /opt/letsencrypt/certbot-auto-patched
 
-        if [ "$ProgramName" != "travis" ]
+        if [ "$ProgramName" != "travis" ] && [ "$ProgramName" != "packer" ]
         then
           letsencrypt_config
         fi
@@ -1182,7 +1183,7 @@ function letsencrypt_config() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_config_letEncrypt="$(askOption "Configure Let’s Encrypt ? [Y/n]: " "Y" $AutoDebug)"
+  input_config_letEncrypt="$(askOption "Configure Let’s Encrypt ? [Y/n]: " "Y" $DefaultOption)"
 
   if [ $input_config_letEncrypt == "Y" ] || [ $input_config_letEncrypt == "y" ]
   then
@@ -1214,7 +1215,7 @@ function letsencrypt_config() {
     # Add crontab renew‑letsencrypt
     crontab -l | { cat; echo "0 0 * * * /etc/letsencrypt/crontab/${global_domain}-renewLetsEncrypt.sh"; } | crontab -
 
-    input_config_letEncrypt_isOK="$(askOption "Let’s Encrypt configuration is correct? ? [Y/n]: " "Y" $AutoDebug)"
+    input_config_letEncrypt_isOK="$(askOption "Let’s Encrypt configuration is correct? ? [Y/n]: " "Y" $DefaultOption)"
     if [ $input_config_letEncrypt_isOK == "Y" ] || [ $input_config_letEncrypt_isOK == "y" ]
     then
       # Enabled certificates in configuration file
@@ -1236,7 +1237,7 @@ function blackfire_install() {
   #####################################################################################################################
 
   # Func askOption (question, defaultOption, skipQuestion)
-  input_install_blackfire="$(askOption "Install blackfire.io Agent [Opcional] ? [y/N]: " "N" $AutoDebug)"
+  input_install_blackfire="$(askOption "Install blackfire.io Agent [Opcional] ? [y/N]: " "N" $DefaultOption)"
 
   if [ $input_install_blackfire == "Y" ] || [ $input_install_blackfire == "y" ]
   then
@@ -1266,12 +1267,12 @@ function blackfire_install() {
 #####################################################################################################################
 
 ProgramName="$1"
-AutoDebug="$2" # If the value is "Y" the script works in automatic mode with the default options for debug
+DefaultOption="$2" # If the value is "Y" the script works in automatic mode with the default options for debug
 
 # Func askOption (question, defaultOption, skipQuestion)
-global_domain="$(askOption "Enter the domian: " "domian.com" $AutoDebug)"
+global_domain="$(askOption "Enter the domian: " "domian.com" $DefaultOption)"
 # Func askOption (question, defaultOption, skipQuestion)
-global_emailSupport="$(askOption "Enter email support: " "email@email.com" $AutoDebug)"
+global_emailSupport="$(askOption "Enter email support: " "email@email.com" $DefaultOption)"
 
 # installation options
 case "$ProgramName" in
@@ -1357,6 +1358,30 @@ case "$ProgramName" in
             nginx_install
             letsencrypt_install
             blackfire_install
+            clear_compile
+            ;;
+        "packer")
+            export DEBIAN_FRONTEND=noninteractive
+
+            essential_install
+            jemalloc_install
+            openssl_install
+            zlib_install
+            lz4_install
+            cmake_install
+            libzip_install
+            python2_install
+            python3_install
+            libssh2_install
+            nghttp2_install
+            curl_install
+            libcrack2_install
+            libxml2_install
+            libxslt_install
+            mariadb_install
+            php_install
+            nginx_install
+            letsencrypt_install
             clear_compile
             ;;
         "travis")
