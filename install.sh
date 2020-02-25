@@ -162,7 +162,7 @@ function clear_compile() {
     ccache -C
 
     apt-get -y remove --auto-remove libxau-dev libxdmcp-dev xorg-sgml-doctools \
-    docbook-xsl docbook-xml needrestart autoconf autogen autopoint \
+    xsltproc docbook-xsl docbook-xml needrestart autoconf autogen autopoint \
     automake m4 bison build-essential g++ pkg-config \
     autotools-dev libtool expect \
     libcunit1-dev x11proto-core-dev file \
@@ -224,7 +224,7 @@ function essential_install() {
 
     # TODO: check this: Packages that can be deleted after the script is finished.
     apt-get -y install libxau-dev libxdmcp-dev xorg-sgml-doctools \
-    docbook-xsl docbook-xml needrestart autoconf autogen autopoint \
+    xsltproc docbook-xsl docbook-xml needrestart autoconf autogen autopoint \
     automake m4 bison build-essential g++ pkg-config \
     autotools-dev libtool expect \
     libcunit1-dev x11proto-core-dev file \
@@ -237,7 +237,7 @@ function essential_install() {
 
     # TODO: check this: Important packages that must be installed.
     apt-get -y install coreutils uuid-dev wget \
-    mcrypt perl libpcre3 bzip2 xsltproc \
+    mcrypt perl libpcre3 bzip2 \
     trousers libidn2-0 libtiffxx5 libexpat1-dev \
     libc-dbg gettext debian-keyring liblinear-tools \
     libdbi-perl rsync net-tools libdbd-mysql-perl re2c \
@@ -303,7 +303,7 @@ function essential_install() {
 function jemalloc_install() {
   #####################################################################################################################
   #
-  # INSTALL jemalloc 5.1.0 - https://github.com/jemalloc/jemalloc/archive/5.1.0.tar.gz
+  # INSTALL jemalloc
   #
   #####################################################################################################################
 
@@ -342,7 +342,7 @@ function jemalloc_install() {
 function cmake_install() {
   #####################################################################################################################
   #
-  # INSTALL cmake (Tested with 3.13.4 - https://cmake.org/files/v3.13/cmake-3.13.4.tar.gz)
+  # INSTALL cmake
   #
   #####################################################################################################################
 
@@ -378,7 +378,7 @@ function cmake_install() {
 function openssl_install() {
   #####################################################################################################################
   #
-  # INSTALL OpenSSL (Tested with 1.1.1a - https://www.openssl.org/source/openssl-1.1.1a.tar.gz)
+  # INSTALL OpenSSL
   # config file: /usr/local/ssl/openssl.cnf
   #
   #####################################################################################################################
@@ -426,7 +426,7 @@ function python2_install() {
 
   #####################################################################################################################
   #
-  # INSTALL Python (Tested with 2.7.15 - https://www.python.org/ftp/python/2.7.15/Python-2.7.15.tar.xz)
+  # INSTALL Python (deprecated)
   #
   #####################################################################################################################
 
@@ -472,7 +472,7 @@ function python3_install() {
 
   #####################################################################################################################
   #
-  # INSTALL Python (Tested with 3.7.2 - https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz)
+  # INSTALL Python 3
   #
   #####################################################################################################################
 
@@ -500,6 +500,10 @@ function python3_install() {
     make
     make install
 
+    apt remove -y --auto-remove python3.*
+    rm /usr/bin/python3
+    ln -s /usr/local/bin/python3 /usr/bin/python3
+
     alias python=python3
 
     python3 --version
@@ -519,7 +523,7 @@ function python3_install() {
 function zlib_install() {
   #####################################################################################################################
   #
-  # INSTALL zlib (Tested with 1.2.11 - http://www.zlib.net/zlib-1.2.11.tar.gz)
+  # INSTALL zlib
   #
   #####################################################################################################################
 
@@ -553,7 +557,7 @@ function zlib_install() {
 function lz4_install() {
   #####################################################################################################################
   #
-  # INSTALL LZ4 (Tested with v1.8.3 - https://github.com/lz4/lz4/archive/v1.8.3.tar.gz)
+  # INSTALL LZ4
   #
   #####################################################################################################################
 
@@ -586,7 +590,7 @@ function lz4_install() {
 function libzip_install() {
   #####################################################################################################################
   #
-  # INSTALL libzip (Tested with 1.5.1 - https://libzip.org/download/libzip-1.5.1.tar.gz)
+  # INSTALL libzip
   #
   #####################################################################################################################
 
@@ -622,7 +626,7 @@ function libzip_install() {
 function libssh2_install() {
   #####################################################################################################################
   #
-  # INSTALL libssh2 (Tested with 1.8.0 - https://libssh2.org/download/libssh2-1.8.0.tar.gz)
+  # INSTALL libssh2
   #
   #####################################################################################################################
 
@@ -640,7 +644,7 @@ function libssh2_install() {
 
     wgetAndDecompress $libssh2_install_tmp_dir "libssh2_src" $libssh2_address
 
-    ./configure --with-openssl --with-libssl-prefix=/usr/local --with-libz --with-libz-prefix=/usr/local
+    ./configure --with-crypto=openssl --with-libssl-prefix=/usr/local --with-libz --with-libz-prefix=/usr/local
 
     make
     make install
@@ -656,7 +660,6 @@ function nghttp2_install() {
   #####################################################################################################################
   #
   # INSTALL Nghttp2: HTTP/2 C Library
-  # (Tested with v1.36.0 - https://github.com/nghttp2/nghttp2/releases/download/v1.36.0/nghttp2-1.36.0.tar.gz)
   #
   #####################################################################################################################
 
@@ -689,7 +692,7 @@ function nghttp2_install() {
 function curl_install() {
   #####################################################################################################################
   #
-  # INSTALL curl (Tested with 7.63.0 - https://curl.haxx.se/download/curl-7.63.0.tar.gz)
+  # INSTALL curl
   #
   #####################################################################################################################
 
@@ -727,7 +730,7 @@ function curl_install() {
 function libcrack2_install() {
   #####################################################################################################################
   #
-  # INSTALL libcrack2  (Tested with 2.9.6 - https://github.com/cracklib/cracklib/archive/cracklib-2.9.6.tar.gz)
+  # INSTALL libcrack2
   #
   #####################################################################################################################
 
@@ -782,7 +785,7 @@ function libcrack2_install() {
 function libxml2_install() {
   #####################################################################################################################
   #
-  # INSTALL LibXML2  (Tested with 2.9.9 - http://xmlsoft.org/sources/libxml2-2.9.9.tar.gz)
+  # INSTALL LibXML2
   #
   #####################################################################################################################
 
@@ -800,7 +803,7 @@ function libxml2_install() {
 
     wgetAndDecompress $libXML2_install_tmp_dir "libXML2_src" $libXML2_address
 
-    ./configure --prefix=/usr/local --with-history
+    ./configure --prefix=/usr/local --with-history --with-python=/usr/local/bin/python3
 
     make
     make install
@@ -815,7 +818,7 @@ function libxml2_install() {
 function libxslt_install() {
   #####################################################################################################################
   #
-  # INSTALL libxslt  (Tested with 1.1.33 - http://xmlsoft.org/sources/libxslt-1.1.33.tar.gz)
+  # INSTALL libxslt
   #
   #####################################################################################################################
 
@@ -832,6 +835,8 @@ function libxslt_install() {
     libxslt_install_tmp_dir="$(askOption "Enter temporary directory for libxslt compilation: " "/var/tmp/libxslt_build" $DefaultOption)"
 
     wgetAndDecompress $libxslt_install_tmp_dir "libxslt_src" $libxslt_address
+
+    sed -i s/3000/5000/ libxslt/transform.c doc/xsltproc.{1,xml}
 
     ./configure --prefix=/usr/local
 
@@ -876,8 +881,7 @@ function mariadb_install() {
 function php_install() {
   #####################################################################################################################
   #
-  # INSTALL PHP (Tested with 7.3.2 - https://github.com/php/php-src/archive/php-7.3.2.tar.gz)
-  # use config file from: https://github.com/kasparsd/php-7-debian/
+  # INSTALL PHP
   #
   #####################################################################################################################
 
@@ -1018,7 +1022,7 @@ function php_install() {
 function nginx_install() {
   #####################################################################################################################
   #
-  # INSTALL nginx (Tested with 1.15.8 - https://nginx.org/download/nginx-1.15.8.tar.gz)
+  # INSTALL Nginx
   #
   #####################################################################################################################
 
