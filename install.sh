@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Tested on Debian 9.9 32bit / 64bit
+# Tested on Debian Stretch 64bit
 # Use at your own risk
 
 #####################################################################################################################
@@ -12,7 +12,7 @@ jemalloc_address_default="https://github.com/jemalloc/jemalloc/archive/5.2.1.tar
 cmake_address_default="https://github.com/Kitware/CMake/releases/download/v3.16.4/cmake-3.16.4.tar.gz"
 openssl_address_default="https://www.openssl.org/source/openssl-1.1.1d.tar.gz"
 python_address_default="https://www.python.org/ftp/python/2.7.17/Python-2.7.17.tgz"
-python3_address_default="https://www.python.org/ftp/python/3.8.0/Python-3.8.0.tgz"
+python3_address_default="https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tgz"
 zlib_address_default="http://www.zlib.net/zlib-1.2.11.tar.gz"
 lz4_address_default="https://github.com/lz4/lz4/archive/v1.9.2.tar.gz"
 libzip_address_default="https://libzip.org/download/libzip-1.6.1.tar.gz"
@@ -22,7 +22,7 @@ curl_address_default="https://curl.haxx.se/download/curl-7.68.0.tar.gz"
 libcrack2_address_default="https://github.com/cracklib/cracklib/archive/v2.9.7.tar.gz"
 libXML2_address_default="http://xmlsoft.org/sources/libxml2-2.9.10.tar.gz"
 libxslt_address_default="http://xmlsoft.org/sources/libxslt-1.1.34.tar.gz"
-php_address_default="https://github.com/php/php-src/archive/php-7.4.2.tar.gz"
+php_address_default="https://github.com/php/php-src/archive/php-7.4.3.tar.gz"
 nginx_address_default="https://nginx.org/download/nginx-1.17.8.tar.gz"
 psol_url="https://www.modpagespeed.com/release_archive/1.13.35.2/psol-1.13.35.2-x64.tar.gz"
 #####################################################################################################################
@@ -39,7 +39,6 @@ fi
 BASEDIR="$PWD"
 MACHINE_TYPE=`uname -m`
 TRAVISFOLDNAME=/tmp/.travis_fold_name
-
 NUMCPUS=`nproc`
 NUMJOBS=`expr $NUMCPUS + 1`
 

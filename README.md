@@ -23,7 +23,7 @@ After the system starts, you will manually rerun the script `sudo ./install.sh a
 | ------------- |:----------:|
 | openssl       | 1.1.1d     |
 | python2       | 2.7.17     |
-| python3       | 3.8.0      |
+| python3       | 3.8.1      |
 | zlib          | 1.2.11     |
 | lz4           | 1.9.2      |
 | libssh2       | 1.9.0      |
@@ -36,7 +36,7 @@ After the system starts, you will manually rerun the script `sudo ./install.sh a
 | libxslt       | 1.1.34     |
 | jemalloc      | 5.2.1      |
 | mariadb       | 10.4       |
-| php           | 7.4.2      |
+| php           | 7.4.3      |
 | nginx         | 1.17.8     |
 | modpagespeed  | 1.13.35.2  |
 | letsencrypt   | last       |

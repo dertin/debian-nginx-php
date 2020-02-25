@@ -21,8 +21,8 @@ before_install:
   - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
   - docker --version
   # Docker Run
-  - docker build -t dertin/debian:lemp -f Dockerfile.debug .
-  - docker run -t --privileged=true --name container_test dertin/debian:lemp /bin/bash -c "/root/workspace/install.sh travis Y"
+  - docker build -t dertin/debian-php-nginx:travis-ci -f Dockerfile.debug .
+  - docker run -t --privileged=true --name container_test dertin/debian-php-nginx:travis-ci /bin/bash -c "/root/workspace/install.sh travis Y"
   - docker start container_test
   - docker ps -a
 

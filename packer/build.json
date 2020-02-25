@@ -5,11 +5,9 @@
     "image": "debian:stretch",
     "commit": true,
     "changes": [
-      "ENTRYPOINT [\"\"]",
       "ENV APP_PATH=/root/workspace/",
       "ENV DEBIAN_FRONTEND noninteractive",
-      "WORKDIR $APP_PATH",
-      "RUN apt-get clean && apt-get -y update > /dev/null && apt-get install -y locales && locale-gen en_US.UTF-8 && apt-get install -y --no-install-recommends apt-utils && apt-get -y upgrade > /dev/null && rm -rf /var/lib/apt/lists/*"
+      "WORKDIR /root/workspace/"
     ]
   }],
   "provisioners": [{
@@ -20,7 +18,17 @@
     "type": "shell",
     "inline": [
       "chmod +x /root/workspace/*.sh",
-      "/root/workspace/install.sh packer Y"
+      "cd /root/workspace/",
+      "./install.sh packer Y"
     ]
-  }]
+  }],
+  "post-processors": [
+    [
+      {
+        "type": "docker-tag",
+        "repository": "dertin/debian-php-nginx",
+        "tag": "latest"
+      }
+    ]
+  ]
 }
