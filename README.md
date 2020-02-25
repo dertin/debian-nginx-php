@@ -9,6 +9,13 @@ cd lemp-stack-debian/
 chmod +x install.sh
 sudo ./install.sh all N
 ```
+Using packer.io
+```sh
+cd lemp-stack-debian/packer
+packer build build.json
+```
+
+
 ## Important:
 
 - You must have a domain address pointing to your server before running the script, so that your HTTPS certificate is configured correctly automatically. If you do not have a domain now, enter the domain you are going to configure later and then manually configure your HTTPS certificate.
