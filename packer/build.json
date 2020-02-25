@@ -1,6 +1,6 @@
 {
   "builders": [{
-    "name": "lemp-debian-docker",
+    "name": "debian-nginx-php-docker",
     "type": "docker",
     "image": "debian:stretch",
     "commit": true,
