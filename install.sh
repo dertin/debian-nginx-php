@@ -936,7 +936,6 @@ function php_install() {
     --enable-sysvsem \
     --enable-sysvshm \
     --with-zlib \
-    --enable-zip \
     --with-readline \
     --with-curl \
     --enable-simplexml \
@@ -946,7 +945,6 @@ function php_install() {
     --with-fpm-user=www-data \
     --with-fpm-group=www-data \
     --with-libxml=/usr/local \
-    --enable-wddx \
     --disable-rpath \
     --enable-inline-optimization \
     --enable-mbregex \
