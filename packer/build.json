@@ -26,7 +26,7 @@
     [
       {
         "type": "docker-tag",
-        "repository": "dertin/debian-php-nginx",
+        "repository": "dertin/debian-nginx-php",
         "tag": "latest"
       }
     ]

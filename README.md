@@ -1,20 +1,21 @@
-# LEMP Stack on Debian
+# Nginx with PHP on Debian Stretch
 
-The latest stable versions of software for a LEMP stack on a Debian server are compiled with an optimized configuration for the best performance, speed of response and security.
+The latest stable versions of software to create a web service platform in Debian Stretch are compiled with a configuration optimized for the best performance, speed of response and security.
 
-The basic usage is
+
+To compile the platform you can use the following instructions:
 ```sh
-git clone https://github.com/dertin/lemp-stack-debian.git
-cd lemp-stack-debian/
+git clone https://github.com/dertin/debian-nginx-php.git
+cd debian-nginx-php/
 chmod +x install.sh
 sudo ./install.sh all N
 ```
-Using packer.io
+
+You can modify the build.json file according to your needs using packer.io
 ```sh
-cd lemp-stack-debian/packer
+cd debian-nginx-php/packer
 packer build build.json
 ```
-
 
 ## Important:
 
@@ -29,7 +30,7 @@ After the system starts, you will manually rerun the script `sudo ./install.sh a
 | Program       | Version    |
 | ------------- |:----------:|
 | openssl       | 1.1.1d     |
-| python2       | 2.7.17     |
+| ~~python2~~   | 2.7.17     |
 | python3       | 3.8.1      |
 | zlib          | 1.2.11     |
 | lz4           | 1.9.2      |
@@ -42,7 +43,7 @@ After the system starts, you will manually rerun the script `sudo ./install.sh a
 | libxml2       | 2.9.10     |
 | libxslt       | 1.1.34     |
 | jemalloc      | 5.2.1      |
-| mariadb       | 10.4       |
+| mariadb client| 10.4       |
 | php           | 7.4.3      |
 | nginx         | 1.17.8     |
 | modpagespeed  | 1.13.35.2  |
@@ -50,8 +51,8 @@ After the system starts, you will manually rerun the script `sudo ./install.sh a
 | blackfire     | last       |
 
 
-All collaboration is appreciated, through https://github.com/dertin/lemp-stack-debian/issues
+All collaboration is appreciated, through https://github.com/dertin/debian-nginx-php/issues
 
 Use at your own risk
 
-[![alt travis-ci](https://travis-ci.org/dertin/lemp-stack-debian.svg?branch=develop)](https://travis-ci.org/dertin/lemp-stack-debian/)
+[![alt travis-ci](https://travis-ci.org/dertin/debian-nginx-php.svg?branch=develop)](https://travis-ci.org/dertin/debian-nginx-php/)

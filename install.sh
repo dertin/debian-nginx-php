@@ -159,8 +159,9 @@ function clear_compile() {
   then
 
     rm -rf /var/tmp/*_build
+    ccache -C
 
-    apt-get -y remove libxau-dev libxdmcp-dev xorg-sgml-doctools \
+    apt-get -y remove --auto-remove libxau-dev libxdmcp-dev xorg-sgml-doctools \
     docbook-xsl docbook-xml needrestart autoconf autogen autopoint \
     automake m4 bison build-essential g++ pkg-config \
     autotools-dev libtool expect \
@@ -169,12 +170,14 @@ function clear_compile() {
     autoconf-archive g++-multilib gcc-multilib \
     libstdc++-6-dev gcc-6-locales \
     g++-6-multilib valgrind valgrind-mpi \
-    valkyrie gcj-jdk flex tk-dev
-    # libjemalloc-dev
+    valkyrie gcj-jdk flex tk-dev ccache
+
+    apt-get -y remove --auto-remove golang
+    apt-get -y remove --auto-remove binutils
+    apt-get -y remove --auto-remove qt4-qmake
+
     apt-get -y autoremove
     apt-get clean
-    ccache -C
-
   fi
 
 
@@ -229,16 +232,15 @@ function essential_install() {
     autoconf-archive g++-multilib gcc-multilib \
     libstdc++-6-dev gcc-6-locales \
     g++-6-multilib valgrind valgrind-mpi \
-    valkyrie gcj-jdk flex tk-dev
-    # libjemalloc-dev
+    valkyrie gcj-jdk flex tk-dev golang binutils ccache \
+    qt4-qmake
 
     # TODO: check this: Important packages that must be installed.
-    apt-get -y install coreutils binutils ccache uuid-dev wget \
-    mcrypt cython perl libpcre3 bzip2 xsltproc \
+    apt-get -y install coreutils uuid-dev wget \
+    mcrypt perl libpcre3 bzip2 xsltproc \
     trousers libidn2-0 libtiffxx5 libexpat1-dev \
     libc-dbg gettext debian-keyring liblinear-tools \
-    libdbi-perl rsync net-tools libdbd-mysql-perl \
-    re2c qt4-qmake golang \
+    libdbi-perl rsync net-tools libdbd-mysql-perl re2c \
     libc-ares-dev libpcre3-dev libxml2-dev libxslt1-dev \
     libfreetype6-dev libfontconfig1-dev \
     libjpeg62-turbo-dev libjpeg-dev libpng-dev \
@@ -497,6 +499,8 @@ function python3_install() {
 
     make
     make install
+
+    alias python=python3
 
     python3 --version
 
@@ -1344,7 +1348,7 @@ case "$ProgramName" in
             lz4_install
             cmake_install
             libzip_install
-            python2_install
+            #python2_install
             python3_install
             libssh2_install
             nghttp2_install
@@ -1369,7 +1373,7 @@ case "$ProgramName" in
             lz4_install
             cmake_install
             libzip_install
-            python2_install
+            #python2_install
             python3_install
             libssh2_install
             nghttp2_install
@@ -1414,9 +1418,9 @@ case "$ProgramName" in
               libzip_install 2>&1 > /dev/null
             travis_fold_end
 
-            travis_fold_start python2
-              python2_install  2>&1 > /dev/null
-            travis_fold_end
+            #travis_fold_start python2
+            #  python2_install  2>&1 > /dev/null
+            #travis_fold_end
 
             travis_fold_start python3
               python3_install  2>&1 > /dev/null
@@ -1467,7 +1471,7 @@ case "$ProgramName" in
             travis_fold_end
             ;;
         *)
-            echo $"Usage: sudo $0 {all|program_name} {N|Y}(Automatic mode)"
-            exit 1
+        echo $"Usage: sudo $0 {all|program_name} {N|Y}(Automatic mode)"
+        exit 1
 
 esac

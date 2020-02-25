@@ -1,7 +1,8 @@
 .git
+.github
 .DS_Store
 .gitignore
 .travis.yml
-Dockerfile
-Dockerfile.*
+**/Dockerfile.*
 README.md
+TODO.md
