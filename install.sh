@@ -1204,7 +1204,7 @@ function letsencrypt_config() {
     sed -i "s#XXEMAILSUPPORTXX#${global_emailSupport}#g" /etc/letsencrypt/configs/${global_domain}.conf
 
     cd /opt/letsencrypt/ || exit 1
-    ./certbot-auto --config /etc/letsencrypt/configs/${global_domain}.conf certonly
+    USE_PYTHON_3=1 ./certbot-auto --config /etc/letsencrypt/configs/${global_domain}.conf certonly
 
     mkdir -p /var/log/letsencrypt/
 
