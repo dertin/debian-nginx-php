@@ -23,7 +23,7 @@ libcrack2_address_default="https://github.com/cracklib/cracklib/archive/v2.9.7.t
 libXML2_address_default="http://xmlsoft.org/sources/libxml2-2.9.10.tar.gz"
 libxslt_address_default="http://xmlsoft.org/sources/libxslt-1.1.34.tar.gz"
 php_address_default="https://github.com/php/php-src/archive/php-7.4.3.tar.gz"
-nginx_address_default="https://nginx.org/download/nginx-1.17.8.tar.gz"
+nginx_address_default="https://nginx.org/download/nginx-1.17.9.tar.gz"
 psol_url="https://www.modpagespeed.com/release_archive/1.13.35.2/psol-1.13.35.2-x64.tar.gz"
 #####################################################################################################################
 #
