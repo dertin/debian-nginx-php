@@ -168,10 +168,15 @@ function clear_compile() {
     libcunit1-dev x11proto-core-dev file \
     libenchant-dev gnu-standards \
     autoconf-archive g++-multilib gcc-multilib \
-    libstdc++-6-dev gcc-6-locales \
-    g++-6-multilib valgrind valgrind-mpi \
-    valkyrie gcj-jdk flex tk-dev ccache
+    valgrind valgrind-mpi \
+    valkyrie flex tk-dev ccache
 
+    # Only run in Debian 9.x
+    DEBIAN_VERSION=`cat /etc/debian_version | cut -d . -f 1`
+    if (( $DEBIAN_VERSION < 10 )); then
+        apt-get -y remove --auto-remove libstdc++-6-dev gcc-6-locales g++-6-multilib gcj-jdk
+    fi
+    
     apt-get -y remove --auto-remove golang
     apt-get -y remove --auto-remove binutils
     apt-get -y remove --auto-remove qt4-qmake
@@ -230,10 +235,15 @@ function essential_install() {
     libcunit1-dev x11proto-core-dev file \
     libenchant-dev gnu-standards \
     autoconf-archive g++-multilib gcc-multilib \
-    libstdc++-6-dev gcc-6-locales \
-    g++-6-multilib valgrind valgrind-mpi \
-    valkyrie gcj-jdk flex tk-dev golang binutils ccache \
+    valgrind valgrind-mpi \
+    valkyrie flex tk-dev golang binutils ccache \
     qt4-qmake
+
+    # Only run in Debian 9.x
+    DEBIAN_VERSION=`cat /etc/debian_version | cut -d . -f 1`
+    if (( $DEBIAN_VERSION < 10 )); then
+        apt-get -y install libstdc++-6-dev gcc-6-locales g++-6-multilib gcj-jdk
+    fi
 
     # TODO: check this: Important packages that must be installed.
     apt-get -y install coreutils uuid-dev wget \
