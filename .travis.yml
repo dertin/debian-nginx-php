@@ -25,7 +25,7 @@ before_install:
 jobs:
   include:
     - stage: "Debain Scratch"
-        script:
+      script:
           - docker build -t dertin/debian-nginx-php:travis-ci -f Dockerfile.testScratch .
           - docker run -t --privileged=true --name container_test_scratch dertin/debian-nginx-php:travis-ci /bin/bash -c "/root/workspace/install.sh travis Y"
           - docker start container_test_scratch
@@ -43,7 +43,7 @@ jobs:
           - docker exec -t container_test_scratch /bin/bash -c "USE_PYTHON_3=1 /opt/letsencrypt/certbot-auto-patched --version --no-self-upgrade --non-interactive --no-bootstrap"
           - docker exec -t container_test_scratch /bin/bash -c "USE_PYTHON_3=1 /opt/letsencrypt/certbot-auto --version --non-interactive --no-self-upgrade --no-bootstrap"
     - stage: "Debain Buster"
-        script:
+      script:
           - docker build -t dertin/debian-nginx-php:travis-ci -f Dockerfile.testBuster .
           - docker run -t --privileged=true --name container_test_buster dertin/debian-nginx-php:travis-ci /bin/bash -c "/root/workspace/install.sh travis Y"
           - docker start container_test_buster
