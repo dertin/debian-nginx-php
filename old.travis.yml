@@ -1,0 +1,55 @@
+# Virtual environment
+os: linux
+dist: bionic
+language: shell
+services:
+  - docker
+
+# Triggers the build
+branches:
+  only:
+    - develop
+
+# Prepare environment
+before_install:
+  # Disable apt-daily.service for Travis CI
+  - bash ./.travis/wait_for_apt.sh
+  # Upgrade Docker CE
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+  - docker --version
+  # Docker Run
+  - docker build -t dertin/debian-nginx-php:travis-ci -f Dockerfile.test .
+  - docker run -t --privileged=true --name container_test dertin/debian-nginx-php:travis-ci /bin/bash -c "/root/workspace/install.sh travis Y"
+  - docker start container_test
+  - docker ps -a
+
+# Clean environment
+after_script:
+  - docker stop container_test
+  - docker rm $(docker ps -a -q)
+
+# Test of commands
+script:
+  - docker exec -t container_test /bin/bash -c "/usr/bin/openssl version"
+  - docker exec -t container_test /bin/bash -c "/usr/local/bin/cmake --version"
+  - docker exec -t container_test /bin/bash -c "/usr/local/bin/curl -V"
+  - docker exec -t container_test /bin/bash -c "/usr/local/bin/python3 --version"
+  - docker exec -t container_test /bin/bash -c "/usr/local/bin/python3 -m pip -V"
+  - docker exec -t container_test /bin/bash -c "/usr/local/php7/bin/php -v"
+  - docker exec -t container_test /bin/bash -c "/usr/local/php7/bin/php -i | grep 'Client API version'"
+  - docker exec -t container_test /bin/bash -c "/usr/sbin/nginx -v"
+  - docker exec -t container_test /bin/bash -c "service php7-fpm start"
+  - docker exec -t container_test /bin/bash -c "service nginx start"
+  - docker exec -t container_test /bin/bash -c "USE_PYTHON_3=1 /opt/letsencrypt/certbot-auto-patched --version --no-self-upgrade --non-interactive --no-bootstrap"
+  - docker exec -t container_test /bin/bash -c "USE_PYTHON_3=1 /opt/letsencrypt/certbot-auto --version --non-interactive --no-self-upgrade --no-bootstrap"
+
+#after_success:
+#after_failure:
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
