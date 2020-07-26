@@ -29,23 +29,23 @@ After the system starts, you will manually rerun the script `sudo ./install.sh a
 
 | Program       | Version    |
 | ------------- |:----------:|
-| openssl       | 1.1.1f     |
-| ~~python2~~   | 2.7.17     |
-| python3       | 3.8.2      |
+| openssl       | 1.1.1g     |
+| ~~python2~~   | 2.7.18     |
+| python3       | 3.8.5      |
 | zlib          | 1.2.11     |
 | lz4           | 1.9.2      |
 | libssh2       | 1.9.0      |
-| nghttp2       | 1.40.0     |
-| curl          | 7.69.1     |
-| cmake         | 3.17.0     |
-| libzip        | 1.6.1      |
+| nghttp2       | 1.41.0     |
+| curl          | 7.71.1     |
+| cmake         | 3.18.0     |
+| libzip        | 1.7.3      |
 | libcrack2     | 2.9.7      |
 | libxml2       | 2.9.10     |
 | libxslt       | 1.1.34     |
 | jemalloc      | 5.2.1      |
 | mariadb client| 10.4       |
-| php           | 7.4.4      |
-| nginx         | 1.17.8     |
+| php           | 7.4.8      |
+| nginx         | 1.19.1     |
 | modpagespeed  | 1.13.35.2  |
 | letsencrypt   | last       |
 | blackfire     | last       |
