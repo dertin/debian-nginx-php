@@ -1,11 +1,11 @@
-FROM debian:buster
+FROM debian:12.11
 
 ENV APP_PATH=/root/workspace/
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR $APP_PATH
 
-ADD . /root/workspace
+ADD . $APP_PATH
 
 RUN apt-get clean && \
     apt-get -y update > /dev/null && \
@@ -14,4 +14,4 @@ RUN apt-get clean && \
     apt-get install -y --no-install-recommends apt-utils && \
     apt-get -y upgrade > /dev/null && \
     rm -rf /var/lib/apt/lists/* && \
-    chmod +x /root/workspace/*.sh
+    chmod +x $APP_PATH/*.sh
