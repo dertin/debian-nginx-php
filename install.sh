@@ -53,9 +53,9 @@ fi
 
 export CFLAGS="-march=native -O2 -ftree-vectorize -pipe"
 export CXXFLAGS="${CFLAGS}"
-export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -lmimalloc"
+export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib"
 export LDCONFIG=-L/usr/local/lib
-export LIBS="-ldl -lmimalloc"
+export LIBS="-ldl"
 
 # Run apt non-interactively and auto-resolve config prompts
 export DEBIAN_FRONTEND=${DEBIAN_FRONTEND:-noninteractive}
@@ -213,7 +213,7 @@ function essential_install() {
   then
 
     # Build Essential
-    if [ ! -f /etc/apt/sources.list ] && [ ! -f /etc/apt/sources.list.d/debian.sources ]; then
+    if [ ! -f /etc/apt/sources.list ]; then
       cat <<'EOF' >/etc/apt/sources.list
 deb http://deb.debian.org/debian bookworm main contrib non-free-firmware
 deb-src http://deb.debian.org/debian bookworm main contrib non-free-firmware
@@ -222,6 +222,10 @@ deb-src http://security.debian.org/debian-security bookworm-security main contri
 deb http://deb.debian.org/debian bookworm-updates main contrib non-free-firmware
 deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free-firmware
 EOF
+    fi
+
+    if [ -f /etc/apt/sources.list.d/debian.sources ]; then
+      mv /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources.disabled
     fi
 
     if [ -f /etc/apt/sources.list ]; then
@@ -856,6 +860,9 @@ function mimalloc_install() {
     make -C build install
 
     ldconfig
+
+    export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -lmimalloc"
+    export LIBS="-ldl -lmimalloc"
 
     pauseToContinue
   fi
