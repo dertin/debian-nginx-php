@@ -33,8 +33,11 @@ EOF
 }
 
 setup_apt() {
-  install_policy_block
-  cat <<'EOL' >/etc/apt/sources.list
+  if [ -n "${CI:-}" ] || [ "${POLICY_BLOCK:-}" = "1" ]; then
+    install_policy_block
+  fi
+  if [ ! -f /etc/apt/sources.list ]; then
+    cat <<'EOL' >/etc/apt/sources.list
 deb http://deb.debian.org/debian bookworm main contrib non-free-firmware
 deb-src http://deb.debian.org/debian bookworm main contrib non-free-firmware
 deb http://security.debian.org/debian-security bookworm-security main contrib non-free-firmware
@@ -44,6 +47,7 @@ deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free-firm
 deb http://deb.debian.org/debian bookworm-backports main contrib non-free-firmware
 deb-src http://deb.debian.org/debian bookworm-backports main contrib non-free-firmware
 EOL
+  fi
 
   if [ -f /etc/apt/sources.list.d/debian.sources ]; then
     mv /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources.disabled
@@ -122,7 +126,10 @@ configure_letsencrypt() {
   cp files/letsencrypt/crontab/renewLetsEncrypt.sh \
     "/etc/letsencrypt/crontab/${domain}-renewLetsEncrypt.sh"
   chmod +x "/etc/letsencrypt/crontab/${domain}-renewLetsEncrypt.sh"
-  (crontab -l 2>/dev/null; echo "0 0 * * * /etc/letsencrypt/crontab/${domain}-renewLetsEncrypt.sh") | crontab -
+  if [ -z "${CI:-}" ]; then
+    command -v crontab >/dev/null || apt-get install -y cron
+    (crontab -l 2>/dev/null; echo "0 0 * * * /etc/letsencrypt/crontab/${domain}-renewLetsEncrypt.sh") | crontab -
+  fi
   certbot --config "/etc/letsencrypt/configs/${domain}.conf" certonly || true
   sed -i '/#REMOVE_AFTER_CONFIGURING_LE#/d' "/etc/nginx/sites-enabled/${domain}.conf"
   nginx -s reload || true

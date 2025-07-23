@@ -19,9 +19,10 @@ sudo DOMAIN=example.com EMAIL_SUPPORT=admin@example.com ./install.sh
 The `DOMAIN` and `EMAIL_SUPPORT` environment variables are used to customise the
 configuration and to request the initial HTTPS certificate with Certbot.
 
-During installation a `/usr/sbin/policy-rc.d` symlink is created and protected
-with `dpkg-divert` so that no package can remove it. This prevents services from
-starting automatically. You can verify it exists with:
+When running in CI (or when the environment variable `POLICY_BLOCK=1` is set)
+the installer creates a `/usr/sbin/policy-rc.d` symlink protected with
+`dpkg-divert`. This prevents services from starting automatically. You can
+verify it exists with:
 
 ```sh
 sudo ls -l /usr/sbin/policy-rc.d
