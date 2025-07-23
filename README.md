@@ -1,6 +1,6 @@
-# Nginx with PHP on Debian Stretch
+Nginx with PHP on Debian 12.11
 
-The latest stable versions of software to create a web service platform in Debian Stretch are compiled with a configuration optimized for the best performance, speed of response and security.
+The latest stable versions of software to create a web service platform in Debian 12.11 are compiled with a configuration optimized for the best performance, speed of response and security.
 
 
 To compile the platform you can use the following instructions:
@@ -29,27 +29,27 @@ After the system starts, you will manually rerun the script `sudo ./install.sh a
 
 | Program       | Version    |
 | ------------- |:----------:|
-| openssl       | 1.1.1g     |
+| openssl       | 3.5.1     |
 | ~~python2~~   | 2.7.18     |
-| python3       | 3.8.5      |
-| zlib          | 1.2.11     |
-| lz4           | 1.9.2      |
-| libssh2       | 1.9.0      |
-| nghttp2       | 1.41.0     |
-| curl          | 7.71.1     |
-| cmake         | 3.18.0     |
-| libzip        | 1.7.3      |
-| libcrack2     | 2.9.7      |
-| libxml2       | 2.9.10     |
-| libxslt       | 1.1.34     |
-| jemalloc      | 5.2.1      |
-| mariadb client| 10.4       |
-| php           | 7.4.8      |
-| nginx         | 1.19.1     |
-| modpagespeed  | 1.13.35.2  |
-| letsencrypt   | last       |
-| blackfire     | last       |
+| python3       | 3.12.3      |
+| zlib          | 1.3.1      |
+| lz4           | 1.10.0     |
+| libssh2       | 1.11.1     |
+| nghttp2       | 1.66.0     |
+| curl          | 8.15.0     |
+| cmake         | 4.0.3     |
+| libzip        | 1.11.4     |
+| libcrack2     | 2.10.3     |
+| libxml2       | 2.11.9     |
+| libxslt       | 1.1.43     |
+| mimalloc      | 3.1.5      |
+| mariadb client| 11.8.2     |
+| php           | 8.4.10      |
+| nginx         | 1.28.0     |
+| letsencrypt   | 4.1.1      |
+| blackfire     | latest     |
 
+**Note:** The deprecated jemalloc library was removed and this stack now links against mimalloc 3.1.5 by default.
 
 All collaboration is appreciated, through https://github.com/dertin/debian-nginx-php/issues
 
