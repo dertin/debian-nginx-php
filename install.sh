@@ -38,14 +38,34 @@ EOL
   sed -i '/^#\s*deb-src /s/^#//' /etc/apt/sources.list
   apt-get update
   apt-get -y upgrade
+
+  # PHP 8.4 from sury repository
+  if [ ! -f /etc/apt/sources.list.d/php.list ]; then
+    apt-get install -y wget lsb-release gnupg
+    wget -qO - https://packages.sury.org/php/apt.gpg | \
+      gpg --dearmor -o /usr/share/keyrings/php-archive-keyring.gpg
+    echo "deb [signed-by=/usr/share/keyrings/php-archive-keyring.gpg] https://packages.sury.org/php/ $(lsb_release -cs) main" \
+      >/etc/apt/sources.list.d/php.list
+  fi
+
+  # Latest stable nginx from official repository
+  if [ ! -f /etc/apt/sources.list.d/nginx.list ]; then
+    apt-get install -y curl lsb-release gnupg
+    curl -fsSL https://nginx.org/keys/nginx_signing.key | \
+      gpg --dearmor -o /usr/share/keyrings/nginx-archive-keyring.gpg
+    echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/debian $(lsb_release -cs) nginx" \
+      >/etc/apt/sources.list.d/nginx.list
+  fi
+
+  apt-get update
 }
 
 install_packages() {
   apt-get install -y build-essential ca-certificates wget curl gnupg pkg-config \
     cmake openssl zlib1g-dev liblz4-dev libzip-dev libssh2-1-dev libnghttp2-dev \
     libcurl4-openssl-dev libcrack2-dev libxml2-dev libxslt1-dev mariadb-client \
-    nginx php php-fpm php-cli php-mysql python3 python3-pip python3-venv certbot \
-    python3-certbot-nginx
+    nginx php8.4 php8.4-fpm php8.4-cli php8.4-mysql python3 python3-pip \
+    python3-venv certbot python3-certbot-nginx
 }
 
 configure_nginx() {

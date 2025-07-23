@@ -5,7 +5,9 @@ than compiling everything from source.  Configuration files for Nginx, PHP and
 Certbot are included in the `files` directory and are automatically installed by
 `install.sh`.
 
-Clone the repository and run the installer:
+Clone the repository and run the installer. The script configures the official
+nginx repository and the Sury PHP repository so the latest stable versions
+of nginx and PHP 8.4 can be installed on Debian 12.11:
 
 ```sh
 git clone https://github.com/dertin/debian-nginx-php.git
@@ -41,8 +43,8 @@ configuration and to request the initial HTTPS certificate with Certbot.
 | libxml2       | 2.11.9     |
 | libxslt       | 1.1.43     |
 | mariadb client| 11.8.2     |
-| php           | 8.2.x      |
-| nginx         | 1.22.x     |
+| php           | 8.4.x      |
+| nginx         | 1.28.x     |
 | letsencrypt   | 4.1.1      |
 | blackfire     | latest     |
 
