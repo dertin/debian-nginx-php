@@ -57,6 +57,11 @@ export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -lmimalloc"
 export LDCONFIG=-L/usr/local/lib
 export LIBS="-ldl -lmimalloc"
 
+# Run apt non-interactively and auto-resolve config prompts
+export DEBIAN_FRONTEND=${DEBIAN_FRONTEND:-noninteractive}
+shopt -s expand_aliases
+alias apt-get='/usr/bin/apt-get -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"'
+
 source /etc/profile
 
 #####################################################################################################################
@@ -208,7 +213,7 @@ function essential_install() {
   then
 
     # Build Essential
-    if [ ! -f /etc/apt/sources.list ]; then
+    if [ ! -f /etc/apt/sources.list ] && [ ! -f /etc/apt/sources.list.d/debian.sources ]; then
       cat <<'EOF' >/etc/apt/sources.list
 deb http://deb.debian.org/debian bookworm main contrib non-free-firmware
 deb-src http://deb.debian.org/debian bookworm main contrib non-free-firmware
@@ -219,7 +224,9 @@ deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free-firm
 EOF
     fi
 
-    sed -i '/^#\s*deb-src /s/^#//' /etc/apt/sources.list
+    if [ -f /etc/apt/sources.list ]; then
+      sed -i '/^#\s*deb-src /s/^#//' /etc/apt/sources.list
+    fi
 
     apt-get -y update
     apt-get install -y --no-install-recommends apt-utils
