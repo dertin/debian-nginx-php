@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Installs and configures packages on Debian 12.11 using APT whenever possible.
-# Only mimalloc is built from source if not available.
+# Installs and configures packages on Debian 12.11 using the distribution
+# repositories.  Service configuration files bundled with this repository are
+# copied into place and customised with the DOMAIN and EMAIL_SUPPORT environment
+# variables.
 
 # non interactive apt
 export DEBIAN_FRONTEND=${DEBIAN_FRONTEND:-noninteractive}
@@ -46,20 +48,50 @@ install_packages() {
     python3-certbot-nginx
 }
 
-install_mimalloc() {
-  if dpkg -s libmimalloc-dev >/dev/null 2>&1; then
-    return
-  fi
-  local tmp=/var/tmp/mimalloc_build
-  local url="https://github.com/microsoft/mimalloc/archive/refs/tags/v3.1.5.tar.gz"
-  mkdir -p "${tmp}" && cd "${tmp}"
-  wget -O mimalloc.tar.gz "$url"
-  tar xf mimalloc.tar.gz --strip-components=1
-  cmake -B build -DCMAKE_BUILD_TYPE=Release -DMI_BUILD_SHARED=ON .
-  make -C build
-  make -C build install
-  ldconfig
+configure_nginx() {
+  local domain=${DOMAIN:-example.com}
+  mkdir -p "/var/www/${domain}/htdocs"
+  chgrp www-data "/var/www/${domain}/htdocs"
+  cp files/nginx/nginx.conf /etc/nginx/nginx.conf
+  mkdir -p /etc/nginx/conf.d
+  cp files/nginx/conf.d/mail.conf /etc/nginx/conf.d/mail.conf
+  mkdir -p /etc/nginx/snippets
+  cp -r files/nginx/snippets/* /etc/nginx/snippets/
+  sed -i "s#XXDOMAINXX#${domain}#g" /etc/nginx/snippets/diffie-hellman
+  mkdir -p /etc/nginx/sites-available
+  cp files/nginx/sites-available/xxdomainxx.conf "/etc/nginx/sites-available/${domain}.conf"
+  sed -i "s#XXDOMAINXX#${domain}#g" "/etc/nginx/sites-available/${domain}.conf"
+  mkdir -p /etc/nginx/sites-enabled
+  ln -sf "/etc/nginx/sites-available/${domain}.conf" "/etc/nginx/sites-enabled/${domain}.conf"
 }
+
+configure_php() {
+  local phpv=$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')
+  local fpm_dir="/etc/php/${phpv}/fpm"
+  cp files/php/etc/php-fpm.d/www.conf "${fpm_dir}/pool.d/www.conf"
+  sed "s#/usr/local/php/etc#${fpm_dir}#" files/php/etc/php-fpm.conf > "${fpm_dir}/php-fpm.conf"
+  cp files/php/etc/conf.d/modules.ini "${fpm_dir}/conf.d/modules.ini"
+}
+
+configure_letsencrypt() {
+  local domain=${DOMAIN:-example.com}
+  local email=${EMAIL_SUPPORT:-admin@${domain}}
+  mkdir -p "/var/www/${domain}/letsencrypt"
+  chgrp www-data "/var/www/${domain}/letsencrypt"
+  mkdir -p /etc/letsencrypt/configs
+  sed "s#XXDOMAINXX#${domain}#g;s#XXEMAILSUPPORTXX#${email}#g" \
+    files/letsencrypt/configs/xxdomainxx.conf > \
+    "/etc/letsencrypt/configs/${domain}.conf"
+  mkdir -p /etc/letsencrypt/crontab
+  cp files/letsencrypt/crontab/renewLetsEncrypt.sh \
+    "/etc/letsencrypt/crontab/${domain}-renewLetsEncrypt.sh"
+  chmod +x "/etc/letsencrypt/crontab/${domain}-renewLetsEncrypt.sh"
+  (crontab -l 2>/dev/null; echo "0 0 * * * /etc/letsencrypt/crontab/${domain}-renewLetsEncrypt.sh") | crontab -
+  certbot --config "/etc/letsencrypt/configs/${domain}.conf" certonly || true
+  sed -i '/#REMOVE_AFTER_CONFIGURING_LE#/d' "/etc/nginx/sites-enabled/${domain}.conf"
+  nginx -s reload
+}
+
 
 check_versions() {
   openssl version
@@ -75,7 +107,9 @@ check_versions() {
 main() {
   setup_apt
   install_packages
-  install_mimalloc
+  configure_nginx
+  configure_php
+  configure_letsencrypt
   check_versions
 }
 

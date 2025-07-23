@@ -1,28 +1,27 @@
 Nginx with PHP on Debian 12.11
 
-The latest stable versions of software to create a web service platform in Debian 12.11 are compiled with a configuration optimized for the best performance, speed of response and security.
+This project provides a simple installer that relies on Debian packages rather
+than compiling everything from source.  Configuration files for Nginx, PHP and
+Certbot are included in the `files` directory and are automatically installed by
+`install.sh`.
 
+Clone the repository and run the installer:
 
-To compile the platform you can use the following instructions:
 ```sh
 git clone https://github.com/dertin/debian-nginx-php.git
-cd debian-nginx-php/
+cd debian-nginx-php
 chmod +x install.sh
-sudo ./install.sh all N
+sudo DOMAIN=example.com EMAIL_SUPPORT=admin@example.com ./install.sh
 ```
 
-You can modify the build.json file according to your needs using packer.io
-```sh
-cd debian-nginx-php/packer
-packer build build.json
-```
+The `DOMAIN` and `EMAIL_SUPPORT` environment variables are used to customise the
+configuration and to request the initial HTTPS certificate with Certbot.
 
 ## Important:
 
-- You must have a domain address pointing to your server before running the script, so that your HTTPS certificate is configured correctly automatically. If you do not have a domain now, enter the domain you are going to configure later and then manually configure your HTTPS certificate.
+- You must have a domain address pointing to your server before running the script so that your HTTPS certificate can be requested automatically.
 
-- It is recommended to restart the system when the script requests it.
-After the system starts, you will manually rerun the script `sudo ./install.sh all N` and skip the steps that have already been installed before restarting the system to continue.
+- If you change the domain after installation you will need to update the certificate manually with `certbot`.
 
 
 ## List of installed programs:
@@ -30,7 +29,6 @@ After the system starts, you will manually rerun the script `sudo ./install.sh a
 | Program       | Version    |
 | ------------- |:----------:|
 | openssl       | 3.5.1     |
-| ~~python2~~   | 2.7.18     |
 | python3       | 3.12.3      |
 | zlib          | 1.3.1      |
 | lz4           | 1.10.0     |
@@ -42,14 +40,13 @@ After the system starts, you will manually rerun the script `sudo ./install.sh a
 | libcrack2     | 2.10.3     |
 | libxml2       | 2.11.9     |
 | libxslt       | 1.1.43     |
-| mimalloc      | 3.1.5      |
 | mariadb client| 11.8.2     |
-| php           | 8.4.10      |
-| nginx         | 1.28.0     |
+| php           | 8.2.x      |
+| nginx         | 1.22.x     |
 | letsencrypt   | 4.1.1      |
 | blackfire     | latest     |
 
-**Note:** The deprecated jemalloc library was removed and this stack now links against mimalloc 3.1.5 by default.
+**Note:** The installer relies entirely on Debian packages and no longer compiles these components from source.
 
 All collaboration is appreciated, through https://github.com/dertin/debian-nginx-php/issues
 
