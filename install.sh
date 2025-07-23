@@ -70,11 +70,13 @@ EOF
 }
 
 install_packages() {
+  # install python first so py3compile is available for other packages
+  apt-get install -y python3 python3-pip python3-venv
+  # remaining packages
   apt-get install -y build-essential ca-certificates wget curl gnupg pkg-config \
     cmake openssl zlib1g-dev liblz4-dev libzip-dev libssh2-1-dev libnghttp2-dev \
     libcurl4-openssl-dev libcrack2-dev libxml2-dev libxslt1-dev mariadb-client \
-    nginx php8.4 php8.4-fpm php8.4-cli php8.4-mysql python3 python3-pip \
-    python3-venv certbot python3-certbot-nginx
+    nginx php8.4 php8.4-fpm php8.4-cli php8.4-mysql certbot python3-certbot-nginx
 }
 
 configure_nginx() {
