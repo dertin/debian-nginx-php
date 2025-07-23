@@ -8,23 +8,22 @@
 # Default software source list
 #
 #####################################################################################################################
-jemalloc_address_default="https://github.com/jemalloc/jemalloc/archive/5.2.1.tar.gz"
-cmake_address_default="https://github.com/Kitware/CMake/releases/download/v3.18.0/cmake-3.18.0.tar.gz"
-openssl_address_default="https://www.openssl.org/source/openssl-1.1.1g.tar.gz"
+cmake_address_default="https://github.com/Kitware/CMake/releases/download/v4.0.3/cmake-4.0.3.tar.gz"
+openssl_address_default="https://www.openssl.org/source/openssl-3.5.1.tar.gz"
 python_address_default="https://www.python.org/ftp/python/2.7.18/Python-2.7.18.tgz"
-python3_address_default="https://www.python.org/ftp/python/3.8.5/Python-3.8.5.tgz"
-zlib_address_default="http://www.zlib.net/zlib-1.2.11.tar.gz"
-lz4_address_default="https://github.com/lz4/lz4/archive/v1.9.2.tar.gz"
-libzip_address_default="https://libzip.org/download/libzip-1.7.3.tar.gz"
-libssh2_address_default="https://www.libssh2.org/download/libssh2-1.9.0.tar.gz"
-nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.41.0/nghttp2-1.41.0.tar.gz"
-curl_address_default="https://curl.haxx.se/download/curl-7.71.1.tar.gz"
-libcrack2_address_default="https://github.com/cracklib/cracklib/archive/v2.9.7.tar.gz"
-libXML2_address_default="http://xmlsoft.org/sources/libxml2-2.9.10.tar.gz"
-libxslt_address_default="http://xmlsoft.org/sources/libxslt-1.1.34.tar.gz"
-php_address_default="https://github.com/php/php-src/archive/php-7.4.8.tar.gz"
-nginx_address_default="https://nginx.org/download/nginx-1.19.1.tar.gz"
-psol_url="https://www.modpagespeed.com/release_archive/1.13.35.2/psol-1.13.35.2-x64.tar.gz"
+python3_address_default="https://www.python.org/ftp/python/3.12.3/Python-3.12.3.tgz"
+zlib_address_default="https://www.zlib.net/zlib-1.3.1.tar.gz"
+lz4_address_default="https://github.com/lz4/lz4/archive/v1.10.0.tar.gz"
+libzip_address_default="https://libzip.org/download/libzip-1.11.4.tar.gz"
+libssh2_address_default="https://libssh2.org/download/libssh2-1.11.1.tar.gz"
+nghttp2_address_default="https://github.com/nghttp2/nghttp2/releases/download/v1.66.0/nghttp2-1.66.0.tar.gz"
+curl_address_default="https://curl.se/download/curl-8.15.0.tar.gz"
+libcrack2_address_default="https://github.com/cracklib/cracklib/archive/v2.10.3.tar.gz"
+libXML2_address_default="https://download.gnome.org/sources/libxml2/2.11/libxml2-2.11.9.tar.xz"
+libxslt_address_default="https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.43.tar.xz"
+mimalloc_address_default="https://github.com/microsoft/mimalloc/archive/refs/tags/v3.1.5.tar.gz"
+php_address_default="https://github.com/php/php-src/archive/php-8.4.10.tar.gz"
+nginx_address_default="https://nginx.org/download/nginx-1.28.0.tar.gz"
 #####################################################################################################################
 #
 # Environment Variables
@@ -54,9 +53,9 @@ fi
 
 export CFLAGS="-march=native -O2 -ftree-vectorize -pipe"
 export CXXFLAGS="${CFLAGS}"
-export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib"
+export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -lmimalloc"
 export LDCONFIG=-L/usr/local/lib
-export LIBS="-ldl"
+export LIBS="-ldl -lmimalloc"
 
 source /etc/profile
 
@@ -145,7 +144,7 @@ function service_stop() {
   then
 
     service nginx stop
-    service php7-fpm stop
+    service php-fpm stop
 
   fi
 }
@@ -310,44 +309,6 @@ function essential_install() {
   fi
 }
 
-function jemalloc_install() {
-  #####################################################################################################################
-  #
-  # INSTALL jemalloc
-  #
-  #####################################################################################################################
-
-  # Func askOption (question, defaultOption, skipQuestion)
-  input_install_jemalloc="$(askOption "Install jemalloc ? [Y/n]: " "Y" $DefaultOption)"
-
-  if [ $input_install_jemalloc == "Y" ] || [ $input_install_jemalloc == "y" ]
-  then
-
-    # Func askOption (question, defaultOption, skipQuestion)
-    jemalloc_address="$(askOption "Enter the download address for jemalloc (tar.gz): " $jemalloc_address_default $DefaultOption)"
-
-    # Func askOption (question, defaultOption, skipQuestion)
-    jemalloc_install_tmp_dir="$(askOption "Enter temporary directory for jemalloc compilation: " "/var/tmp/jemalloc_build" $DefaultOption)"
-
-    # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
-    wgetAndDecompress $jemalloc_install_tmp_dir jemalloc_src $jemalloc_address
-
-    ./autogen.sh
-
-    ./configure --prefix=/usr/local --with-xslroot=/usr/share/xml/docbook/stylesheet/docbook-xsl/
-
-    make
-    make dist
-    make install
-
-    echo '/usr/local/lib' > /etc/ld.so.conf.d/local.conf
-
-    ldconfig
-
-    pauseToContinue
-
-  fi
-}
 
 function cmake_install() {
   #####################################################################################################################
@@ -860,13 +821,37 @@ function libxslt_install() {
   fi
 }
 
+function mimalloc_install() {
+  ##############################################################################
+  # INSTALL mimalloc
+  ##############################################################################
+
+  input_install_mimalloc="$(askOption "Install mimalloc ? [Y/n]: " "Y" $DefaultOption)"
+
+  if [ $input_install_mimalloc == "Y" ] || [ $input_install_mimalloc == "y" ]
+  then
+    mimalloc_address="$(askOption "Enter the download address for mimalloc (tar.gz): " $mimalloc_address_default $DefaultOption)"
+    mimalloc_install_tmp_dir="$(askOption "Enter temporary directory for mimalloc compilation: " "/var/tmp/mimalloc_build" $DefaultOption)"
+
+    wgetAndDecompress $mimalloc_install_tmp_dir mimalloc_src $mimalloc_address
+
+    cmake -B build -DCMAKE_BUILD_TYPE=Release -DMI_BUILD_SHARED=ON .
+    make -C build
+    make -C build install
+
+    ldconfig
+
+    pauseToContinue
+  fi
+}
+
 function mariadb_install() {
   #
   # -- This function is little tested by the main developer. --
   #
   #####################################################################################################################
   #
-  # INSTALL MariaDB 10.4 - http://espejito.fder.edu.uy/mariadb/repo/10.4/debian stretch main
+  # INSTALL MariaDB 11.8 - https://mirrors.xtom.de/mariadb/repo/11.8/debian bookworm main
   #
   #####################################################################################################################
 
@@ -878,7 +863,7 @@ function mariadb_install() {
 
     apt-get -y install software-properties-common dirmngr
     apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0xF1656F24C74CD1D8
-    add-apt-repository 'deb [arch=amd64,i386,ppc64el] http://espejito.fder.edu.uy/mariadb/repo/10.4/debian stretch main'
+    add-apt-repository 'deb [arch=amd64] https://mirrors.xtom.de/mariadb/repo/11.8/debian bookworm main'
     apt-get -y update
     apt-get -y install libmariadb-dev mariadb-client
     ln -s /usr/bin/mariadb_config /usr/bin/mysql_config
@@ -904,7 +889,7 @@ function php_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
 
     # Func askOption (question, defaultOption, skipQuestion)
-    php_address="$(askOption "Enter the download address for PHP 7 (tar.gz): " $php_address_default $DefaultOption)"
+    php_address="$(askOption "Enter the download address for PHP 8 (tar.gz): " $php_address_default $DefaultOption)"
 
     # Func askOption (question, defaultOption, skipQuestion)
     php_install_tmp_dir="$(askOption "Enter temporary directory for php compilation: " "/var/tmp/php_build" $DefaultOption)"
@@ -912,13 +897,13 @@ function php_install() {
     # Func wgetAndDecompress (dirTmp, folderTmp, downloadAddress)
     wgetAndDecompress $php_install_tmp_dir "php_src" $php_address
 
-    mkdir -p /usr/local/php7
+    mkdir -p /usr/local/php
 
     ./buildconf --force
 
-    CONFIGURE_STRING="--prefix=/usr/local/php7 \
+    CONFIGURE_STRING="--prefix=/usr/local/php \
     --enable-huge-code-pages \
-    --with-config-file-scan-dir=/usr/local/php7/etc/conf.d \
+    --with-config-file-scan-dir=/usr/local/php/etc/conf.d \
     --without-pear \
     --enable-bcmath \
     --with-bz2 \
@@ -972,37 +957,37 @@ function php_install() {
     mkdir -p /run/php
 
     # Create a dir for storing PHP module conf
-    mkdir /usr/local/php7/etc/conf.d
+    mkdir /usr/local/php/etc/conf.d
 
-    # Symlink php-fpm to php7-fpm
-    ln -s /usr/local/php7/sbin/php-fpm /usr/local/php7/sbin/php7-fpm
+    # Symlink php-fpm to php-fpm
+    ln -s /usr/local/php/sbin/php-fpm /usr/local/php/sbin/php8-fpm
 
     # Generate backup configuration file php.ini
-    cp php.ini-production /usr/local/php7/lib/php.ini-production
-    cp php.ini-development /usr/local/php7/lib/php.ini-development
+    cp php.ini-production /usr/local/php/lib/php.ini-production
+    cp php.ini-development /usr/local/php/lib/php.ini-development
     # PHP configuration file
-    cp php.ini-production /usr/local/php7/lib/php.ini
+    cp php.ini-production /usr/local/php/lib/php.ini
     # Enable PDO extension for mysql and extension mysqli, mysqlnd
-    echo -e 'extension=mysqlnd.so\n' >> /usr/local/php7/lib/php.ini
-    echo -e 'extension=mysqli.so\n' >> /usr/local/php7/lib/php.ini
-    echo -e 'extension=pdo_mysql.so\n' >> /usr/local/php7/lib/php.ini
-    echo -e 'openssl.cafile=/etc/ssl/certs/ca-certificates.crt\n' >> /usr/local/php7/lib/php.ini
-    echo -e 'curl.cainfo=/etc/ssl/certs/ca-certificates.crt\n' >> /usr/local/php7/lib/php.ini
+    echo -e 'extension=mysqlnd.so\n' >> /usr/local/php/lib/php.ini
+    echo -e 'extension=mysqli.so\n' >> /usr/local/php/lib/php.ini
+    echo -e 'extension=pdo_mysql.so\n' >> /usr/local/php/lib/php.ini
+    echo -e 'openssl.cafile=/etc/ssl/certs/ca-certificates.crt\n' >> /usr/local/php/lib/php.ini
+    echo -e 'curl.cainfo=/etc/ssl/certs/ca-certificates.crt\n' >> /usr/local/php/lib/php.ini
     # It is important that we prevent Nginx from passing requests to the PHP-FPM backend if the file does not exists
-    sed -ie 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /usr/local/php7/lib/php.ini
+    sed -ie 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /usr/local/php/lib/php.ini
 
-    cp ${BASEDIR}/files/php7/etc/php-fpm.d/www.conf /usr/local/php7/etc/php-fpm.d/www.conf
+    cp ${BASEDIR}/files/php/etc/php-fpm.d/www.conf /usr/local/php/etc/php-fpm.d/www.conf
 
-    cp ${BASEDIR}/files/php7/etc/php-fpm.conf /usr/local/php7/etc/php-fpm.conf
+    cp ${BASEDIR}/files/php/etc/php-fpm.conf /usr/local/php/etc/php-fpm.conf
 
-    cp ${BASEDIR}/files/php7/etc/conf.d/modules.ini /usr/local/php7/etc/conf.d/modules.ini
+    cp ${BASEDIR}/files/php/etc/conf.d/modules.ini /usr/local/php/etc/conf.d/modules.ini
 
     # Add the init script
-    cp ${BASEDIR}/files/php7/etc/init.d/php7-fpm /etc/init.d/php7-fpm
-    chmod +x /etc/init.d/php7-fpm
-    update-rc.d php7-fpm defaults
+    cp ${BASEDIR}/files/php/etc/init.d/php-fpm /etc/init.d/php-fpm
+    chmod +x /etc/init.d/php-fpm
+    update-rc.d php-fpm defaults
 
-    export PATH=$PATH:/usr/local/php7/bin
+    export PATH=$PATH:/usr/local/php/bin
     echo "export PATH=$PATH" >> /etc/profile
     source /etc/profile
 
@@ -1010,15 +995,15 @@ function php_install() {
     echo -e "PATH=$PATH\n" >> /etc/environment
     chmod 644 /etc/environment
 
-    ln -s /usr/local/php7/bin/php /usr/sbin/php
+    ln -s /usr/local/php/bin/php /usr/sbin/php
 
-    /usr/local/php7/bin/php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    /usr/local/php7/bin/php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+    /usr/local/php/bin/php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+    /usr/local/php/bin/php composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
     ldconfig
 
-    service php7-fpm start
-    service php7-fpm status
+    service php-fpm start
+    service php-fpm status
 
     needrestart -r l
 
@@ -1043,11 +1028,6 @@ function nginx_install() {
     adduser --system --no-create-home --disabled-login --disabled-password --group www-data
     usermod -a -G www-data root
     usermod -a -G www-data admin
-    mkdir -p /var/ngx_pagespeed_cache
-    chown -R www-data:www-data /var/ngx_pagespeed_cache
-
-    # download ngx_pagespeed:
-
     # Func askOption (question, defaultOption, skipQuestion)
     nginx_address="$(askOption "Enter the download address for nginx (tar.gz): " $nginx_address_default $DefaultOption)"
 
@@ -1055,18 +1035,6 @@ function nginx_install() {
     nginx_install_tmp_dir="$(askOption "Enter temporary directory for nginx compilation: " "/var/tmp/nginx_build" $DefaultOption)"
 
     wgetAndDecompress $nginx_install_tmp_dir "nginx_src" $nginx_address
-
-    # Module pagespeed
-    NPS_VERSION=1.13.35.2-stable
-    wget https://github.com/apache/incubator-pagespeed-ngx/archive/v${NPS_VERSION}.zip
-    unzip v${NPS_VERSION}.zip
-    nps_dir=$(find . -name "*pagespeed-ngx-${NPS_VERSION}" -type d)
-    cd "$nps_dir"
-    [ -e scripts/format_binary_url.sh ] && psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL)
-    wget ${psol_url}
-    tar -xzvf $(basename ${psol_url})
-
-    cd ..
 
     # Module Naxsi
     # wget https://github.com/nbs-system/naxsi/archive/master.zip
@@ -1095,9 +1063,8 @@ function nginx_install() {
       --with-file-aio \
       --with-http_realip_module \
       --with-http_sub_module \
-      --with-ld-opt="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -ljemalloc" \
-      --with-cc-opt="-m64 -march=native -DTCP_FASTOPEN=23 -g -O3 -fstack-protector-strong -fuse-ld=gold --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -gsplit-dwarf" \
-      --add-module="${nginx_install_tmp_dir}/nginx_src/${nps_dir}"
+      --with-ld-opt="-L/usr/local/lib -Wl,-rpath,/usr/local/lib -lmimalloc" \
+      --with-cc-opt="-m64 -march=native -DTCP_FASTOPEN=23 -g -O3 -fstack-protector-strong -fuse-ld=gold --param=ssp-buffer-size=4 -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -gsplit-dwarf"
       # --add-module="${nginx_install_tmp_dir}/nginx_src/naxsi-master/naxsi_src"
 
     make
@@ -1171,16 +1138,8 @@ function letsencrypt_install(){
     if [ $input_install_letEncrypt == "Y" ] || [ $input_install_letEncrypt == "y" ]
     then
 
-        mkdir -p /opt/letsencrypt/
-        cd /opt/letsencrypt/ || exit 1
-
-        wget https://dl.eff.org/certbot-auto -P /opt/letsencrypt/
-        chmod a+x /opt/letsencrypt/certbot-auto
-
-        # [TESTING] patches
-        cp -r ${BASEDIR}/files/letsencrypt/patches/* /opt/letsencrypt/
-        patch /opt/letsencrypt/certbot-auto -i /opt/letsencrypt/certbot-auto.patch -o /opt/letsencrypt/certbot-auto-patched
-        chmod a+x /opt/letsencrypt/certbot-auto-patched
+        apt-get update
+        apt-get -y install certbot python3-certbot-nginx
 
         if [ "$ProgramName" != "travis" ] && [ "$ProgramName" != "packer" ]
         then
@@ -1213,8 +1172,7 @@ function letsencrypt_config() {
     sed -i "s#XXDOMAINXX#${global_domain}#g" /etc/letsencrypt/configs/${global_domain}.conf
     sed -i "s#XXEMAILSUPPORTXX#${global_emailSupport}#g" /etc/letsencrypt/configs/${global_domain}.conf
 
-    cd /opt/letsencrypt/ || exit 1
-    USE_PYTHON_3=1 ./certbot-auto --config /etc/letsencrypt/configs/${global_domain}.conf certonly
+    certbot --config /etc/letsencrypt/configs/${global_domain}.conf certonly
 
     mkdir -p /var/log/letsencrypt/
 
@@ -1269,7 +1227,7 @@ function blackfire_install() {
   	apt-get install blackfire-php
 
   	service nginx reload
-  	service php7-fpm reload
+  	service php-fpm reload
 
   fi
 }
@@ -1293,9 +1251,6 @@ global_emailSupport="$(askOption "Enter email support: " "email@email.com" $Defa
 case "$ProgramName" in
         "essential")
             essential_install
-            ;;
-        "jemalloc")
-            jemalloc_install
             ;;
         "openssl")
             openssl_install
@@ -1336,6 +1291,9 @@ case "$ProgramName" in
         "libxslt")
             libxslt_install
             ;;
+        "mimalloc")
+            mimalloc_install
+            ;;
         "mariadb")
             mariadb_install
             ;;
@@ -1354,7 +1312,6 @@ case "$ProgramName" in
         "all")
             service_stop
             essential_install
-            jemalloc_install
             openssl_install
             zlib_install
             lz4_install
@@ -1368,6 +1325,7 @@ case "$ProgramName" in
             libcrack2_install
             libxml2_install
             libxslt_install
+            mimalloc_install
             mariadb_install
             php_install
             nginx_install
@@ -1379,7 +1337,6 @@ case "$ProgramName" in
             export DEBIAN_FRONTEND=noninteractive
 
             essential_install
-            jemalloc_install
             openssl_install
             zlib_install
             lz4_install
@@ -1393,6 +1350,7 @@ case "$ProgramName" in
             libcrack2_install
             libxml2_install
             libxslt_install
+            mimalloc_install
             mariadb_install
             php_install
             nginx_install
@@ -1406,9 +1364,6 @@ case "$ProgramName" in
               essential_install 2>&1 > /dev/null
             travis_fold_end
 
-            travis_fold_start jemalloc
-              jemalloc_install 2>&1 > /dev/null
-            travis_fold_end
 
             travis_fold_start openssl
               openssl_install 2>&1 > /dev/null
@@ -1460,6 +1415,10 @@ case "$ProgramName" in
 
             travis_fold_start libxslt
               libxslt_install 2>&1 > /dev/null
+            travis_fold_end
+
+            travis_fold_start mimalloc
+              mimalloc_install 2>&1 > /dev/null
             travis_fold_end
 
             travis_fold_start mariadb

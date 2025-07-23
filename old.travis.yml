@@ -38,13 +38,13 @@ script:
   - docker exec -t container_test /bin/bash -c "/usr/local/bin/curl -V"
   - docker exec -t container_test /bin/bash -c "/usr/local/bin/python3 --version"
   - docker exec -t container_test /bin/bash -c "/usr/local/bin/python3 -m pip -V"
-  - docker exec -t container_test /bin/bash -c "/usr/local/php7/bin/php -v"
-  - docker exec -t container_test /bin/bash -c "/usr/local/php7/bin/php -i | grep 'Client API version'"
+  - docker exec -t container_test /bin/bash -c "/usr/local/php/bin/php -v"
+  - docker exec -t container_test /bin/bash -c "/usr/local/php/bin/php -i | grep 'Client API version'"
   - docker exec -t container_test /bin/bash -c "/usr/sbin/nginx -v"
   - docker exec -t container_test /bin/bash -c "service php7-fpm start"
   - docker exec -t container_test /bin/bash -c "service nginx start"
-  - docker exec -t container_test /bin/bash -c "USE_PYTHON_3=1 /opt/letsencrypt/certbot-auto-patched --version --no-self-upgrade --non-interactive --no-bootstrap"
-  - docker exec -t container_test /bin/bash -c "USE_PYTHON_3=1 /opt/letsencrypt/certbot-auto --version --non-interactive --no-self-upgrade --no-bootstrap"
+  - docker exec -t container_test /bin/bash -c "certbot --version"
+  - docker exec -t container_test /bin/bash -c "certbot --version"
 
 #after_success:
 #after_failure:

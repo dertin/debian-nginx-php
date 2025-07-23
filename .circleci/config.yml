@@ -1,0 +1,27 @@
+version: 2.1
+jobs:
+  test:
+    machine: true
+    steps:
+      - checkout
+      - run: docker build -t dertin/debian-nginx-php:ci -f Dockerfile .
+      - run: docker run -t --privileged=true --name container_test dertin/debian-nginx-php:ci /bin/bash -c "/root/workspace/install.sh travis Y"
+      - run: docker start container_test
+      - run: docker ps -a
+      - run: docker exec -t container_test /bin/bash -c "/usr/bin/openssl version"
+      - run: docker exec -t container_test /bin/bash -c "/usr/local/bin/cmake --version"
+      - run: docker exec -t container_test /bin/bash -c "/usr/local/bin/curl -V"
+      - run: docker exec -t container_test /bin/bash -c "/usr/local/bin/python3 --version"
+      - run: docker exec -t container_test /bin/bash -c "/usr/local/bin/python3 -m pip -V"
+      - run: docker exec -t container_test /bin/bash -c "/usr/local/php/bin/php -v"
+      - run: docker exec -t container_test /bin/bash -c "/usr/local/php/bin/php -i | grep 'Client API version'"
+      - run: docker exec -t container_test /bin/bash -c "/usr/sbin/nginx -v"
+      - run: docker exec -t container_test /bin/bash -c "service php-fpm start"
+      - run: docker exec -t container_test /bin/bash -c "service nginx start"
+      - run: docker exec -t container_test /bin/bash -c "certbot --version"
+      - run: docker stop container_test
+      - run: docker rm $(docker ps -a -q)
+workflows:
+  build:
+    jobs:
+      - test

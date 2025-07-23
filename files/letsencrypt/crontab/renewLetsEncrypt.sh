@@ -1,12 +1,10 @@
 #!/bin/sh
 
 ### Example to add a subdomain to the certificate ###
-# sudo ./certbot-auto certonly --cert-name example.com -d example.com -d www.example.com -d test.example.com [...]
+# sudo certbot certonly --cert-name example.com -d example.com -d www.example.com -d test.example.com [...]
 
-cd /opt/letsencrypt/
 # To force the renewal add the parameter: --force-renewal
-# and add --config /etc/letsencrypt/configs/example.conf
-./certbot-auto renew --noninteractive --no-self-upgrade --agree-tos
+certbot renew --noninteractive --agree-tos
 
 if [ $? -ne 0 ]
  then
