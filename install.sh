@@ -165,10 +165,10 @@ function clear_compile() {
     automake m4 bison build-essential g++ pkg-config \
     autotools-dev libtool expect \
     libcunit1-dev x11proto-core-dev file \
-    libenchant-dev gnu-standards \
+    libenchant-2-dev gnu-standards \
     autoconf-archive g++-multilib gcc-multilib \
     valgrind valgrind-mpi \
-    valkyrie flex tk-dev ccache
+    flex tk-dev ccache
 
     # Only run in Debian 9.x
     DEBIAN_VERSION=`cat /etc/debian_version | cut -d . -f 1`
@@ -178,7 +178,6 @@ function clear_compile() {
     
     apt-get -y remove --auto-remove golang
     apt-get -y remove --auto-remove binutils
-    apt-get -y remove --auto-remove qt4-qmake
 
     apt-get -y autoremove
     apt-get clean
@@ -209,7 +208,18 @@ function essential_install() {
   then
 
     # Build Essential
-    sed -i '/^#\sdeb-src /s/^#//' "/etc/apt/sources.list"
+    if [ ! -f /etc/apt/sources.list ]; then
+      cat <<'EOF' >/etc/apt/sources.list
+deb http://deb.debian.org/debian bookworm main contrib non-free-firmware
+deb-src http://deb.debian.org/debian bookworm main contrib non-free-firmware
+deb http://security.debian.org/debian-security bookworm-security main contrib non-free-firmware
+deb-src http://security.debian.org/debian-security bookworm-security main contrib non-free-firmware
+deb http://deb.debian.org/debian bookworm-updates main contrib non-free-firmware
+deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free-firmware
+EOF
+    fi
+
+    sed -i '/^#\s*deb-src /s/^#//' /etc/apt/sources.list
 
     apt-get -y update
     apt-get install -y --no-install-recommends apt-utils
@@ -232,11 +242,10 @@ function essential_install() {
     automake m4 bison build-essential g++ pkg-config \
     autotools-dev libtool expect \
     libcunit1-dev x11proto-core-dev file \
-    libenchant-dev gnu-standards \
+    libenchant-2-dev gnu-standards \
     autoconf-archive g++-multilib gcc-multilib \
     valgrind valgrind-mpi \
-    valkyrie flex tk-dev golang binutils ccache \
-    qt4-qmake
+    flex tk-dev golang binutils ccache
 
     # Only run in Debian 9.x
     DEBIAN_VERSION=`cat /etc/debian_version | cut -d . -f 1`
@@ -246,20 +255,20 @@ function essential_install() {
 
     # TODO: check this: Important packages that must be installed.
     apt-get -y install coreutils uuid-dev wget \
-    mcrypt perl libpcre3 bzip2 \
-    trousers libidn2-0 libtiffxx5 libexpat1-dev \
+    perl libpcre3 bzip2 \
+    trousers libidn2-0 libtiffxx6 libexpat1-dev \
     libc-dbg gettext debian-keyring liblinear-tools \
     libdbi-perl rsync net-tools libdbd-mysql-perl re2c \
     libc-ares-dev libpcre3-dev libxml2-dev libxslt1-dev \
     libfreetype6-dev libfontconfig1-dev \
     libjpeg62-turbo-dev libjpeg-dev libpng-dev \
     libbz2-dev zlib1g-dev libzip-dev liblzma-dev \
-    libjansson-dev libmcrypt-dev \
+    libjansson-dev \
     libgmp-dev libev-dev libevent-dev \
     libsqlite3-dev libgdbm-dev libdb-dev \
-    libsystemd-dev libspdylay-dev \
+    libsystemd-dev \
     libaio-dev libncurses5-dev libncursesw5-dev libboost-all-dev \
-    libunistring-dev libunbound-dev libqt4-dev \
+    libunistring-dev libunbound-dev \
     libicu-dev libltdl-dev libreadline-dev \
     libaspell-dev libpspell-dev \
     libc6-dev libpam0g-dev libmsgpack-dev libstemmer-dev libbsd-dev \
@@ -282,7 +291,7 @@ function essential_install() {
     apt-get -y build-dep curl
     apt-get -y build-dep zlib
     apt-get -y build-dep openssl
-    apt-get -y build-dep python3.7
+    apt-get -y build-dep python3
 
     apt-get -y upgrade
     apt-get -y autoremove
