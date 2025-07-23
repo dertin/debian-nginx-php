@@ -109,7 +109,7 @@ configure_letsencrypt() {
   (crontab -l 2>/dev/null; echo "0 0 * * * /etc/letsencrypt/crontab/${domain}-renewLetsEncrypt.sh") | crontab -
   certbot --config "/etc/letsencrypt/configs/${domain}.conf" certonly || true
   sed -i '/#REMOVE_AFTER_CONFIGURING_LE#/d' "/etc/nginx/sites-enabled/${domain}.conf"
-  nginx -s reload
+  nginx -s reload || true
 }
 
 

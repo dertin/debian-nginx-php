@@ -16,8 +16,6 @@ jobs:
       - run: docker exec -t container_test php -v
       - run: docker exec -t container_test php -i | grep 'Client API version'
       - run: docker exec -t container_test nginx -v
-      - run: docker exec -t container_test service php-fpm start
-      - run: docker exec -t container_test service nginx start
       - run: docker exec -t container_test certbot --version
       - run: docker stop container_test
       - run: docker rm $(docker ps -a -q)
