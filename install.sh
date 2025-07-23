@@ -31,6 +31,15 @@ deb-src http://deb.debian.org/debian bookworm-backports main contrib non-free-fi
 EOL
   fi
 
+  # ensure services aren't started automatically
+  if [ ! -f /usr/sbin/policy-rc.d ]; then
+    cat <<'EOF' >/usr/sbin/policy-rc.d
+#!/bin/sh
+exit 101
+EOF
+    chmod +x /usr/sbin/policy-rc.d
+  fi
+
   if [ -f /etc/apt/sources.list.d/debian.sources ]; then
     mv /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources.disabled
   fi
