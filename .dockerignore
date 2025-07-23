@@ -2,7 +2,7 @@
 .github
 .DS_Store
 .gitignore
-.travis.yml
+.circleci/
 **/Dockerfile.*
 README.md
 TODO.md

@@ -55,4 +55,4 @@ All collaboration is appreciated, through https://github.com/dertin/debian-nginx
 
 Use at your own risk
 
-[![alt travis-ci](https://travis-ci.org/dertin/debian-nginx-php.svg?branch=develop)](https://travis-ci.org/dertin/debian-nginx-php/)
+[![CircleCI](https://circleci.com/gh/dertin/debian-nginx-php/tree/develop.svg?style=svg)](https://circleci.com/gh/dertin/debian-nginx-php/tree/develop)
