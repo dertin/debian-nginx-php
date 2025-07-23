@@ -6,9 +6,9 @@ jobs:
       - checkout
       - run: docker build -t dertin/debian-nginx-php:ci -f Dockerfile .
       - run:
-          name: Bloquear arranque de servicios en el contenedor y ejecutar instalador
+          name: Ejecutar instalador dentro del contenedor
           command: |
-            docker run -t --privileged=true --name container_test dertin/debian-nginx-php:ci /bin/bash -c "echo '#!/bin/sh\nexit 101' > /usr/sbin/policy-rc.d && chmod +x /usr/sbin/policy-rc.d && /root/workspace/install.sh"
+            docker run -t --privileged=true --name container_test dertin/debian-nginx-php:ci /bin/bash -c "/root/workspace/install.sh"
       - run: docker start container_test
       - run: docker ps -a
       - run: docker exec -t container_test openssl version
