@@ -40,23 +40,10 @@ sudo head -n2 /usr/sbin/policy-rc.d
 
 | Program       | Version    |
 | ------------- |:----------:|
-| openssl       | 3.5.1     |
-| python3       | 3.12.3      |
-| zlib          | 1.3.1      |
-| lz4           | 1.10.0     |
-| libssh2       | 1.11.1     |
-| nghttp2       | 1.66.0     |
-| curl          | 8.15.0     |
-| cmake         | 4.0.3     |
-| libzip        | 1.11.4     |
-| libcrack2     | 2.10.3     |
-| libxml2       | 2.11.9     |
-| libxslt       | 1.1.43     |
-| mariadb client| 11.8.2     |
 | php           | 8.4.x      |
 | nginx         | 1.28.x     |
-| letsencrypt   | 4.1.1      |
-| blackfire     | latest     |
+| mariadb client| 11.8.2     |
+| certbot       | 2.1.0      |
 
 **Note:** The installer relies entirely on Debian packages and no longer compiles these components from source.
 

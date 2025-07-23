@@ -92,25 +92,35 @@ configure_nginx() {
   local domain=${DOMAIN:-example.com}
   mkdir -p "/var/www/${domain}/htdocs"
   chgrp www-data "/var/www/${domain}/htdocs"
-  cp files/nginx/nginx.conf /etc/nginx/nginx.conf
+  [ -f files/nginx/nginx.conf ] && cp files/nginx/nginx.conf /etc/nginx/nginx.conf || true
   mkdir -p /etc/nginx/conf.d
-  cp files/nginx/conf.d/mail.conf /etc/nginx/conf.d/mail.conf
+  [ -f files/nginx/conf.d/mail.conf ] && cp files/nginx/conf.d/mail.conf /etc/nginx/conf.d/mail.conf || true
   mkdir -p /etc/nginx/snippets
-  cp -r files/nginx/snippets/* /etc/nginx/snippets/
-  sed -i "s#XXDOMAINXX#${domain}#g" /etc/nginx/snippets/diffie-hellman
+  if [ -d files/nginx/snippets ]; then
+    cp -r files/nginx/snippets/* /etc/nginx/snippets/
+  fi
+  [ -f /etc/nginx/snippets/diffie-hellman ] && sed -i "s#XXDOMAINXX#${domain}#g" /etc/nginx/snippets/diffie-hellman || true
   mkdir -p /etc/nginx/sites-available
-  cp files/nginx/sites-available/xxdomainxx.conf "/etc/nginx/sites-available/${domain}.conf"
-  sed -i "s#XXDOMAINXX#${domain}#g" "/etc/nginx/sites-available/${domain}.conf"
+  if [ -f files/nginx/sites-available/xxdomainxx.conf ]; then
+    cp files/nginx/sites-available/xxdomainxx.conf "/etc/nginx/sites-available/${domain}.conf"
+    sed -i "s#XXDOMAINXX#${domain}#g" "/etc/nginx/sites-available/${domain}.conf"
+  fi
   mkdir -p /etc/nginx/sites-enabled
-  ln -sf "/etc/nginx/sites-available/${domain}.conf" "/etc/nginx/sites-enabled/${domain}.conf"
+  [ -f /etc/nginx/sites-available/${domain}.conf ] && ln -sf "/etc/nginx/sites-available/${domain}.conf" "/etc/nginx/sites-enabled/${domain}.conf"
 }
 
 configure_php() {
   local phpv=$(php -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')
   local fpm_dir="/etc/php/${phpv}/fpm"
-  cp files/php/etc/php-fpm.d/www.conf "${fpm_dir}/pool.d/www.conf"
-  sed "s#/usr/local/php/etc#${fpm_dir}#" files/php/etc/php-fpm.conf > "${fpm_dir}/php-fpm.conf"
-  cp files/php/etc/conf.d/modules.ini "${fpm_dir}/conf.d/modules.ini"
+  if [ -f files/php/etc/php-fpm.d/www.conf ]; then
+    cp files/php/etc/php-fpm.d/www.conf "${fpm_dir}/pool.d/www.conf"
+  fi
+  if [ -f files/php/etc/php-fpm.conf ]; then
+    sed "s#/usr/local/php/etc#${fpm_dir}#" files/php/etc/php-fpm.conf > "${fpm_dir}/php-fpm.conf"
+  fi
+  if [ -f files/php/etc/conf.d/modules.ini ]; then
+    cp files/php/etc/conf.d/modules.ini "${fpm_dir}/conf.d/modules.ini"
+  fi
 }
 
 configure_letsencrypt() {
@@ -119,12 +129,16 @@ configure_letsencrypt() {
   mkdir -p "/var/www/${domain}/letsencrypt"
   chgrp www-data "/var/www/${domain}/letsencrypt"
   mkdir -p /etc/letsencrypt/configs
-  sed "s#XXDOMAINXX#${domain}#g;s#XXEMAILSUPPORTXX#${email}#g" \
-    files/letsencrypt/configs/xxdomainxx.conf > \
-    "/etc/letsencrypt/configs/${domain}.conf"
+  if [ -f files/letsencrypt/configs/xxdomainxx.conf ]; then
+    sed "s#XXDOMAINXX#${domain}#g;s#XXEMAILSUPPORTXX#${email}#g" \
+      files/letsencrypt/configs/xxdomainxx.conf > \
+      "/etc/letsencrypt/configs/${domain}.conf"
+  fi
   mkdir -p /etc/letsencrypt/crontab
-  cp files/letsencrypt/crontab/renewLetsEncrypt.sh \
-    "/etc/letsencrypt/crontab/${domain}-renewLetsEncrypt.sh"
+  if [ -f files/letsencrypt/crontab/renewLetsEncrypt.sh ]; then
+    cp files/letsencrypt/crontab/renewLetsEncrypt.sh \
+      "/etc/letsencrypt/crontab/${domain}-renewLetsEncrypt.sh"
+  fi
   chmod +x "/etc/letsencrypt/crontab/${domain}-renewLetsEncrypt.sh"
   if [ -z "${CI:-}" ]; then
     command -v crontab >/dev/null || apt-get install -y cron
