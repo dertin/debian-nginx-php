@@ -19,6 +19,14 @@ sudo DOMAIN=example.com EMAIL_SUPPORT=admin@example.com ./install.sh
 The `DOMAIN` and `EMAIL_SUPPORT` environment variables are used to customise the
 configuration and to request the initial HTTPS certificate with Certbot.
 
+During installation a `/usr/sbin/policy-rc.d` script is created to prevent
+services from starting automatically. You can verify it exists with:
+
+```sh
+sudo ls -l /usr/sbin/policy-rc.d
+sudo head -n2 /usr/sbin/policy-rc.d
+```
+
 ## Important:
 
 - You must have a domain address pointing to your server before running the script so that your HTTPS certificate can be requested automatically.

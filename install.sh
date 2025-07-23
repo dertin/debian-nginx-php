@@ -17,9 +17,20 @@ export CXXFLAGS="${CFLAGS}"
 export LDFLAGS="-L/usr/local/lib -Wl,-rpath,/usr/local/lib"
 export LIBS="-ldl"
 
+
+create_policy_rc() {
+  if [ ! -f /usr/sbin/policy-rc.d ]; then
+    cat <<'EOF' >/usr/sbin/policy-rc.d
+#!/bin/sh
+exit 101
+EOF
+    chmod 755 /usr/sbin/policy-rc.d
+  fi
+}
+
 setup_apt() {
-  if [ ! -f /etc/apt/sources.list ]; then
-    cat <<'EOL' >/etc/apt/sources.list
+  create_policy_rc
+  cat <<'EOL' >/etc/apt/sources.list
 deb http://deb.debian.org/debian bookworm main contrib non-free-firmware
 deb-src http://deb.debian.org/debian bookworm main contrib non-free-firmware
 deb http://security.debian.org/debian-security bookworm-security main contrib non-free-firmware
@@ -29,16 +40,6 @@ deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free-firm
 deb http://deb.debian.org/debian bookworm-backports main contrib non-free-firmware
 deb-src http://deb.debian.org/debian bookworm-backports main contrib non-free-firmware
 EOL
-  fi
-
-  # ensure services aren't started automatically
-  if [ ! -f /usr/sbin/policy-rc.d ]; then
-    cat <<'EOF' >/usr/sbin/policy-rc.d
-#!/bin/sh
-exit 101
-EOF
-    chmod +x /usr/sbin/policy-rc.d
-  fi
 
   if [ -f /etc/apt/sources.list.d/debian.sources ]; then
     mv /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources.disabled
@@ -49,13 +50,7 @@ EOF
   apt-get -y upgrade
 
   # recreate policy file in case upgrade removed it
-  if [ ! -f /usr/sbin/policy-rc.d ]; then
-    cat <<'EOF' >/usr/sbin/policy-rc.d
-#!/bin/sh
-exit 101
-EOF
-    chmod +x /usr/sbin/policy-rc.d
-  fi
+  create_policy_rc
 
   # PHP 8.4 from sury repository
   if [ ! -f /etc/apt/sources.list.d/php.list ]; then
@@ -79,14 +74,7 @@ EOF
 }
 
 install_packages() {
-  # ensure policy script still exists
-  if [ ! -f /usr/sbin/policy-rc.d ]; then
-    cat <<'EOF' >/usr/sbin/policy-rc.d
-#!/bin/sh
-exit 101
-EOF
-    chmod +x /usr/sbin/policy-rc.d
-  fi
+  create_policy_rc
   # install python first so py3compile is available for other packages
   apt-get install -y --no-install-recommends python3 python3-pip python3-venv
   # remaining packages
