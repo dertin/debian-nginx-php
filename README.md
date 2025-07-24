@@ -16,6 +16,9 @@ chmod +x install.sh
 sudo DOMAIN=example.com EMAIL_SUPPORT=admin@example.com ./install.sh
 ```
 
+For automated tests the repository includes `Dockerfile.ci` which builds a
+minimal container image and runs the installer non-interactively.
+
 The `DOMAIN` and `EMAIL_SUPPORT` environment variables are used to customise the
 configuration and to request the initial HTTPS certificate with Certbot.
 

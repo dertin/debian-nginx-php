@@ -4,11 +4,14 @@ jobs:
     machine: true
     steps:
       - checkout
-      - run: docker build -t dertin/debian-nginx-php:ci -f Dockerfile .
+      - run: docker build -t dertin/debian-nginx-php:ci -f Dockerfile.ci .
       - run:
           name: Ejecutar instalador dentro del contenedor
           command: |
-            docker run -t --privileged=true --name container_test dertin/debian-nginx-php:ci /bin/bash -c "/root/workspace/install.sh"
+            docker run -t --privileged=true --name container_test \
+              -e DOMAIN=example.com -e EMAIL_SUPPORT=admin@example.com \
+              -e POLICY_BLOCK=1 dertin/debian-nginx-php:ci \
+              /bin/bash -c "/root/workspace/install.sh"
       - run: docker start container_test
       - run: docker ps -a
       - run: docker exec -t container_test openssl version
