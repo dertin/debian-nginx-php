@@ -37,8 +37,8 @@ setup_apt() {
   if [ -n "${CI:-}" ] || [ "${POLICY_BLOCK:-}" = "1" ]; then
     install_policy_block
   fi
-  if [ ! -f /etc/apt/sources.list ]; then
-    cat <<'EOL' >/etc/apt/sources.list
+  # ensure we have a clean sources list with deb-src enabled
+  cat <<'EOL' >/etc/apt/sources.list
 deb http://deb.debian.org/debian bookworm main contrib non-free-firmware
 deb-src http://deb.debian.org/debian bookworm main contrib non-free-firmware
 deb http://security.debian.org/debian-security bookworm-security main contrib non-free-firmware
@@ -48,7 +48,6 @@ deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free-firm
 deb http://deb.debian.org/debian bookworm-backports main contrib non-free-firmware
 deb-src http://deb.debian.org/debian bookworm-backports main contrib non-free-firmware
 EOL
-  fi
 
   if [ -f /etc/apt/sources.list.d/debian.sources ]; then
     mv /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources.disabled
@@ -87,6 +86,26 @@ install_packages() {
     cmake openssl zlib1g-dev liblz4-dev libzip-dev libssh2-1-dev libnghttp2-dev \
     libcurl4-openssl-dev libcrack2-dev libxml2-dev libxslt1-dev mariadb-client \
     nginx php8.4 php8.4-fpm php8.4-cli php8.4-mysql certbot python3-certbot-nginx
+}
+
+check_templates() {
+  local missing=0
+  for f in \
+    files/nginx/nginx.conf \
+    files/nginx/conf.d/mail.conf \
+    files/nginx/snippets/diffie-hellman \
+    files/nginx/sites-available/xxdomainxx.conf \
+    files/php/etc/php-fpm.conf \
+    files/php/etc/php-fpm.d/www.conf \
+    files/php/etc/conf.d/modules.ini \
+    files/letsencrypt/configs/xxdomainxx.conf \
+    files/letsencrypt/crontab/renewLetsEncrypt.sh; do
+    if [ ! -f "$f" ]; then
+      echo "Missing template $f" >&2
+      missing=1
+    fi
+  done
+  [ "$missing" = 0 ] || exit 1
 }
 
 configure_nginx() {
@@ -151,6 +170,7 @@ check_versions() {
 main() {
   setup_apt
   install_packages
+  check_templates
   configure_nginx
   configure_php
   configure_letsencrypt
